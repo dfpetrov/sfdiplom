@@ -1,0 +1,265 @@
+{% extends 'appcourses/manage/base.html' %}
+{% load static %}
+{% block css_head %}
+{% include '_quill_css_snow.html' %}
+{% include '_hljs_css.html' %}
+{% endblock %}
+{% block section_body %}
+<div class="page-section bg-white border-bottom-2 mt-0 pt-4">
+    <div class="container page__container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h4>Название</h4>
+                <input type="text" name="title" form="form" class="form-control form-control-lg"
+                       value="{{content.item.title}}">
+                {% if type_video %}
+                    <h4 class="mt-3">Ссылка на видео</h4>
+                    <input type="text" name="video_url" form="form" class="form-control form-control-lg"
+                       value="{{content.item.url}}">
+                {% elif type_quiz %}
+                    <h4 class="mt-3">Тест</h4>
+                    {{form.quiz}}
+                {% endif %}
+                <div class="row mt-3">
+                    <div class="col-md-4">
+                        <label>Тип контента</label>
+                        <input type="text" class="form-control" readonly
+                               value="{{content.get_content_type_display}}">
+                    </div>
+                    <div class="col-md-4">
+                        <label>Order</label>
+                        {{form.order}}
+                    </div>
+                    <div class="col-md-4">
+                        <label>Slug</label>
+                        {{form.slug}}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card m-0">
+                    <div class="card-header text-center">
+                        <form method="post" id="form" class="needs-validation" novalidate
+                              enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <input form="form" type="button" class="btn btn-accent btn-lg"
+                                   value="Сохранить" name="btnSave" id="btnSave">
+                        </form>
+                    </div>
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item d-flex">
+                            {% if not active %}
+                            <span class="flex text-info"><strong>Драфт</strong></span>
+                            <i class="material-icons text-muted">check</i>
+                            {% else %}
+                            <span class="flex text-muted">Драфт</span>
+                            {% endif %}
+                        </div>
+                        <div class="list-group-item d-flex" {% if active %}
+                             style="background-color: aliceblue;" {% endif %}>
+                            {% if active %}
+                            <span class="flex text-danger"><strong>Опубликован</strong></span>
+                            <i class="material-icons text-danger">check</i>
+                            {% else %}
+                            <span class="flex text-muted">Опубликован</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% if not creation %}
+                <div class="card my-3">
+                    <div class="card-body">
+                        <form method="post" action="{{public_url}}">
+                            {% csrf_token %}
+                            <input type="submit" class="btn btn-outline-primary btn-lg btn-block"
+                                   value="{% if active %}Снять с публикации{% else %}Опубликовать{% endif %}">
+                        </form>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if type_text %}
+<div class="container page__container page-section">
+    <div class="row">
+        <div class="col">
+            <div class="mb-heading d-flex align-items-center">
+                <h4 class="flex mb-0">Контент</h4>
+            </div>
+            <div class="card my-4">
+                <div class="card-body">
+                    <div id="toolbar">
+                        <button id="custom-block-info">
+                            <i class="material-icons font-size-20pt">error_outline</i>
+                        </button>
+                        <button id="custom-block-warning">
+                            <i class="material-icons font-size-20pt">warning</i>
+                        </button>
+                    </div>
+                    <div id="editor"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}
+
+{% block js_body %}
+{% include '_sweetalert_js.html' %}
+{% include '_hljs_js_pack.html' %}
+{% include '_quill_js.html' %}
+<script>
+
+    {% if type_text %}
+    var container = document.getElementById('editor');
+
+    var toolbarOptions = [
+        [{
+            'header': [1, 2, 3, 4, 5, 6, false]
+        }],
+        ['bold', 'italic', 'underline', 'code'],
+        ['blockquote', 'code-block', 'link', 'image', 'video'],
+        [{
+            'list': 'ordered'
+        }, {
+            'list': 'bullet'
+        }],
+        [{
+            'script': 'sub'
+        }, {
+            'script': 'super'
+        }],
+        [{
+            'indent': '-1'
+        }, {
+            'indent': '+1'
+        }],
+        [{
+            'color': []
+        }, {
+            'background': []
+        }],
+        ['clean']
+    ];
+    var options = {
+        modules: {
+            syntax: false,
+            toolbar: toolbarOptions,
+        },
+        placeholder: 'Текст контента...',
+        theme: 'snow'
+    };
+    var editor = new Quill(container, options);
+
+    let description_HTML_JSON = '{{ description_HTML_JSON|escapejs }}'
+
+    try {
+        editor.setContents(JSON.parse(description_HTML_JSON))
+    } catch (error) {
+    }
+
+    var customButton = document.getElementById('custom-block-info')
+    customButton.addEventListener('click', function () {
+        var range = editor.getSelection()
+        if (range) {
+            if (range.length == 0) {
+                console.log('User cursor is at index', range.index);
+            } else {
+                editor.format('color', 'red')
+
+                // editor.insertText(range.index + range.length, '\n{&info_end&}');
+                // editor.insertText(range.index, '{&info_start&}\n');
+                //
+                // var h2 = Array.prototype.slice.call(document.querySelectorAll("*"));
+                //var matches = h2.filter(item => item.style.color == "red;");
+                //matches = Array.from(h2).find(v => v.style.color == 'red');
+                //console.log(matches)
+                // var newDiv = document.createElement('div')
+                // newDiv.innerHTML = "<h1>Привет!</h1>"
+                // matches[0].appendChild(newDiv);
+
+            }
+        }
+    })
+
+    var customButton = document.getElementById('custom-block-warning')
+    customButton.addEventListener('click', function () {
+        var range = editor.getSelection()
+        if (range) {
+            if (range.length == 0) {
+                console.log('User cursor is at index', range.index);
+            } else {
+                editor.format('color', 'green')
+            }
+        }
+    })
+    {% endif %}
+
+    btnSave.onclick = function () {
+
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-success',
+                cancelButton: 'btn btn-danger'
+            },
+            buttonsStyling: false
+        })
+
+        swalWithBootstrapButtons.fire({
+            title: 'Сохранить изменения?',
+            text: 'Текст будет сохранен и опубликован на сайте',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Да, сохранить',
+            cancelButtonText: 'Нет, не надо',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.value) {
+
+                let formData = new FormData(document.forms.form)
+
+                {% if type_text %}
+                    let textFormat = editor.getContents();
+                    formData.append("text_format", JSON.stringify(textFormat));
+                {% endif %}
+
+                let postUrl = "{{ post_url }}"
+                var xhr = new XMLHttpRequest()
+                xhr.open("POST", postUrl)
+                xhr.send(formData)
+                xhr.onloadend = function () {
+                    if (xhr.status == 200) {
+
+                        let response = JSON.parse(xhr.response)
+                        if (response.response !== 'error') {
+                            window.location = response.response
+                        } else {
+                            console.log(response.response)
+                        }
+
+                    } else {
+
+                    }
+
+                }
+
+            } else if (
+                result.dismiss === Swal.DismissReason.cancel
+            ) {
+                swalWithBootstrapButtons.fire(
+                    'Отмена',
+                    'можешь продолжить редактирование',
+                    'error'
+                )
+            }
+        })
+
+    }
+
+</script>
+{% endblock %}

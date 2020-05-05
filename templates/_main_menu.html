@@ -1,0 +1,72 @@
+{% load i18n %}{% load static %}
+{% if style_index %}
+    <style>
+        .navbar-brand {
+            color: #303840;
+        }
+        .mdk-header--shadow .nav-link {
+            color: rgba(48,56,64,.5)
+        }
+        .mdk-header--shadow .nav-link:hover{
+            color: #303840
+        }
+        .mdk-header--shadow .active > .nav-link {
+            color: #303840
+        }
+    </style>
+{% endif %}
+<header id="header" class="mdk-header js-mdk-header m-0 {% if style == 'lesson' or hide_main_menu %}d-none{% endif %}" data-fixed data-effects="waterfall">
+    <div class="mdk-header__content">
+
+        {% if style == 'lesson' %}
+        <nav id="default-navbar" class="navbar navbar-expand m-0">
+            <div class="container-fluid">
+        {% else %}
+        <nav id="default-navbar" class="navbar navbar-expand m-0">
+            <div class="container">
+        {% endif %}
+                <a href="{% url 'appmain:index' %}" class="navbar-brand">
+                    <img src="{% static 'images/logo/pumpskill_color.svg' %}" class="avatar avatar-sm mr-2" alt="logoPumpSkill">
+                    <span class="d-none d-sm-block">PumpSkill</span>
+                </a>
+                <div class="flex"></div>
+
+                {% if user.is_authenticated %}
+                <ul class="nav navbar-nav flex-nowrap">
+                    <!-- User dropdown -->
+                    <li class="nav-item dropdown ml-1 ml-md-3">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"><img
+                                src="{{ user.profile.get_avatar_url }}"
+                                alt="{{ user }}" class="rounded-circle" width="40"></a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item" href="{% url 'appmain:dashboard' %}">
+                                <i class="material-icons">dashboard</i> {% trans 'Панель управления' %}
+                            </a>
+                            <a class="dropdown-item" href="{% url 'appaccounts:profile_edit' %}">
+                                <i class="material-icons">person</i> {% trans 'Мой профайл' %}
+                            </a>
+                            <a class="dropdown-item" href="{% url 'appaccounts:logout' %}">
+                                <i class="material-icons">exit_to_app</i> {% trans 'Выйти' %}
+                            </a>
+                        </div>
+                    </li>
+                    <!-- // END User dropdown -->
+                </ul>
+                {% else %}
+                <ul class="nav navbar-nav">
+                    <li class="nav-item active mr-3 mr-sm-4">
+                        <a class="nav-link" href="{% url 'appaccounts:login' %}">{% trans 'Войти' %}</a>
+                    </li>
+                    <li class="nav-item ml-0">
+                        <a class="nav-link" href="{% url 'appaccounts:register' %}">{% trans 'Регистрация' %}</a>
+                    </li>
+                </ul>
+                {% endif %}
+                <!-- // END Menu -->
+            </div>
+        </nav>
+        <!-- // END Navbar -->
+
+    </div>
+
+</header>

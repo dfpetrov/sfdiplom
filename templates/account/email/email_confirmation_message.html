@@ -1,0 +1,237 @@
+{% load i18n %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .bg-primary {
+            background-color: #2196f3 !important;
+        }
+
+        .navbar {
+            padding-top: 0;
+            padding-bottom: 0;
+            font-size: 1.6rem;
+            /* font-weight: 500; */
+            display: flex;
+            align-items: center;
+            color: #fff;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            margin: 5px 0 5px 0;
+            padding-left: 5px;
+        }
+
+        .avatar {
+            font-size: 1rem;
+            display: inline-block;
+            position: relative;
+            z-index: 0;
+        }
+
+        .avatar-sm {
+            width: 2.5rem;
+            height: 2.5rem;
+        }
+
+        li {
+            list-style: none;
+        }
+
+        body {
+            font-family: "Oswald", "Helvetica Neue", "Arial", "sans-serif";
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #eceff1;
+            min-height: 100vh;
+            scroll-behavior: smooth;
+            text-rendering: optimizeSpeed;
+            margin: 0;
+            padding: 0;
+        }
+
+        .btn {
+            display: inline-block;
+            font-weight: 400;
+            color: #383b3d;
+            text-align: center;
+            vertical-align: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            background-color: transparent;
+            border: 1px solid transparent;
+            padding: .5rem 1rem;
+            font-size: .9375rem;
+            line-height: 1.5;
+            border-radius: .25rem;
+            transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn-success {
+            color: #212529;
+            background-color: #2ccf9c;
+            border-color: #2ccf9c;
+            box-shadow: inset 0 1px 0 hsla(0, 0%, 100%, .15), 0 1px 1px rgba(0, 0, 0, .075);
+            color: #fff;
+            font-size: 20px;
+        }
+
+        .btn-success:hover {
+            color: #fff;
+            background-color: #2ac292;
+            border-color: #27b688
+        }
+
+        .text-muted {
+            color: #b8bdc2 !important;
+        }
+
+        .container {
+            /* max-width: 90vw; */
+            text-align: center;
+            background-color: #fff;
+            /* border-radius: 5px; */
+        }
+
+        .text-header {
+            color: #4d4d4d;
+        }
+
+        .text-white {
+            color: #fff;
+        }
+
+        .background {
+            background-image: url("{{current_site.domain}}{% static 'images/email/background1.png' %}");
+            background-color: #2196f3;
+            margin: 0;
+            border-top-left-radius: inherit;
+            border-top-right-radius: inherit;
+        }
+
+        .m-0 {
+            margin: 0 !important;
+        }
+
+        .mb-4 {
+            margin-bottom: 48px !important;
+        }
+
+        .mt-2 {
+            margin-top: 24px !important;
+        }
+
+        .mb-1 {
+            margin-bottom: 12px !important;
+        }
+
+        .mb-2 {
+            margin-bottom: 24px !important;
+        }
+
+        .mt-4 {
+            margin-top: 48px !important;
+        }
+
+        .pb-4 {
+            padding-bottom: 48px !important;
+        }
+
+        .px-1 {
+            padding-left: 12px !important;
+            padding-right: 12px !important;
+        }
+
+        p {
+            line-height: 1.5;
+        }
+
+        .m-2 {
+            margin: 24px;
+        }
+
+        .avatar-xl {
+            height: 120px;
+            width: 120px;
+        }
+
+        .footer {
+            border-bottom-left-radius: inherit;
+            border-bottom-right-radius: inherit;
+            background-color: #d4d7d9;
+            color: #8f8f8f;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .footer>a {
+            color: #388cda;
+            text-decoration: none;
+        }
+    </style>
+    <title>{% trans 'Подтверждение регистрации' %}</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="background pb-4 px-1">
+            <div class="navbar mb-4">
+                <ul class="navbar-brand text-white">
+                    <li><img src="{{current_site.domain}}{% static 'images/logo/pumpskill_white.svg' %}" alt=""
+                            class="avatar avatar-sm mr-2"></li>
+                    <li>PumpSkill</li>
+                </ul>
+            </div>
+            <h1 class="text-white m-0">{% trans 'Добро пожаловать на' %} {{current_site.name}}!</h1>
+            <p class="text-white">{% trans 'Остался один шаг и ты готов прокачивать свои скилы' %}</p>
+        </div>
+        <div class="px-1">
+            <img src="{{current_site.domain}}{% static 'images/email/email_confirm.svg' %}" alt="email-confirm"
+                class="avatar-xl m-2">
+            <h2 style="color: #4d4d4d; font-size: 24px;">{% trans 'Подтверждение регистрации' %}</h2>
+            {% load account %}{% user_display user as user_display %}
+            <p style="color: #757575;">
+{% trans 'Ты получил это письмо, потому что пользователь' %} 
+{{ user_display }} 
+{% trans 'указал этот e-mail для подключения к своему аккаунту' %}.
+</p>
+            <p style="color: #757575;">
+{% trans 'Чтобы завершить регистрацию, нажми на кнопку "Подтвердить e-mail"' %}:
+            </p>
+            <a href="{{ activate_url }}" target="_blank" rel="noopener noreferrer"
+                class="btn btn-success mt-2 mb-2">{% trans 'Подтвердить' %} e-mail</a>
+
+            <p class="text-muted">{% trans 'Если кнопка не отображается, перейди по ссылке или скопируй ее и вставь в браузере' %}:
+                {{ activate_url }}
+            </p>
+            <p class="text-muted">{% trans 'Если ты не понимаешь о чем идет речь, просто проигнорируй это письмо' %}.</p>
+        </div>
+        <div class="footer">
+            <img src="{{current_site.domain}}{% static 'images/logo/pumpskill_color.svg' %}" alt="PumpSkill"
+                class="avatar avatar-sm">
+            <p>{% trans 'Задачи для прокачки скилов' %}</p>
+            <a href="{{current_site.domain}}" target="_blank" rel="noopener noreferrer">{{current_site.name}}</a>
+        </div>
+    </div>
+</body>
+
+</html>

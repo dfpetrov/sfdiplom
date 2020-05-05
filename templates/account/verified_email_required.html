@@ -1,0 +1,33 @@
+{% extends '__base_auth.html' %}
+
+{% load static %}
+
+{% load i18n %}
+
+
+{% block title %}{% trans 'Подтвердите свой e-mail' %}{% endblock %}
+
+{% block content %}
+
+<div class="card-header text-center">
+    <h4 class="card-title">{% trans 'Подтвердите свой e-mail' %}</h4>
+</div>
+<div class="card-body">
+    <div class="alert alert-light border-1 border-left-3 border-left-danger d-flex align-items-center role=">
+        <i class="fa fa-times fa-3x mr-3 text-danger"></i>
+        <div class="text-body">
+
+            <p>{% trans 'Эта часть сайта требует подтверждения e-mail адреса' %}.</p>
+
+            <p>{% trans 'Мы отправили письмо с подтверждением. Пожалуйста, перейди по ссылке в письме' %}.</p>
+
+            <p>{% trans 'Проверь папку' %} <b><span class="text-danger">{% trans 'СПАМ' %}</span></b> {% trans 'если письма нет' %}.</p>
+
+            <p><strong>{% trans 'Заметка' %}:</strong> <a href="{% url 'appaccounts:account_email' %}">{% trans 'в настройках профиля' %}</a> {% trans 'ты можешь изменить свой e-mail или повторно запросить письмо с подтверждением' %}</p>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

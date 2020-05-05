@@ -1,0 +1,94 @@
+{% extends 'appaccounts/__base_profile_edit.html' %}
+
+{% load i18n %}
+{% load static %}
+{% block section1_title %}{% trans 'Основная информация' %}{% endblock %}
+
+{% block section1_content %}
+
+    <div class="list-group list-group-form">
+        <div class="list-group-item">
+            <div class="form-group row mb-0">
+                <label class="col-form-label col-sm-2">Login</label>
+                {#                <div class="col-sm-10">#}
+                {#                    <input type="text" class="form-control" value="{{ login }}" placeholder="Login ..." disabled>#}
+                {#                </div>#}
+                <div class="col-sm-10">
+                    <input type="text" name="username" class="form-control" value="{{ login }}" placeholder="Login ...">
+                    {% if form.username.errors %}
+                        <div class="alert alert-danger my-2" role="alert" id="check_confirm_alert">
+                            <ul class="py-0 px-3 my-0">
+                                {% for error in form.username.errors %}
+                                    <li><strong>{{ error|escape }}</strong></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="list-group-item">
+            <div class="form-group row mb-0">
+                <label class="col-form-label col-sm-2">{% trans 'Имя' %}</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" value="{{ first_name }}" name="first_name"
+                           placeholder="{% trans 'Имя' %} ...">
+                </div>
+            </div>
+        </div>
+        <div class="list-group-item">
+            <div class="form-group row mb-0">
+                <label class="col-form-label col-sm-2">{% trans 'Аватар' %}</label>
+                <div class="col-sm-10 media align-items-center">
+                    <div class="media-body">
+                        <div class="row">
+                            <div class="col text-center">
+                                <div data-toggle="buttons">
+                                    {% for student_avatar in avatar_list %}
+                                        <label class="btn btn-light px-1 pr-1 px-sm-4 rounded {% if profile.index_avatar == student_avatar.number %}active{% endif %}">
+                                            <input form="form_section1" type="radio" name="index_avatar"
+                                                   id="option{{ student_avatar.number }}"
+                                                   autocomplete="off" hidden value="{{ student_avatar.number }}"
+                                                   {% if profile.index_avatar == student_avatar.number %}checked{% endif %}>
+                                            <img src="{{ student_avatar.url }}" alt=""
+                                                 class="avatar avatar-list">
+                                        </label>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        {% if always_none and profile_form.avatar.errors %}
+                            <div class="alert alert-danger my-2" role="alert" id="check_confirm_alert">
+                                <ul class="py-0 px-3 my-0">
+                                    {% for error in profile_form.avatar.errors %}
+                                        <li><strong>{{ error|escape }}</strong></li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="list-group-item">
+            <div class="form-group row mb-0">
+                <label class="col-form-label col-sm-2">{% trans 'О себе' %}</label>
+                <div class="col-sm-10">
+                    {{ form.description }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block js_body %}
+    <script>
+        var avatarInput = document.getElementById('id_avatar');
+        if (avatarInput != null) {
+            avatarInput.oninput = function () {
+                labelForAvatar.innerText = avatarInput.files[0].name
+            }
+        }
+    </script>
+{% endblock %}

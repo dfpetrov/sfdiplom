@@ -1,0 +1,515 @@
+{% extends '__base.html' %}
+{% load i18n %}
+{% load static %}
+{% block css_head %}
+<link rel="stylesheet" href="{% static 'css/nestable.css' %}">
+{% endblock %}
+{% block style_head %}
+.swal2-actions .swal2-cancel {
+margin: 12px;
+}
+
+.media-body {
+overflow: hidden;
+}
+
+#editor {
+height: 350px;
+}
+
+.breadcrumb {
+overflow: hidden;
+}
+{% endblock %}
+{% block title %}Редактирование теста {{quiz}} {% endblock %}
+
+{% block content %}
+
+<!-- Header Layout -->
+<div class="mdk-header-layout js-mdk-header-layout">
+
+    <!-- Header -->
+    {% include '_main_menu.html' %}
+    <!-- // END Header -->
+
+    <!-- Header Layout Content -->
+    <div class="mdk-header-layout__content page-content pb-0">
+
+        <div class="hero bg-gradient-primary py-64pt text-center text-sm-left mb-4">
+            <div class="container d-flex flex-column flex-md-row align-items-center text-center">
+                <h1 class="text-white">{{ quiz }}</h1>
+            </div>
+        </div>
+
+        <div class="page-section border-bottom-2 pt-3">
+            <div class="container page__container">
+
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'appmain:index' %}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'appmain:dashboard' %}">
+                        {% trans 'Панель управления' %}</a>
+                    </li>
+                    <li class="breadcrumb-item"><a href="{% url 'appcourses:manage_course_list' %}">
+                        {% trans 'Список курсов' %}</a>
+                    </li>
+                    <li class="breadcrumb-item"><a href="{% url 'appcourses:manage_quiz_list' %}">
+                        {% trans 'Список тестов' %}</a>
+                    </li>
+                    <li class="breadcrumb-item active">{{ quiz }}</li>
+                </ol>
+                {% include '_messages.html' %}
+
+                {% if form.errors %}
+                {% for field in form %}
+                {% for error in field.errors %}
+                <div class="alert alert-danger">
+                    {{field.name}}
+                    <strong>{{ error }}</strong>
+                </div>
+                {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {{field.name}}
+                    <strong>{{ error }}</strong>
+                </div>
+                {% endfor %}
+                {% endif %}
+
+                <!-- row title -->
+                <div class="row mb-4">
+                    <!-- col title -->
+                    <div class="col-12 col-md-8">
+                        <h2 class="card-title" style="overflow: hidden;">
+                            Редактирвоание теста
+                            <span class="text-warning">{{quiz}}</span>
+                        </h2>
+                        {% if quiz.active %}
+                        <h2 class="card-title text-danger">Тест опубликован!</h2>
+                        {% endif %}
+                    </div>
+                    <!-- //END col title -->
+
+                    <!-- col save -->
+                    <div class="col-12 col-md-4 text-lg-right">
+                        <form action="" method="post" id="update_form">
+                            {% csrf_token %}
+                            <input form="update_form" type="button" class="btn btn-success btn-lg"
+                                   value="Сохранить" name="btnSave" id="btnSave">
+                        </form>
+                    </div>
+                    <!-- //END col save -->
+
+                </div>
+                <!-- //END row title -->
+
+                <!-- row body -->
+                <div class="row">
+
+                    <!-- col main -->
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Основная информация</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label class="form-label">Title</label>
+                                    {{form.title}}
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Description</label>
+                                    {{form.description}}
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label class="form-label">subject</label>
+                                            {{ form.subject }}
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label class="form-label">language</label>
+                                            {{ form.language }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Вопросы теста</h4>
+                            </div>
+                            <div class="card-body">
+                                <button type="button" class="btn btn-outline-primary mb-3" value="Добавить вопрос"
+                                        name="btnAddContent" id="btnAddContent">
+                                    Добавить вопрос<i class="material-icons">add</i>
+                                </button>
+                                <div class="nestable" id="nestable-handles-primary">
+                                    <ul id="content_list" class="list-group list-group-fit nestable-list-plain mb-0">
+                                        {% for content in quiz.questions.all %}
+                                        <li class="list-group-item nestable-item" name="content"
+                                            id="listContent_{{ forloop.counter }}">
+                                            <div class="media align-items-center">
+                                                <div class="media-left">
+                                                    <a href="#" class="btn btn-default nestable-handle"><i
+                                                            class="material-icons">menu</i></a>
+                                                </div>
+                                                <div class="media-body">
+                                                    <input type="text" value="{{ content.id }}"
+                                                           id="contentId_{{ forloop.counter }}" hidden>
+                                                    <span name="contentTitle" id="contentTitle_{{ forloop.counter }}">
+                                                        {{ content.title }}
+                                                    </span>
+                                                    <small class="text-muted d-block mt-1">
+                                                        {{ content.get_type_display }}
+                                                    </small>
+                                                    <input type="text" hidden
+                                                           value="{{ content.get_type_display }}"
+                                                           id="contentTypeId_{{ forloop.counter }}">
+                                                </div>
+                                                <div class="media-right text-right">
+                                                    <div style="width:100px">
+                                                        <a href="{{content.get_manage_url}}"
+                                                           class="btn btn-primary btn-sm" title="Изменить">
+                                                            <i class="material-icons">edit</i>
+                                                        </a>
+                                                        <button type="button" class="btn btn-danger btn-sm"
+                                                                value="Удалить" name="btnDelContent"
+                                                                id="btnDelContent_{{ forloop.counter }}"
+                                                                title="Удалить">
+                                                            <i class="material-icons">delete</i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        {% endfor %}
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- //END col main -->
+
+                    <!-- col meta -->
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Свойства</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label class="form-label">type</label>
+                                    {{ form.type }}
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">owner</label>
+                                    <input type="text" value="{{ quiz.owner }}" class="form-control" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">slug</label>
+                                    <input type="text" value="{{ quiz.slug }}" class="form-control" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Активность</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label class="form-label {% if quiz.active %}text-danger{% endif %}">Тест опубликован</label>
+                                    {{ form.active }}
+                                </div>
+                            </div>
+                        </div>
+                        <a href="{{ quiz.get_absolute_url }}" class="btn btn-outline-primary btn-lg">
+                            Посмотреть на сайте
+                        </a>
+                    </div>
+                    <!-- //END col meta -->
+
+                </div>
+                <!-- //END row body -->
+
+            </div>
+        </div>
+
+    </div>
+    <!-- // END Header Layout Content -->
+
+</div>
+<!-- // END Header Layout -->
+
+{% endblock %}
+
+{% block js_body %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+<script src="{% static 'vendor/jquery.nestable.js' %}"></script>
+<script src="{% static 'js/nestable.js' %}"></script>
+<script>
+
+    btnSave.onclick = function () {
+    var formIsValid = false
+
+    {% if quiz.active %}
+    Swal.fire({
+      title: 'Внимание! Тест уже опубликован!',
+      text: "Вы действительно хотите сохранить изменения активного теста?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes!'
+    }).then((result) => {
+      if (result.value) {
+        formIsValid = true
+        save_changes()
+      }
+    })
+    {% else %}
+    formIsValid = true
+    save_changes()
+    {% endif %}
+
+    function save_changes() {
+
+    if (formIsValid) {
+
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            })
+
+            swalWithBootstrapButtons.fire({
+                title: 'Сохранить изменения?',
+                text: 'Дынне будут сохранены и опубликованы на сайте',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Да, сохранить',
+                cancelButtonText: 'Нет, не надо',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.value) {
+
+                    let formData = new FormData(document.forms.update_form)
+
+                    let contentList = document.getElementsByName('contentTitle')
+                    let contents = []
+                    var order = 1
+                    contentList.forEach(element => {
+                        let contentInputID = element.id.replace('contentTitle_',
+                            'contentId_')
+                        let contentTypeInputID = element.id.replace('contentTitle_',
+                            'contentTypeId_')
+                        let listContentID = contentInputID.replace(
+                            'contentId_',
+                            'listContent_')
+                        let inputContent = document.getElementById(contentInputID)
+                        let inputContentType = document.getElementById(contentTypeInputID)
+                        let listContent = document.getElementById(
+                            listContentID)
+                        if (listContent.hidden) {
+                            var contentData = {
+                                title: element.innerText,
+                                id: inputContent.value,
+                                type: inputContentType.value,
+                                remove: true,
+                                order: order
+                            }
+                        } else {
+                            var contentData = {
+                                title: element.innerText,
+                                id: inputContent.value,
+                                type: inputContentType.value,
+                                remove: false,
+                                order: order
+                            }
+                        }
+                        order += 1
+                        contents.push(contentData)
+                    });
+                    formData.append("contents", JSON.stringify(contents));
+
+                    let postUrl = "{{ quiz.get_manage_url }}"
+                    var xhr = new XMLHttpRequest()
+                    xhr.open("POST", postUrl)
+                    xhr.send(formData)
+                    xhr.onloadend = function () {
+                        if (xhr.status == 200) {
+
+                            let response = JSON.parse(xhr.response)
+                            if (response.response !== 'error') {
+                                window.location = response.response
+                            } else {
+
+                            }
+
+                        } else {
+
+                        }
+
+                    }
+
+                } else if (
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    swalWithBootstrapButtons.fire(
+                        'Отмена',
+                        'можешь продолжить редактирование',
+                        'error'
+                    )
+                }
+            })
+
+        }
+     }
+
+     }
+
+    btnAddContent.onclick = function () {
+
+        Swal.mixin({
+          input: 'text',
+          confirmButtonText: 'Next &rarr;',
+          showCancelButton: true,
+          progressSteps: ['1', '2']
+        }).queue([
+          {
+            title: 'Текст вопроса',
+            text: 'создание нового вопроса',
+            inputPlaceholder: 'Например: реши уравнение 2+2=?'
+          },
+          {
+            title: 'Тип',
+            text: '1 - одиночный выбор; 2 - множественный выбор, 3 - код',
+            inputPlaceholder: 'Тип контента: 1/2 или 3'
+          },
+        ]).then((result) => {
+          if (result.value) {
+
+            let contentTitle = result.value[0]
+            let contentType = result.value[1]
+            let contentTypeText = ''
+
+            switch (contentType) {
+                  case '1':
+                    contentTypeText = 'одиночный выбор';
+                    break;
+                  case '2':
+                    contentTypeText = 'множественный выбор';
+                    break;
+                  case '3':
+                    contentTypeText = 'код';
+                    break;
+                  default:
+                    contentTypeText = 'одиночный выбор';
+                }
+
+            let contentCount = 'new' + (document.getElementsByName('content').length + 1)
+
+            if (contentTitle) {
+
+                content_list.innerHTML += `
+                    <li class="list-group-item nestable-item" name="content"
+                    id="listContent_` + contentCount + `">
+                    <div class="media align-items-center">
+                        <div class="media-left">
+                            <a href="#" class="btn btn-default nestable-handle"><i
+                                    class="material-icons">menu</i></a>
+                        </div>
+                        <div class="media-body">
+                            <input type="text" value="` + contentCount + `"
+                                id="contentId_` + contentCount + `" hidden>
+                            <span name="contentTitle"
+                                id="contentTitle_` + contentCount + `">` + contentTitle + `</span>
+
+                            <small class="text-muted d-block mt-1">` + contentTypeText + `</small>
+                            <input type="text" hidden value="` + contentType + `" id="contentTypeId_` + contentCount + `" >
+                        </div>
+                        <div class="media-right text-right">
+                            <div style="width:100px">
+                                <button type="button" class="btn btn-primary btn-sm"
+                                    value="Редактировать" name="btnEditContent"
+                                    id="btnEditContent_` + contentCount + `"
+                                    title="Изменить"><i class="material-icons">edit</i>
+                                </button>
+                                <button type="button" class="btn btn-danger btn-sm"
+                                    value="Удалить" name="btnDelContent"
+                                    id="btnDelContent_` + contentCount + `"
+                                    title="Удалить">
+                                    <i class="material-icons">delete</i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </li>`
+            }
+
+          }
+        })
+    }
+
+    function delegate(el, evt, sel, handler) {
+        el.addEventListener(evt, function (event) {
+            var t = event.target;
+            while (t && t !== this) {
+                if (t.name == sel) {
+                    handler.call(t, event);
+                }
+                t = t.parentNode;
+            }
+        });
+    }
+
+    delegate(document, "click", "btnEditContent", function (event) {
+        (async () => {
+
+            contentId = this.id.replace("btnEditContent", "contentTitle")
+            let content = document.getElementById(contentId)
+            const {
+                value: contentTitle
+            } = await Swal.fire({
+                title: 'Редактирование вопроса',
+                input: 'text',
+                showCancelButton: true,
+                inputValue: content.innerText
+            })
+
+            if (contentTitle) {
+
+                content.innerText = contentTitle
+            }
+
+        })()
+
+    });
+
+    delegate(document, "click", "btnDelContent", function (event) {
+        Swal.fire({
+            title: 'Удалить вопрос?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Нет, не удалять',
+            confirmButtonText: 'Да, удалить'
+        }).then((result) => {
+            if (result.value) {
+                (async () => {
+                    listContentId = this.id.replace("btnDelContent",
+                        "listContent")
+                    let content = document.getElementById(listContentId)
+                    content.hidden = true
+                })()
+            }
+        })
+    })
+</script>
+{% endblock %}

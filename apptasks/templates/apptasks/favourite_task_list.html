@@ -1,0 +1,139 @@
+{% extends '__base.html' %}
+
+{% load i18n %}
+{% load static %}
+
+{% block css_head %}
+<style>
+    .media-body {
+        overflow: hidden;
+    }
+    .breadcrumb {
+        overflow: hidden;
+    }
+</style>
+{% endblock %}
+
+{% block title %}{% trans 'Избранные задачи' %}{% endblock %}
+
+{% block content %}
+
+    <!-- Header Layout -->
+    <div class="mdk-header-layout js-mdk-header-layout">
+
+        <!-- Header -->
+        {% include '_main_menu.html' %}
+        <!-- // END Header -->
+
+        <!-- Header Layout Content -->
+        <div class="mdk-header-layout__content d-flex flex-column">
+
+            {% include '_page_menu.html' %}
+
+            <div class="page ">
+
+                <div class="container page__container">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'appmain:index' %}">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'appmain:dashboard' %}">{% trans 'Панель управления' %}</a></li>
+                        <li class="breadcrumb-item active">{% trans 'Избранные задачи' %}</li>
+                    </ol>
+                    {% include '_messages.html' %}
+                    <h2 class="h2">{% trans 'Избранные задачи' %}</h2>
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">{% trans 'Всего задач в избранных' %} <span class="text-primary">{{ task_count }}</span></h5>
+                        </div>
+                        <div data-toggle="lists" data-lists-values='[
+        "js-lists-values-task", 
+        "js-lists-values-rate", 
+        "js-lists-values-status",
+        "js-lists-values-created"
+      ]' data-lists-sort-by="js-lists-values-revenue" data-lists-sort-desc="true" class="table-responsive">
+                            <table class="table table-nowrap m-0">
+                                <thead class="thead-light">
+                                    <tr class="text-uppercase small">
+                                        <th>
+                                            <a href="javascript:void(0)" class="sort" data-sort="js-lists-values-task">{% trans 'Задача' %}</a>
+                                        </th>
+                                        <th class="text-center" style="width:130px">
+                                            <a href="javascript:void(0)" class="sort" data-sort="js-lists-values-rate">{% trans 'Результат' %}</a>
+                                        </th>
+                                        <th class="text-center" style="width:130px">
+                                            <a href="javascript:void(0)" class="sort" data-sort="js-lists-values-status">{% trans 'Статус' %}</a>
+                                        </th>
+                                        <th class="text-center" style="width:130px">
+                                            <a href="javascript:void(0)" class="sort" data-sort="js-lists-values-created">{% trans 'Дата' %}</a>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="list">
+
+                                    {% for task in tasks %}
+                                    <tr>
+                                        <td>
+                                            <div class="media align-items-center">
+                                                <a href="{{ task.task.get_absolute_url }}" class="avatar avatar-4by3 avatar-lg mr-3" title="{% trans 'Смотреть задачу' %} {{ task.title_short }}">
+                                                    <img src="{{ task.task.skill.get_avatar_url }}" alt="{{ task.task.skill }}" class="avatar-img rounded">
+                                                </a>
+                                                <div class="media-body">
+                                                    <a class="text-body js-lists-values-task" href="{{ task.task.get_absolute_url }}" title="{% trans 'Смотреть задачу' %} {{ task.title_short }}"><strong>{{ task.title_short }}</strong></a>
+                                                    <div class="text-muted small mt-1">
+                                                        by 
+                                                        <a href="{{ task.task.author.profile.get_absolute_url }}" class="text-muted" title="{% trans 'Смотреть профиль' %} {{ task.task.author }}">
+                                                            {{ task.task.author }}
+                                                        </a>
+                                                    </div>
+                                                    <div class="mt-2">
+                                                        <a href="{{ task.task.skill.get_absolute_url }}"
+                                                            title="{% trans 'Показать все задачи по' %} {{ task.task.skill }}">#{{ task.task.skill }}</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-center text-black-70">
+                                            <span class="text-success js-lists-values-rate"><b>{{ task.rate }}</b></span>
+                                        </td>
+                                        <td class="text-center text-black-70">
+                                            {% if task.status == 'for_check' %}
+                                            <a class="text-success js-lists-values-rate" href="{{ task.order_url }}" title="{% trans 'Открыть мое решение' %}">
+                                                <span class="js-lists-values-status badge badge-success">{{ task.status_display }}</span>
+                                            </a>
+                                            {% elif task.status == 'done' %}
+                                            <a class="text-success js-lists-values-rate" href="{{ task.order_url }}" title="{% trans 'Открыть мое решение' %}">
+                                                <span class="js-lists-values-status badge badge-warning">{{ task.status_display }}</span>
+                                            </a>
+                                            {% elif task.status != '' %}
+                                            <a class="text-success js-lists-values-rate" href="{{ task.order_url }}" title="{% trans 'Открыть мое решение' %}">
+                                                <span class="js-lists-values-status badge badge-primary">{{ task.status_display }}</span>
+                                            </a>
+                                            {% else %}
+                                            <span class="js-lists-values-status badge badge-primary">{{ task.status_display }}</span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-center text-black-70">
+                                            <span class="js-lists-values-created">{{ task.created }}</span>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    {% include '_pagination.html' %}
+                    
+                </div>
+
+            </div>
+        </div>
+        <!-- // END Header Layout Content -->
+
+    </div>
+    <!-- // END Header Layout -->
+
+{% endblock %}
+
+{% block js_body %}
+{% include '_list_js.html' %}
+{% endblock %}

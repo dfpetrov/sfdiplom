@@ -1,0 +1,69 @@
+{% extends 'appmain/dashboard.html' %}
+{% load static %}
+{% load filters %}
+{% load course_filters %}
+{% load i18n %}
+
+{% block section_content %}
+
+    <!-- section: Quiz list -->
+    <div class="page-section">
+        <div class="container page__container">
+
+            <!-- section: head -->
+            <div class="row">
+                <div class="col">
+                    <div class="page-headline text-center">
+                        <h2>{% trans 'Проверь свои знания' %}</h2>
+                        <p class="lead text-70 col-lg-8 mx-auto">{% trans 'Список всех испытаний' %}</p>
+                    </div>
+                </div>
+            </div>
+            <!-- //END section: head -->
+
+            <!-- section: list -->
+            <div class="row">
+                {% for quiz in quiz_list %}
+                    <div class="col-md-6">
+                        <a class="card card--elevated card-course" href="{{ quiz.get_absolute_url }}"
+                           style="height: 218px">
+                            <img src="{{ quiz.get_avatar_url }}" alt="{{ quiz.title }}"
+                                 class="card-img" style="max-height: 100%; width: initial;">
+                            <div class="fullbleed bg-primary" style="opacity: .5; border-radius: inherit;"></div>
+                            <div class="card-body fullbleed">
+                                <div class="row">
+                                    <div class="col-5 text-center">
+                                        <span class="h5 text-white text-uppercase font-weight-normal m-0 d-block">Достижение</span>
+                                        <span class="text-white-60 d-block mb-16pt">
+                                            {{ quiz.user_score|default_if_none:0 }} {% trans 'из' %} {{ quiz.total_score }}
+                                        </span>
+                                        <img src="{{ quiz.result_description.cup_avatar }}"
+                                             alt="achievement" class="avatar avatar-xxl">
+                                    </div>
+                                    <div class="col-7 d-flex flex-column">
+                                        <div class="text-right flex">
+                                            {% if quiz.complete_date %}
+                                                <small class="text-white-60">{% trans 'пройден' %} {{ quiz.complete_date }}</small>
+                                            {% else %}
+                                                <small class="text-white-60">{% trans 'не пройден' %}</small>
+                                            {% endif %}
+                                        </div>
+                                        <div>
+                                            <span class="h4 text-white m-0 d-block">{{ quiz.title|truncatechars:20 }}</span>
+                                            <span class="text-white-60">{{ quiz.overview|truncatechars:35 }}</span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+            <!-- //END section: list -->
+
+        </div>
+    </div>
+    <!-- //END section: Quiz list -->
+
+{% endblock %}

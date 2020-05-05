@@ -1,0 +1,130 @@
+{% extends '__base.html' %}
+{% load static %}
+{% load i18n %}
+{% block style_head %}
+    .icon-hover:hover {
+    color: black!important;
+    }
+{% endblock %}
+{% block title %}{% trans 'Курсы по программированию' %}{% endblock %}
+{% block content %}
+    <!-- Header Layout -->
+    <div class="mdk-header-layout js-mdk-header-layout">
+        <!-- section: Header -->
+        {% include '_main_menu.html' %}
+        <!-- //END section: Header -->
+
+        <!-- section: main - Header Layout Content -->
+        <div class="mdk-header-layout__content page-content py-0">
+            {% include '_page_menu.html' %}{% load course_filters %}
+
+            <main>
+                <!-- article: Course -->
+                <article>
+                    <!-- section: heading -->
+                    <div class="mdk-box bg-dark js-mdk-box mb-0" data-effects="parallax-background blend-background">
+                        <div class="mdk-box__bg" style="opacity: 0.75">
+                            <div class="mdk-box__bg-front" style="background-image: url({{ background_img }});">
+                            </div>
+                        </div>
+                        <div class="mdk-box__content">
+                            <div class="hero container page__container py-64pt py-md-128pt text-center text-sm-left">
+                                <div class="container py-64pt">
+                                    <h1 class="text-white">{% trans 'Библиотека курсов' %}</h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- //END section: heading -->
+
+                    <!-- aside: breadcrumbs & messages -->
+                    {% include '_breadcrumb.html' %}
+                    {% include '_messages.html' %}
+                    <!-- //END aside: breadcrumbs & messages -->
+
+                    <!-- section: courses list -->
+
+                    <div class="page-section border-bottom-2">
+                        {% for course in course_list %}
+                            <article class="container page__container mb-64pt">
+                                <div class="row align-items-center">
+                                    <div class="col">
+                                        <div class="card card--raised card--elevated">
+                                            <div class="card-body">
+                                                <h2 class="card-title mb-0">{{ course.title }}</h2>
+                                                {% if course.user_progress %}
+                                                    <p class="card-subtitle mt-2">{% trans 'пройдено' %}: {{ course.user_progress }}%</p>
+                                                {% endif %}
+                                                <div class="d-flex mt-2">
+                                                    {% for star in course.estimate_stars %}
+                                                        <div class="rating__item">
+                                                            <i class="material-icons">{{ star }}</i>
+                                                        </div>
+                                                    {% endfor %}
+                                                </div>
+                                                <p class="text-70 mt-3">
+                                                    {{ course.overview }}
+                                                </p>
+                                                <a href="{{ course.get_absolute_url }}"
+                                                   class="btn btn-outline-secondary">
+                                                    {% trans 'Подробнее о курсе' %}
+                                                </a>
+                                            </div>
+                                            <div class="card-footer d-flex align-items-center bg-light">
+                                                <div class="text-muted flex">
+                                                    <i class="material-icons text-muted icon-hover mr-2">school</i>
+                                                    <span class="mr-3">
+                                                        {% plural_form course.module_count 'модуль' 'модуля' 'модулей' %}
+                                                    </span>
+                                                    <i class="material-icons text-muted icon-hover mr-2">class</i>
+                                                    <span class="mr-3">
+                                                        {% plural_form course.lesson_count 'урок' 'урока' 'уроков' %}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </article>
+                        {% endfor %}
+                    </div>
+
+                    <!-- //END section: courses list -->
+
+                </article>
+                <!-- //END article: Course -->
+            </main>
+
+            <!-- aside: Spacer -->
+            <aside class="page-section bg-gradient-purple border-top-2">
+                <div class="container page__container p-0-xs">
+                    <div class="row col-lg-9 mx-auto">
+                        <div class="col-sm-6 text-center d-flex flex-column justify-content-center">
+                            <h4 class="text-white mb-8pt">{% trans 'Вперед к знаниям!' %}</h4>
+                            <p class="text-white-70 mb-24pt mb-sm-0">
+                                {% trans 'Ты можешь многое, стоит только начать' %}
+                            </p>
+                        </div>
+                        {% if not user.is_authenticated %}
+                            <div class="col-sm-6 d-flex flex-column align-items-center justify-content-center">
+                                <a href="{% url 'appaccounts:register' %}" class="btn btn-outline-white mb-8pt">
+                                    {% trans 'Зарегистрироваться' %}
+                                </a>
+                                <p class="text-white-70 mb-0">
+                                    {% trans 'Уже есть аккаунт?' %}
+                                    <a href="{% url 'appaccounts:login' %}" class="text-white text-underline">
+                                        {% trans 'Войти' %}
+                                    </a>
+                                </p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </aside>
+            <!-- //END aside: Spacer -->
+        </div>
+        <!-- //END section: main - Header Layout Content -->
+    </div>
+    <!-- // END Header Layout -->
+{% endblock %}

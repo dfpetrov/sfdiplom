@@ -1,0 +1,24 @@
+{% if breadcrumbs %}
+    <aside>
+        <div class="page-section py-0 my-0 ">
+            <div class="container page__container">
+                <div class="row align-items-center">
+                    <nav class="col">
+                        <ol class="breadcrumb my-0">
+                            {#                        <li class="breadcrumb-item"><a href="{% url 'appmain:index' %}">Home</a></li>#}
+                            {% for breadcrumb in breadcrumbs %}
+                                {% if breadcrumb.url %}
+                                    <li class="breadcrumb-item"><a
+                                            href="{{ breadcrumb.url }}">{{ breadcrumb.title }}</a>
+                                    </li>
+                                {% else %}
+                                    <li class="breadcrumb-item active">{{ breadcrumb.title }}</li>
+                                {% endif %}
+                            {% endfor %}
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </aside>
+{% endif %}

@@ -1,0 +1,62 @@
+{% load i18n %}
+<!-- col task_list -->
+<div class="col-12 col-md-9">
+    {% load filters %}
+    {% for task in tasks %}
+    <!-- task item card -->
+    <div class="card">
+        <!-- task item card body -->
+        <div class="row p-2 p-sm-3">
+            <!-- skill avatar -->
+            <div class="col-12 col-md-3 col-lg-2 text-center">
+                <a href="{{ task.get_absolute_url }}" class="avatar avatar-xl avatar-4by3" title="{% trans 'Смотреть задачу' %}">
+                    <img src="{{ task.skill.get_avatar_url }}" alt="{{ task.skill }}" class="avatar-img rounded">
+                </a>
+                <div>
+                    <i class="material-icons star {% if task.rating > 0 %}star-active{%else%}text-muted{% endif %}">star</i>
+                    <i class="material-icons star {% if task.rating > 1 %}star-active{%else%}text-muted{% endif %}">star</i>
+                    <i class="material-icons star {% if task.rating > 2 %}star-active{%else%}text-muted{% endif %}">star</i>
+                    <i class="material-icons star {% if task.rating > 3 %}star-active{%else%}text-muted{% endif %}">star</i>
+                    <i class="material-icons star {% if task.rating > 4 %}star-active{%else%}text-muted{% endif %}">star</i>
+                </div>
+            </div>
+            <!-- //END skill avatar -->
+
+            <!-- task description -->
+            <div class="col-12 col-md-9 col-lg-10">
+                <h4 class="card-title mb-0">
+                    <a href="{{ task.get_absolute_url }}" title="{% trans 'Смотреть задачу' %}">{{ task.title_short }}</a>
+                </h4>
+                <small class="text-muted">{{ task.created }}</small>
+                <span class="text-black-50 mr-2">
+                    {% trans 'от' %} <a href="{{ task.author.profile.get_absolute_url }}" class="text-black-50"
+                        style="text-decoration: underline;">{{ task.author.profile }}</a>
+                </span>
+                {% if task.order_status %}
+                <span class="badge badge-pill {{ task.order_status|get_badge_class_for_order_status }}">
+                    {{ task.order_status_display }}
+                </span>
+                {% endif %}
+                <p class="mt-2">{{ task.description_short }}</p>
+                <a href="{{ task.skill.get_absolute_url }}"
+                    title="Показать все задачи по {{ task.skill }}">#{{ task.skill }}</a>
+                <div class="mt-2">
+                    <span class="text-muted mr-2">
+                        <i class="material-icons mr-1" style="font-size: inherit;">favorite_border</i>
+                        {{ task.favourite_count|default_if_none:"--" }}
+                    </span>
+                    <span class="text-muted">
+                        <i class="material-icons mr-1" style="font-size: inherit;">thumb_up</i>
+                        {{ task.like_count|default_if_none:"--" }}
+                    </span>
+                </div>
+            </div>
+            <!-- //END task description -->
+
+        </div>
+        <!-- //END task item card body -->
+    </div>
+    <!-- //END task item card -->
+    {% endfor %}
+</div>
+<!-- //END col task_list -->

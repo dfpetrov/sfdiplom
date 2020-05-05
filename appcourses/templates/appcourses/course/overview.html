@@ -1,0 +1,370 @@
+{% extends '__base.html' %}
+{% load static %}
+{% block style_head %}
+    .accordion__menu-link:focus, .accordion__menu-link:hover {
+    background-color: rgba(220, 220, 220, 0.59);
+    }
+    .icon-holder:hover {
+    color: black!important;
+    }
+{% endblock %}
+{% load i18n %}
+{% block title %}{% trans 'Курс' %} {{ course.title }} {% endblock %}
+{% block content %}
+    <!-- Header Layout -->
+    <div class="mdk-header-layout js-mdk-header-layout">
+        <!-- section: Header -->
+        {% include '_main_menu.html' %}
+        <!-- //END section: Header -->
+
+        <!-- section: main - Header Layout Content -->
+        <div class="mdk-header-layout__content page-content pb-0">
+            {% include '_page_menu.html' %}{% load course_filters %}
+
+            <main>
+                <!-- article: Course -->
+                <article>
+                    <!-- section: heading -->
+                    <div class="mdk-box bg-dark js-mdk-box mb-0" data-effects="parallax-background blend-background">
+                        <div class="mdk-box__bg" style="opacity: 0.75">
+                            <div class="mdk-box__bg-front" style="background-image: url({{ background_img }});">
+                            </div>
+                        </div>
+                        <div class="mdk-box__content">
+                            <div class="hero container page__container py-64pt py-md-112pt text-center text-sm-left">
+                                <div class="container">
+                                    <h1 class="text-white">{{ course }}</h1>
+                                    <p class="lead text-white-50 measure-hero-lead">{{ course.overview }}</p>
+                                    <div class="d-flex flex-column flex-sm-row align-items-center justify-content-start">
+                                        {% if current_lesson %}
+                                            <a href="{{ current_lesson.get_absolute_url }}"
+                                               class="btn btn-outline-white">
+                                                {% trans 'Продолжить изучение' %}
+                                            </a>
+                                        {% elif not user_enrolled %}
+                                            <form method="post" action="{% url 'appcourses:enroll_to_course' %}">
+                                                {{ enroll_form }}
+                                                {% csrf_token %}
+                                                <button type="submit"
+                                                        class="btn btn-outline-white btn-lg mb-16pt mb-sm-0 mr-sm-16pt"
+                                                        value="{% trans 'Начать курс' %}"
+                                                        name="btnStartCourse" id="btnStartCourse">
+                                                    <span id="textAddFavourites">{% trans 'Начать курс' %}</span>
+                                                </button>
+                                            </form>
+                                        {% else %}
+                                            <a href="{{ first_lesson.get_absolute_url }}"
+                                               class="btn btn-outline-white">
+                                                {% trans 'Продолжить изучение' %}
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="navbar navbar-expand-sm navbar-submenu navbar-light navbar-list p-0 m-0 align-items-center">
+                        <div class="container page__container">
+                            <ul class="nav navbar-nav flex align-items-sm-center">
+                                <li class="nav-item navbar-list__item d-flex align-items-center p-0 m-0">
+                                    <i class="material-icons text-muted icon--left icon-holder m-1">school</i>
+                                    {% plural_form course.module_count 'модуль' 'модуля' 'модулей' %}
+                                </li>
+                                <li class="nav-item navbar-list__item d-flex align-items-center p-0 m-0">
+                                    <i class="material-icons text-muted icon--left icon-holder m-1">class</i>
+                                    {% plural_form course.lesson_count 'урок' 'урока' 'уроков' %}
+                                </li>
+                                <li class="nav-item navbar-list__item d-flex align-items-center p-0 m-0">
+                                    <i class="material-icons text-muted icon--left icon-holder m-1">assessment</i>
+                                    Beginner
+                                </li>
+                                <li class="nav-item ml-sm-auto text-sm-center flex-column navbar-list__item">
+                                    <div class="rating rating-24">
+                                        {% for star in estimate_stars %}
+                                            <span class="rating__item">
+                                        <span class="material-icons">{{ star }}</span>
+                                    </span>
+                                        {% endfor %}
+                                    </div>
+                                    <p class="lh-1 mb-0">
+                                        <small class="text-muted">
+                                            {% plural_form course.estimate_count 'оценка' 'оценки' 'оценок' %}
+                                        </small>
+                                    </p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- //END section: heading -->
+
+                    <!-- aside: breadcrumbs & messages -->
+                    {% include '_breadcrumb.html' %}
+                    {% include '_messages.html' %}
+                    <!-- //END aside: breadcrumbs & messages -->
+
+                    <!-- section: course content -->
+                    <section class="page-section border-bottom-2 pt-3">
+                        <div class="container page__container">
+                            <h2 class="py-4">{% trans 'Содержание' %}</h2>
+                            {% for module in course.module_list %}
+                                <div class="card-group card-group--lg-up mb-3">
+                                    <div class="card card--elevated">
+                                        <ul class="accordion accordion--boxed js-accordion list-group-flush"
+                                            id="course-toc">
+                                            <li class="accordion__item open">
+                                                <a class="accordion__toggle" data-toggle="collapse"
+                                                   data-parent="#course-toc"
+                                                   href="#course-toc-{{ forloop.counter }}">
+                                                    <img src="{% static 'images/courses/lesson.svg' %}"
+                                                         class="avatar avatar-list mr-2"
+                                                         alt="lesson{{ forloop.counter }}">
+                                                    <span> {{ forloop.counter }}. {{ module.title }}</span>
+                                                </a>
+                                                <div class="accordion__menu">
+                                                    <ul class="list-unstyled collapse {% if forloop.counter == 1 %}show{% endif %}"
+                                                        id="course-toc-{{ forloop.counter }}">
+                                                        {% for lesson in module.lesson_list %}
+                                                            <li class="pl-md-4 accordion__menu-link">
+                                                                <i class="material-icons text-black-70 icon--left">class</i>
+                                                                <a class="flex timeline-text font-size-16pt"
+                                                                   href="{{ lesson.get_absolute_url }}">
+                                                                    {{ lesson.title }}
+                                                                </a>
+                                                            </li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </section>
+                    <!-- //END section: course content -->
+
+                    <!-- section: course description -->
+                    <div class="page-section bg-white border-bottom-1">
+                        <div class="container">
+                            <div class="row">
+                                <section class="col-12 col-md-7 mb-4">
+                                    <h4>{% trans 'Описание курса' %}</h4>
+                                    <p class="text-70">{{ course.description|safe }}</p>
+                                </section>
+                                <section
+                                        class="col-12 col-md-5 pt-4 pt-md-0 pl-md-4 border-top border-top-md-0 border-left-md">
+                                    <h4 class="text-sm-center">
+                                        {% trans 'Чему ты научишься' %}
+                                    </h4>
+                                    <p class="text-70">{{ course.profit|safe }}</p>
+                                </section>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- //END section: course description -->
+
+                    <!-- section: review -->
+                    <section class="page-section bg-white border-bottom-2">
+                        <div class="container page__container pb-16pt pb-lg-32pt">
+                            <h4>{% trans 'Оценка курса' %}</h4>
+                            <div class="row">
+                                <div class="col-md-3 mb-32pt mb-md-0">
+                                    <div class="display-1">{{ total_estimate }}</div>
+                                    <div class="rating rating-32">
+                                        {% for star in estimate_stars %}
+                                            <span class="rating__item">
+                                        <span class="material-icons">{{ star }}</span>
+                                    </span>
+                                        {% endfor %}
+                                    </div>
+                                    <p class="text-muted mb-0">{% plural_form course.estimate_count 'оценка' 'оценки' 'оценок' %}</p>
+                                </div>
+                                <div class="col-md-9">
+                                    {% for item in estimate_list %}
+                                        <div class="row align-items-center mb-8pt">
+                                            <div class="col-md-9 col-sm-6">
+                                                <div class="progress">
+                                                    <div class="progress-bar bg-secondary" role="progressbar"
+                                                         aria-valuenow="{{ item.percent }}"
+                                                         style="width: {{ item.percent }}%"
+                                                         aria-valuemin="0"
+                                                         aria-valuemax="100"></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 col-sm-6 d-none d-sm-flex align-items-center">
+                                                <div class="rating rating-24 mr-8pt">
+                                                    {% for star in item.stars %}
+                                                        <span class="rating__item">
+                                                        <span class="material-icons">{{ star }}</span>
+                                                    </span>
+                                                    {% endfor %}
+                                                </div>
+                                                <span class="text-muted">{{ item.percent|default:'0' }}%</span>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container page__container pt-16pt pt-lg-32pt pb-4">
+                            {% for review in course.review_list %}
+                                {% if forloop.counter < 4 %}
+                                    <div class="mb-16pt pb-16pt row">
+                                        <div class="col-md-3 mb-16pt mb-md-0">
+                                            <div class="d-flex">
+                                                {#                                            <a href="student-profile.html" class="avatar avatar-sm mr-16pt">#}
+                                                <img src="{{ review.user.profile.get_avatar_url }}" alt="avatar"
+                                                     class="avatar avatar-sm mr-3 rounded-circle">
+                                                {#                                            </a>#}
+                                                <div class="flex">
+                                                    <p class="text-muted m-0">{{ review.created }}</p>
+                                                    <p class="mb-0">{{ review.user.profile.get_name }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <div class="rating mb-8pt">
+                                                {% for star in review.estimate_stars %}
+                                                    <span class="rating__item">
+                                                    <span class="material-icons">{{ star }}</span>
+                                                </span>
+                                                {% endfor %}
+                                            </div>
+                                            <p class="text-70 mb-0">{{ review.text }}</p>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </section>
+                    <!-- //END section: review -->
+                </article>
+                <!-- //END article: Course -->
+            </main>
+
+            <!-- aside: Other courses -->
+            <aside class="page-section">
+                <div class="container page__container">
+                    <div class="page-heading">
+                        <h4>{% trans 'Курсы по программированию' %}</h4>
+                        <a href="{% url 'appcourses:library' %}" class="ml-sm-auto text-underline">
+                            {% trans 'Смотреть все курсы' %}</a>
+                    </div>
+                    <!-- section: TOP courses list -->
+                    <div class="row">
+                        {% for course in courses %}
+                            {% with course_url=course.get_absolute_url title=course.title %}
+                                    <article class="col-md-4">
+                                        <div
+                                                class="card card--elevated card-course overlay js-overlay mdk-reveal js-mdk-reveal"
+                                                data-partial-height="40" data-toggle="popover" data-trigger="click"
+                                                data-original-title=""
+                                                title="" style="height: 208px;">
+
+                                            <a href="{{ course_url }}" class="js-image" data-position="center"
+                                               data-height="auto"
+                                               style="display: block; position: relative; overflow: hidden; background-image: url({{ course.get_avatar_url }}); background-size: cover; background-position: center center; height: 168px;">
+                                            <span class="overlay__content">
+                                                <span class="overlay__action d-flex flex-column text-center">
+                                                    <i class="material-icons">play_circle_outline</i>
+                                                </span>
+                                            </span>
+                                            </a>
+                                            {% if course.new %}
+                                                <span class="corner-ribbon corner-ribbon--default-right-top corner-ribbon--shadow bg-accent text-white">NEW</span>
+                                            {% endif %}
+                                            <div class="mdk-reveal__content">
+                                                <div class="card-body">
+                                                    <h1 class="card-title font-size-16pt mb-2">{{ title }}</h1>
+                                                    <div class="rating flex">
+                                                        {% for star in course.estimate_stars %}
+                                                            <span class="rating__item">
+                                                                <span class="material-icons">{{ star }}</span>
+                                                            </span>
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <section class="popoverContainer d-none">
+                                            <div class="media">
+                                                <div class="media-body">
+                                                    <h4 class="card-title mb-2 text-center">
+                                                        {% trans 'Описание курса' %}
+                                                    </h4>
+                                                </div>
+                                            </div>
+                                            <p class="my-16pt text-black-70">
+                                                {{ course.overview }}
+                                            </p>
+                                            <div class="my-3">
+                                                <div class="d-flex">
+                                                    <div class="flex">
+                                                        <div class="card-title font-size-16pt">{{ title }}</div>
+                                                        <div class="d-flex align-items-center my-4pt">
+                                                            <span class="material-icons icon-24pt text-muted mr-4pt">
+                                                                school
+                                                            </span>
+                                                            <small class="text-black-50 lh-1 mb-0 mr-2 font-size-16pt">
+                                                                {% plural_form course.module_count 'модуль' 'модуля' 'модулей' %}
+                                                            </small>
+                                                            <span class="material-icons icon-24pt text-muted mr-4pt">
+                                                                play_circle_outline
+                                                            </span>
+                                                            <small class="text-black-50 lh-1 mb-0 mr-2 font-size-16pt">
+                                                                {% plural_form course.lesson_count 'урок' 'урока' 'уроков' %}
+                                                            </small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row align-items-center">
+                                                <div class="col">
+                                                    <a href="{{ course_url }}"
+                                                       class="btn btn-outline-accent btn-block">
+                                                        {% trans 'Смотреть трейлер' %}
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </section>
+                                    </article>
+                                {% endwith %}
+                        {% endfor %}
+                    </div>
+                    <!-- // END section: TOP courses list -->
+                </div>
+            </aside>
+            <!-- //END aside: Other courses -->
+
+            <!-- aside: Spacer -->
+            <aside class="page-section bg-gradient-purple border-top-2">
+                <div class="container page__container p-0-xs">
+                    <div class="row col-lg-9 mx-auto">
+                        <div class="col-sm-6 text-center d-flex flex-column justify-content-center">
+                            <h4 class="text-white mb-8pt">{% trans 'Вперед к знаниям!' %}</h4>
+                            <p class="text-white-70 mb-24pt mb-sm-0">
+                                {% trans 'Ты можешь многое, стоит только начать' %}
+                            </p>
+                        </div>
+                        {% if not user.is_authenticated %}
+                            <div class="col-sm-6 d-flex flex-column align-items-center justify-content-center">
+                                <a href="{% url 'appaccounts:register' %}" class="btn btn-outline-white mb-8pt">
+                                    {% trans 'Зарегистрироваться' %}
+                                </a>
+                                <p class="text-white-70 mb-0">
+                                    {% trans 'Уже есть аккаунт?' %}
+                                    <a href="{% url 'appaccounts:login' %}" class="text-white text-underline">
+                                        {% trans 'Войти' %}
+                                    </a>
+                                </p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </aside>
+            <!-- //END aside: Spacer -->
+        </div>
+        <!-- //END section: main - Header Layout Content -->
+    </div>
+    <!-- // END Header Layout -->
+{% endblock %}

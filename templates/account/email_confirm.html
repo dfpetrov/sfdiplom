@@ -1,0 +1,44 @@
+{% extends '__base_auth.html' %}
+
+{% load static %}
+
+{% load i18n %}
+{% load account %}
+
+{% block title %}Pump skill {% trans 'Подтверждение' %} e-mail{% endblock %}
+
+{% block content %}
+
+<div class="card-header text-center">
+    <h4 class="card-title">{% trans 'Подтверждение' %} e-mail</h4>
+</div>
+<div class="card-body">
+    <div class="alert alert-light border-1 border-left-3 border-left-primary d-flex align-items-center role=">
+        <i class="fa fa-check-circle fa-3x mr-3 text-warning"></i>
+        <div class="text-body">
+
+            {% if confirmation %}
+
+            {% user_display confirmation.email_address.user as user_display %}
+
+            <p>{% blocktrans with confirmation.email_address.email as email %}Пожалуйста подтвердите что <a href="mailto:{{ email }}">{{ email }}</a> этот адрес электронной почты для пользователя {{ user_display }}.{% endblocktrans %}</p>            
+
+            {% else %}
+
+            {% url 'account_email' as email_url %}
+
+            <p>{% blocktrans %}Срок действия ссылки для подтверждения по электронной почте истек или недействителен. Пожалуйста <a href="{{ email_url }}">оформить новый запрос на подтверждение по электронной почте</a>.{% endblocktrans %}</p>
+
+            {% endif %}
+        </div>
+    </div>
+    
+    <form method="post" action="{% url 'appaccounts:confirm_email' confirmation.key %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary btn-block">{% trans 'Подтвердить' %}</button>
+    </form>
+</div>
+<div class="card-footer text-center text-black-50">{% trans 'Вспомнил пароль?' %} <a href="{% url 'appaccounts:login' %}">{% trans 'Войти' %}</a>
+</div>
+
+{% endblock %}

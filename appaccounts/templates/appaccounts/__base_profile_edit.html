@@ -1,0 +1,198 @@
+{% extends '__base.html' %}{% load i18n %}{% load static %}
+{% block css_head %}
+    <style>
+        label {
+            font-weight: 500;
+        }
+
+        .list-group {
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 1px -1px rgba(48, 56, 64, .2), 0 1px 1px 0 rgba(48, 56, 64, .14), 0 1px 3px 0 rgba(48, 56, 64, .12);
+            border-radius: .25rem;
+        }
+
+        .list-group-item {
+            position: relative;
+            display: block;
+            padding: .75rem 1.5rem;
+            margin-bottom: -1px;
+            background-color: #fff;
+            border: 1px solid #ebeff2;
+        }
+
+        .list-group-item:first-child {
+            border-top-left-radius: .25rem;
+            border-top-right-radius: .25rem;
+        }
+
+        .list-group-form .list-group-item {
+            padding: 1rem 1.5rem;
+        }
+
+        .col-form-label {
+            padding-top: calc(.5rem + 1px);
+            padding-bottom: calc(.5rem + 1px);
+            line-height: 1.5;
+        }
+
+        .col-form-label {
+            margin-bottom: 0;
+            font-size: inherit;
+        }
+
+        .form-control {
+            display: block;
+            width: 100%;
+            height: calc(2.5rem + 2px);
+            padding: .5rem .75rem;
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.5;
+            color: #303840;
+            background-color: #edf0f2;
+            background-clip: padding-box;
+            border: 1px solid #edf0f2;
+            border-radius: .25rem;
+            transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+        }
+
+        .btn-accent {
+            color: #fff;
+            background-color: #ed0b4c;
+            border-color: #ed0b4c;
+        }
+
+        .btn-accent:hover {
+            color: #fff;
+            background-color: #c80940;
+            border-color: #bc093c;
+        }
+    </style>
+{% endblock %}
+{% block title %}{% trans 'Редактирование профайла' %} {{ profile }}{% endblock %}
+{% block content %}
+    <!-- Header Layout -->
+    <div class="mdk-header-layout js-mdk-header-layout">
+        <!-- section: Header -->
+        {% include '_main_menu.html' %}
+        <!-- //END section: Header -->
+
+        <!-- section: main - Header Layout Content -->
+        <div class="mdk-header-layout__content page-content">
+            {% include '_page_menu.html' %}
+
+            <!-- section: Heading -->
+            <div class="bg-gradient-primary border-bottom-white pt-112pt pb-32pt">
+                <div class="container d-flex flex-column flex-md-row align-items-center text-center text-md-left">
+                    <img src="{{ profile.get_avatar_url }}" width="104"
+                         class="mr-md-32pt mb-32pt mb-md-0" alt="">
+                    <div class="flex mb-32pt mb-md-0">
+                        <h2 class="text-white mb-0">{{ profile.get_name }}</h2>
+                        <p class="lead text-white-50 d-flex align-items-center">
+                            {% trans 'На сайте с' %}
+                            <span class="ml-1 d-flex align-items-center">
+{#                            <i class="material-icons icon-16pt mr-4pt">opacity</i>#}
+                            {{ power }}
+                        </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="navbar navbar-expand-sm navbar-dark-white bg-gradient-primary p-sm-0 ">
+                <div class="container page__container">
+                    <!-- Navbar toggler -->
+                    <button class="navbar-toggler ml-n16pt" type="button" data-toggle="collapse"
+                            data-target="#navbar-submenu2">
+                        <span class="material-icons">menu</span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbar-submenu2">
+                        <div class="navbar-collapse__content pb-16pt pb-sm-0">
+                            <ul class="nav navbar-nav">
+                                <li class="nav-item">
+                                    <a href="{% url 'appmain:dashboard_section' section='main' %}" class="nav-link">
+                                        {% trans 'Главное' %}
+                                    </a>
+                                </li>
+                                {% if always_none %}
+                                    <li class="nav-item {% if section == 'tasks' %}active{% endif %}">
+                                        <a href="{% url 'appmain:dashboard_section' section='tasks' %}"
+                                           class="nav-link">
+                                            {% trans 'Задачи' %}
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                            <ul class="nav navbar-nav ml-auto">
+                                <li class="nav-item">
+                                    <a href="{% url 'appaccounts:profile_edit' %}" class="nav-link active">
+                                        {% trans 'Мой профиль' %}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- // END section: Heading -->
+
+            <!-- aside: breadcrumbs & messages -->
+            {% include '_breadcrumb.html' %}
+            {% include '_messages.html' %}
+            <!-- //END aside: breadcrumbs & messages -->
+
+            <!-- container -->
+            <div class="page-section border-bottom-2 pt-3">
+                <div class="container page__container">
+                    <div class="row">
+                        <div class="col-lg-9">
+
+                            <div class="page-section">
+                                <h2>{% block section1_title %}{% endblock %}</h2>
+                                <form id="form_section1" method="post">
+                                    {% csrf_token %}
+                                    {% block section1_content %}{% endblock %}
+                                </form>
+                            </div>
+
+                            <div class="page-section">
+                                <h2>{% block section2_title %}{% endblock %}</h2>
+                                {% block section2_content %}{% endblock %}
+                            </div>
+
+                        </div>
+                        <div class="col-lg-3 page-nav">
+                            <div class="page-section pt-lg-112pt">
+                                <nav class="nav page-nav__menu">
+                                    <a class="nav-link {% if profile_chapter == 1 %}active{% endif %}"
+                                       href="{% if profile_chapter == 1 %}#{% else %}{% url 'appaccounts:profile_edit' %}{% endif %}">
+                                        {% trans 'Основная информация' %}</a>
+                                    <a class="nav-link {% if profile_chapter == 2 %}active{% endif %}"
+                                       href="{% if profile_chapter == 2 %}#{% else %}{% url 'appaccounts:account_email' %}{% endif %}">
+                                        {% trans 'Подтвердить/Изменить' %} e-mail</a>
+                                    <a class="nav-link {% if profile_chapter == 3 %}active{% endif %}"
+                                       href="{% if profile_chapter == 3 %}#{% else %}{% url 'appaccounts:password_change' %}{% endif %}">
+                                        {% trans 'Изменить пароль' %}</a>
+                                    <a class="nav-link {% if profile_chapter == 4 %}active{% endif %}"
+                                       href="{% if profile_chapter == 4 %}#{% else %}{% url 'appaccounts:password_reset' %}{% endif %}">
+                                        {% trans 'Сбросить пароль' %}</a>
+
+                                </nav>
+                                {% if profile_chapter != 2 %}
+                                    <div class="page-nav__content mb-4">
+                                        <button form="form_section1" type="submit"
+                                                class="btn btn-accent">{% trans 'Сохранить изменения' %}</button>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- //END container -->
+
+        </div>
+        <!-- //END section: main - Header Layout Content -->
+
+    </div>
+    <!-- // END Header Layout -->
+{% endblock %}

@@ -1,0 +1,26 @@
+{% if page_head %}
+    <div class="breadcrumb-area gradient--secondary">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="breadcrumb_box text-center">
+                        <h2 class="breadcrumb-title">{{ page_head }}</h2>
+                        <ul class="breadcrumb-list">
+                            {% for breadcrumb in breadcrumbs %}
+                                {% if breadcrumb.url %}
+                                    <li class="breadcrumb-item">
+                                        <a href="{{ breadcrumb.url }}">
+                                            {{ breadcrumb.title }}
+                                        </a>
+                                    </li>
+                                {% else %}
+                                    <li class="breadcrumb-item active">{{ breadcrumb.title }}</li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}

@@ -1,0 +1,19 @@
+.ql-editor {
+    padding: 0;
+    margin: 0;
+}
+
+.ql-syntax {
+    margin: 0;
+}
+
+.ql-bubble .ql-editor code,
+.ql-bubble .ql-editor pre.ql-syntax {
+    margin: 0;
+}
+
+.ql-snow .ql-editor code,
+.ql-snow .ql-editor pre,
+.ql-snow .ql-editor pre.ql-syntax {
+    margin: 0;
+}

@@ -1,0 +1,193 @@
+{% extends '__base.html' %}
+
+{% load i18n %}
+{% load static %}
+
+{% block meta %}<meta name="yandex-verification" content="7d8e233442030405" />{% endblock %}
+{% block css_head %}<link type="text/css" href="{% static 'css/app_courses.css' %}" rel="stylesheet">{% endblock %}
+
+{% block title %}{% trans 'PumpSkill Прокачай свои скилы' %}{% endblock %}
+
+{% block content %}
+
+<!-- Header Layout -->
+<div class="mdk-header-layout js-mdk-header-layout">
+
+    <!-- Header -->
+    {% include '_main_menu.html' %}
+    <!-- // END Header -->
+
+    <!-- Header Layout Content -->
+    <div class="mdk-header-layout__content page-content ">
+        <div style="background-color: #fff;">
+            <div class="container page__container py-64pt py-md-112pt">
+                <div class="row align-items-center text-center text-md-left">
+                    <div class="col-12 col-md-6 order-1 order-md-0">
+                        <div class="card-body">
+                            <img src="{% static 'images/peertopeer.jpg' %}" alt="peertopeer" class="card-img h-auto">
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 order-1 order-md-0">
+                        <h1>{% trans 'Здесь ты прокачаешь свои скилы' %}</h1>
+                        <p class="lead mb-32pt mb-lg-48pt p-1" style="background-color: #f0f8ff;">
+{% blocktrans %}Решай интересные задачи от пользователей со всего мира. Получай комментарии своих решений. Создавай свои задачи и оценивай решения других.{% endblocktrans %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-section border-bottom-2">
+            <div class="container page__container">
+                <div class="page-headline text-center">
+                    <h2>{% trans 'Задачи по программированию' %}</h2>
+                    <p class="lead text-black-70 measure-lead mx-auto">
+{% trans 'Повышай свои навыки, решая интересные задачи и получай оценки и комментарии других пользователей.' %}</p>
+                </div>
+
+                <div class="row">
+
+                    {% for skill in skill_list %}
+                    <div class="col-sm-6 col-md-4 col-lg-3">
+
+                        <div class="card card--elevated card-course overlay mdk-reveal">
+                            <a href="{{ skill.get_absolute_url }}" class="bg-a"
+                                style="background-image: url({{ skill.get_avatar_url }})">
+                            </a>
+                            <div class="mdk-reveal__content">
+                                <div class="card-body">
+                                    <div class="row mb-1">
+                                        <div class="col">
+                                            <a class="card-title" href="course.html">{{ skill }}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="pt-8pt pt-md-32pt text-center">
+                    <a href="{% url 'apptasks:task_list' %}" class="btn btn-outline-secondary">{% trans 'Смотреть все задачи' %}</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-section bg-gradient-purple border-top-2">
+            <div class="container page__container p-0-xs">
+                <div class="row col-lg-9 mx-auto">
+                    <div class="col-sm-6 text-center d-flex flex-column justify-content-center">
+                        <h4 class="text-white mb-8pt">{% trans 'Работаем!' %}</h4>
+                    </div>
+                    <div class="col-sm-6 d-flex flex-column align-items-center justify-content-center">
+                        <a href="{% url 'appaccounts:register' %}" class="btn btn-outline-white mb-8pt">{% trans 'Создать аккаунт' %}</a>
+                        <p class="text-white-70 mb-0">{% trans 'Уже зарегистрирован?' %} <a href="{% url 'appaccounts:login' %}"
+                                class="text-white text-underline">{% trans 'Войти' %}</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container page__container">
+            <div class="border-left-2 page-section pl-32pt pb-32pt">
+                <div class="d-flex align-items-center page-num-container">
+                    <div class="page-num">1</div>
+                    <h4>{% trans 'Решай задачи или создавай свои' %}</h4>
+                </div>
+                <p class="text-70 mb-lg-32pt">
+{% trans 'Практикуйся, выполняя задачи на разные темы. Ты можешь создавать свои задачи и смотреть как их решат другие пользователи. Добавляй интересные задачи в избранное и ставь лайки.' %}
+                </p>
+                <div class="card card--raised bg-inherit">
+                    <div class="card-body">
+                        <img src="{% static 'images/task.png' %}" alt="task" class="card-img h-auto">
+                    </div>
+                </div>
+            </div>
+            <div class="border-left pl-32pt pb-32pt">
+                <div class="d-flex align-items-center page-num-container">
+                    <div class="page-num">2</div>
+                    <h4>{% trans 'Получай обратную связь' %}</h4>
+                </div>
+                <p class="text-70 mb-lg-32pt">
+{% trans 'Безответная работа - это не прикольно. Поэтому на PumpSkill другие пользователи проверяют твои решения и оставляют полезные комментарии, подсказки, советы (ну или почти всегда полезные).' %}
+                </p>
+                <div class="card card--raised bg-inherit">
+                    <div class="card-body">
+                        <img src="{% static 'images/feedback.png' %}" alt="Achievements" class="card-img h-auto">
+                    </div>
+                </div>
+            </div>
+            <div class="border-left pl-32pt pb-64pt">
+                <div class="d-flex align-items-center page-num-container">
+                    <div class="page-num">3</div>
+                    <h4>{% trans 'Следи за достижениями' %}</h4>
+                </div>
+                <p class="text-70 mb-lg-32pt">
+{% trans 'Чем больше ты практикуешься, тем выше твой прогресс. Оценивай свои достижения на удобном графике в профайле.' %}
+                </p>
+                <div class="card card--raised bg-inherit">
+                    <div class="card-body">
+                        <img src="{% static 'images/profile.png' %}" alt="Achievements" class="card-img h-auto">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="js-fix-footer bg-white border-top-2" data-domfactory-upgraded="fix-footer" style="opacity: 1;">
+            <div class="container page-section py-lg-48pt">
+                <div class="row">
+                    <h4 class="text-70">{% trans 'Каталог задач' %}</h4>
+                </div>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="row">
+                            <div class="col-12 col-md-4">
+                                <nav class="nav nav-links nav--flush flex-column">
+                                    {% for skill in skill_list %}
+                                    {% if forloop.counter < 5 %}
+                                    <a class="nav-link" href="{{ skill.get_absolute_url }}">{% trans 'Задачи по' %} {{ skill }}</a>
+                                    {% endif %}
+                                    {% endfor %}
+                                </nav>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <nav class="nav nav-links nav--flush flex-column">
+                                    {% for skill in skill_list %}
+                                    {% if forloop.counter >= 5 and forloop.counter < 9 %}
+                                    <a class="nav-link" href="{{ skill.get_absolute_url }}">{% trans 'Задачи по' %} {{ skill }}</a>
+                                    {% endif %}
+                                    {% endfor %}
+                                </nav>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <nav class="nav nav-links nav--flush flex-column">
+                                    {% for skill in skill_list %}
+                                    {% if forloop.counter >= 9 and forloop.counter < 12 %}
+                                    <a class="nav-link" href="{{ skill.get_absolute_url }}">{% trans 'Задачи по' %} {{ skill }}</a>
+                                    {% endif %}
+                                    {% endfor %}
+                                    <a class="nav-link" href="{% url 'apptasks:task_list' %}">{% trans 'Все задачи' %}</a>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mt-4 mt-sm-0 text-md-right">
+                        <p class="text-70 brand justify-content-md-end">
+                            <img class="brand-icon" src="{% static 'images/logo/pumpskill_color.svg' %}" width="30"
+                                alt="PumpSkill"> PumpSkill
+                        </p>
+                        <p class="text-muted mb-0 mb-lg-16pt">
+{% trans 'PumpSkill - это он-лайн платформа, основанная на принципах взаимного обучения, которая помогает любому человеку развивать профессиональные навыки и достигать новые цели.' %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- // END Header Layout Content -->
+
+</div>
+<!-- // END Header Layout -->
+{% endblock %}

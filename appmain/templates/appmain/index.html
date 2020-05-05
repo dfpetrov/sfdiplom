@@ -1,0 +1,251 @@
+{% extends '__base.html' %}{% load i18n %}{% load static %}
+{% block meta %}
+    <meta name="yandex-verification" content="7d8e233442030405"/>{% endblock %}
+{% block css_head %}
+    {% include '_font_rubic.html' %}
+{% endblock %}
+{% block style_head %}
+    .btn-primary-light {
+    padding: 10px 40px !important;
+    outline: none;
+    border-color: #6EBDFF;
+    background-color: #6EBDFF;
+    color: #fff;
+    -webkit-transition: all 0.5s;
+    transition: all 0.5s;
+    border-width: 1px;
+    cursor: pointer;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    text-align: center;
+    white-space: nowrap;
+    }
+
+    .btn-primary-light:hover {
+    -webkit-box-shadow: 0 14px 26px -12px rgba(25, 104, 252, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px
+    rgba(25, 104, 252, 0.2) !important;
+    box-shadow: 0 14px 26px -12px rgba(25, 104, 252, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(25,
+    104, 252, 0.2) !important;
+    opacity: 0.95;
+    color: #fff!important;
+    }
+
+    a.text-light:focus, a.text-light:hover {
+    color: #fff!important;
+    }
+{% endblock %}
+{% block title %}{% trans 'PumpSkill | Курсы по программированию' %}{% endblock %}
+{% block content %}
+    <!-- Header Layout -->
+    <div class="mdk-header-layout js-mdk-header-layout">
+        <!-- section: Header -->
+        {% include '_main_menu.html' %}
+        <!-- //END section: Header -->
+
+        <!-- section: main - Header Layout Content -->
+        <div class="mdk-header-layout__content page-content">
+            <main>
+                <!-- section: heading -->
+                <section class="bg-white border-bottom-2">
+                    <div class="bg-white container page__container py-64pt py-md-112pt">
+                        <div class="row align-items-center text-center text-md-left">
+                            <div class="col-12 col-md-6 order-1 order-md-0">
+                                <div class="card-body">
+                                    <img src="{% static 'images/peertopeer.jpg' %}" alt="peertopeer"
+                                         class="card-img h-auto">
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 order-1 order-md-0">
+                                <h1>{% trans 'Изучай то что нравится' %}</h1>
+                                <p class="lead mb-32pt mb-lg-48pt p-2" style="background-color: #f0f8ff;">
+                                    {% blocktrans %}Уничтожай курсы. Проходи испытания. Прокачивай свои
+                                        скилы.{% endblocktrans %}
+                                </p>
+                                {% if continue_learning_text and continue_learning_url %}
+                                    {% if is_authenticated %}
+                                        <a href="{{ continue_learning_url }}"
+                                           class="btn btn-lg btn-primary-light text-light mb-16pt">
+                                            {{ continue_learning_text }}
+                                        </a>
+                                    {% else %}
+                                        <form action="{{ continue_learning_url }}" method="post">
+                                            {% csrf_token %}
+                                            <button type="submit"
+                                                    class="btn btn-lg btn-primary-light text-light mb-16pt">
+                                                {{ continue_learning_text }}
+                                            </button>
+                                        </form>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- //END section: heading -->
+
+                {% load course_filters %}
+                <!-- section: courses list -->
+                <section class="page-section border-bottom-2">
+                    <div class="container page__container">
+                        <div class="page-headline text-center">
+                            <h2>{% trans 'Курсы по программированию' %}</h2>
+{#                            <p class="lead text-black-70 measure-lead mx-auto"></p>#}
+                        </div>
+                        <div class="row justify-content-center">
+                            {% for course in courses %}
+                                {% with course_url=course.get_absolute_url title=course.title %}
+                                    <article class="col-md-5">
+                                        <div
+                                                class="card card--elevated card-course overlay js-overlay mdk-reveal js-mdk-reveal"
+                                                data-partial-height="40" data-toggle="popover" data-trigger="click"
+                                                data-original-title=""
+                                                title="" style="height: 208px;">
+
+                                            <a href="{{ course_url }}" class="js-image" data-position="center"
+                                               data-height="auto"
+                                               style="display: block; position: relative; overflow: hidden; background-image: url({{ course.get_avatar_url }}); background-size: cover; background-position: center center; height: 168px;">
+                                            <span class="overlay__content">
+                                                <span class="overlay__action d-flex flex-column text-center">
+                                                    <i class="material-icons">play_circle_outline</i>
+                                                </span>
+                                            </span>
+                                            </a>
+                                            {% if course.new %}
+                                                <span class="corner-ribbon corner-ribbon--default-right-top corner-ribbon--shadow bg-accent text-white">NEW</span>
+                                            {% endif %}
+                                            <div class="mdk-reveal__content">
+                                                <div class="card-body">
+                                                    <h1 class="card-title font-size-16pt mb-2">{{ title }}</h1>
+                                                    <div class="rating flex">
+                                                        {% for star in course.estimate_stars %}
+                                                            <span class="rating__item">
+                                                                <span class="material-icons">{{ star }}</span>
+                                                            </span>
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <section class="popoverContainer d-none">
+                                            <div class="media">
+                                                <div class="media-body">
+                                                    <h4 class="card-title mb-2 text-center">
+                                                        {% trans 'Описание курса' %}
+                                                    </h4>
+                                                </div>
+                                            </div>
+                                            <p class="my-16pt text-black-70">
+                                                {{ course.overview }}
+                                            </p>
+                                            <div class="my-3">
+                                                <div class="d-flex">
+                                                    <div class="flex">
+                                                        <div class="card-title font-size-16pt">{{ title }}</div>
+                                                        <div class="d-flex align-items-center my-4pt">
+                                                            <span class="material-icons icon-24pt text-muted mr-4pt">
+                                                                school
+                                                            </span>
+                                                            <small class="text-black-50 lh-1 mb-0 mr-2 font-size-16pt">
+                                                                {% plural_form course.module_count 'модуль' 'модуля' 'модулей' %}
+                                                            </small>
+                                                            <span class="material-icons icon-24pt text-muted mr-4pt">
+                                                                play_circle_outline
+                                                            </span>
+                                                            <small class="text-black-50 lh-1 mb-0 mr-2 font-size-16pt">
+                                                                {% plural_form course.lesson_count 'урок' 'урока' 'уроков' %}
+                                                            </small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row align-items-center">
+                                                <div class="col">
+                                                    <a href="{{ course_url }}"
+                                                       class="btn btn-outline-accent btn-block">
+                                                        {% trans 'Смотреть трейлер' %}
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </section>
+                                    </article>
+                                {% endwith %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </section>
+                <!-- //END section: courses list -->
+
+                <!-- section: review -->
+                <section class="page-section bg-white border-bottom-2">
+                    <div class="container page__container">
+                        <div class="page-headline text-center">
+                            <h2>{% trans 'Отзывы' %}</h2>
+                            <p class="lead text-70 measure-lead mx-auto">
+                                {% trans 'Что говорят студенты после прохождения наших курсов' %}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="container page__container pt-16pt pt-lg-32pt pb-4">
+                        {% for review in review_list %}
+                            <div class="mb-16pt pb-16pt row">
+                                <div class="col-md-3 mb-16pt mb-md-0">
+                                    <div class="d-flex">
+                                        <img src="{{ review.user.profile.get_avatar_url }}" alt="avatar"
+                                             class="avatar avatar-sm mr-3 rounded-circle">
+                                        <div class="flex">
+                                            <p class="text-muted m-0">{{ review.created }}</p>
+                                            <p class="mb-0">{{ review.user.profile.get_name }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="rating mb-8pt">
+                                        {% for star in review.estimate_stars %}
+                                            <span class="rating__item">
+                                                <span class="material-icons">{{ star }}</span>
+                                            </span>
+                                        {% endfor %}
+                                    </div>
+                                    <p class="text-70 mb-0">{{ review.text }}</p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </section>
+                <!-- //END section: review -->
+            </main>
+
+            <!-- aside: Spacer -->
+            <aside class="page-section bg-gradient-purple border-top-2">
+                <div class="container page__container p-0-xs">
+                    <div class="row col-lg-9 mx-auto">
+                        <div class="col-sm-6 text-center d-flex flex-column justify-content-center">
+                            <h4 class="text-white mb-8pt">{% trans 'Вперед к знаниям!' %}</h4>
+                            <p class="text-white-70 mb-24pt mb-sm-0">
+                                {% trans 'Ты можешь многое, стоит только начать' %}
+                            </p>
+                        </div>
+                        {% if not user.is_authenticated %}
+                            <div class="col-sm-6 d-flex flex-column align-items-center justify-content-center">
+                                <a href="{% url 'appaccounts:register' %}" class="btn btn-outline-white mb-8pt">
+                                    {% trans 'Зарегистрироваться' %}
+                                </a>
+                                <p class="text-white-70 mb-0">
+                                    {% trans 'Уже есть аккаунт?' %}
+                                    <a href="{% url 'appaccounts:login' %}" class="text-white text-underline">
+                                        {% trans 'Войти' %}
+                                    </a>
+                                </p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </aside>
+            <!-- //END aside: Spacer -->
+        </div>
+        <!-- //END section: main - Header Layout Content -->
+
+    </div>
+    <!-- // END Header Layout -->
+{% endblock %}

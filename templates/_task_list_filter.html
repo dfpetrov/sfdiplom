@@ -1,0 +1,60 @@
+{% load i18n %}
+{% if user.is_authenticated %}
+<div class="col-12 col-md-3 border-2">
+    <h2 class="h2 mb-1 my-3">{% trans 'Фильтр' %}</h2>
+    <form method="get" id="form_filter">
+        <div id="groupFilterStatus">
+            <div class="form-group">
+                <label class="form-label">{% trans 'Фильтр по состоянию' %}</label>
+                <div class="custom-controls-stacked">
+                    <div class="custom-control custom-radio">
+                        <input id="filterStatus1" name="filterStatus" type="radio" class="custom-control-input"
+                            value="0" {% if filter_status == '0' %} checked {% endif %}>
+                        <label for="filterStatus1" class="custom-control-label">{% trans 'Все' %}</label>
+                    </div>
+                    <div class="custom-control custom-radio mt-2">
+                        <input id="filterStatus2" name="filterStatus" type="radio" class="custom-control-input"
+                            value="1" {% if filter_status == '1' %} checked {% endif %}>
+                        <label for="filterStatus2" class="custom-control-label">
+                            {% trans 'Задачи не взятые в работу' %}</label>
+                    </div>
+                    <div class="custom-control custom-radio mt-2">
+                        <input id="filterStatus3" name="filterStatus" type="radio" class="custom-control-input"
+                            value="2" {% if filter_status == '2' %} checked {% endif %}>
+                        <label for="filterStatus3" class="custom-control-label">
+                            {% trans 'Задачи взятые в работу' %}</label>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div id="groupFilterAuthor">
+            <div class="form-group">
+                <label class="form-label">{% trans 'Фильтр по автору' %}</label>
+                <div class="custom-controls-stacked">
+                    <div class="custom-control custom-radio">
+                        <input id="filterAuthor1" name="filterAuthor" type="radio" class="custom-control-input"
+                            value="0" {% if filter_author == '0' %} checked {% endif %}>
+                        <label for="filterAuthor1" class="custom-control-label">{% trans 'Все' %}</label>
+                    </div>
+                    <div class="custom-control custom-radio mt-2">
+                        <input id="filterAuthor2" name="filterAuthor" type="radio" class="custom-control-input"
+                            value="1" {% if filter_author == '1' %} checked {% endif %}>
+                        <label for="filterAuthor2" class="custom-control-label">
+                            {% trans 'Только не мои задачи' %}</label>
+                    </div>
+                    <div class="custom-control custom-radio mt-2">
+                        <input id="filterAuthor3" name="filterAuthor" type="radio" class="custom-control-input"
+                            value="2" {% if filter_author == '2' %} checked {% endif %}>
+                        <label for="filterAuthor3" class="custom-control-label">
+                            {% trans 'Только мои задачи' %}</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input form="form_filter" type="submit" class="btn btn-primary" value="{% trans 'Применить' %}" name="btnFiltrSet">
+        <a href="{% url 'apptasks:task_list' %}" class="btn btn-warning my-1">{% trans 'Сбросить' %}</a>
+    </form>
+</div>
+{% endif %}
+<!-- //END col filter -->

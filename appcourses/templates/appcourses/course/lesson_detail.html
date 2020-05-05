@@ -1,0 +1,601 @@
+{% extends '__base.html' %}
+{% load static %}
+{% load i18n %}
+{% block title %}{{ title }}{% endblock %}
+{% block css_head %}
+    {% include '_perfect_scrollbar_css.html' %}
+    {% include '_font_rubic.html' %}
+    {% if contents.type == 'text' %}
+        {% include '_quill_css_bubble.html' %}
+        {% include '_quill_lesson_style.html' %}
+        {% include '_hljs_css.html' %}
+    {% endif %}
+    {% if type_quiz %}
+        {% include '_hljs_css.html' %}
+    {% endif %}
+{% endblock %}
+{% if type_quiz or is_course_review %}
+    {% block style_head %}
+        {% include '_hljs_custom_style.html' %}
+        {% if is_course_review %}
+            .custom-radio .custom-control-label {
+            cursor: pointer;
+            }
+            .custom-radio .custom-control-label:before {
+            display: none;
+            }
+            .custom-radio .custom-control-label:after {
+            display: none;
+            }
+        {% endif %}
+    {% endblock %}
+{% endif %}
+{% block content %}
+    <!-- Header Layout -->
+    <div class="mdk-header-layout js-mdk-header-layout">
+        <!-- Header -->
+        {% include '_main_menu.html' %}
+        <!-- // END Header -->
+
+        <!-- section: heading -->
+        <div class="mdk-box bg-dark mdk-box--bg-gradient-primary js-mdk-box mb-0 pb-lg-64pt py-32pt"
+             data-effects="blend-background">
+            <button class="navbar-toggler d-block" data-toggle="sidebar" type="button"
+                    style="position: absolute; top: 0; z-index: 1; background-color: rgba(48, 56, 64, 0.42); color: #f5f5dc; border-radius: 0">
+            <span class="material-icons">
+                menu
+            </span>
+            </button>
+            <div class="d-sm-none" style="height: 30px"></div>
+            <div class="mdk-box__content">
+                <div class="container page__container">
+                    <!-- navbar -->
+                    <nav class="course-nav d-none d-md-flex">
+                        {% for module_lesson in current_module.lesson_list %}
+                            <a href="{{ module_lesson.get_absolute_url }}" data-toggle="tooltip" data-placement="bottom"
+                               data-title="{{ module_lesson.title }}" data-original-title="" title=""
+                               style="border-radius: 5px; {% if module_lesson != lesson %}background-color: rgba(48,56,64,.2);{% endif %}">
+                                <span class="material-icons
+                                {% if module_lesson in completed_lessons %}
+                                text-success
+                                {% else %}
+                                text-secondary{% endif %}">
+                                    class
+                                </span>
+                            </a>
+                        {% endfor %}
+                        {% if review_url %}
+                            <a href="{{ review_url }}" data-toggle="tooltip" data-placement="bottom"
+                               data-title="{% trans 'Обратная связь' %}" data-original-title="" title=""
+                               style="border-radius: 5px; {% if not is_review %}background-color: rgba(48,56,64,.2);{% endif %}">
+                                <span class="material-icons {% if not is_review %}text-white-70{% else %}text-primary{% endif %}">comment</span>
+                            </a>
+                        {% endif %}
+                        {% if is_last_module %}
+                            <a href="{{ review_course_url }}" data-toggle="tooltip" data-placement="bottom"
+                               data-title="{% trans 'Отзыв о курсе' %}" data-original-title="" title=""
+                               style="border-radius: 5px; {% if not is_course_review %}background-color: rgba(48,56,64,.2);{% endif %}">
+                                <span class="material-icons {% if not is_course_review %}text-white-70{% else %}text-success{% endif %}">feedback</span>
+                            </a>
+                        {% endif %}
+                    </nav>
+                    <!-- // END navbar -->
+                    <!-- header -->
+                    <h2 class="mb-16pt text-white">{{ header }}</h2>
+                    <p class="hero__lead measure-hero-lead text-white-50">
+                        {% if is_review %}
+                            {% trans 'Обратная связь' %}
+                        {% elif not is_course_review %}
+                            {% trans 'урок' %} {{ number_of_lesson }} {% trans 'из' %} {{ module_lesson_count }}
+                        {% endif %}
+                    </p>
+                    <!-- // END header -->
+                </div>
+            </div>
+        </div>
+        <!-- // END section: heading -->
+
+        <!-- section: navbar -->
+        <div class="navbar navbar-expand-sm navbar-submenu navbar-light h-auto h-sm-64 p-sm-0">
+            <div class="container flex-column flex-sm-row">
+                {% if previous_lesson_url %}
+                    <a href="{{ previous_lesson_url }}" class="m-8pt btn btn-white">
+                        {% if previous_module %}
+                            {% trans 'Предыдущий модуль' %}
+                        {% else %}
+                            {% trans 'Назад' %}
+                        {% endif %}
+                    </a>
+                {% endif %}
+                {% if is_lesson %}
+                    {% if is_authenticated %}
+                        <form method="post" action="{{ next_post_url }}">
+                            {{ complete_lesson_form }}
+                            {% csrf_token %}
+                            <button type="submit" class="m-8pt btn btn-warning">
+                                {% if is_last_lesson %}
+                                    {% trans 'Завершить модуль' %}
+                                {% else %}
+                                    {% trans 'Следующий урок' %}
+                                    <i class="material-icons icon--right">keyboard_arrow_right</i>
+                                {% endif %}
+                            </button>
+                        </form>
+                    {% else %}
+                        <a href="{{ next_url }}" class="m-8pt btn btn-warning">
+                            {% if is_last_lesson %}
+                                {% trans 'Завершить модуль' %}
+                            {% else %}
+                                {% trans 'Следующий урок' %}
+                                <i class="material-icons icon--right">keyboard_arrow_right</i>
+                            {% endif %}
+                        </a>
+                    {% endif %}
+                {% elif is_review %}
+                    {% if is_last_module %}
+                        <a href="{{ next_lesson_url }}" class="m-8pt btn btn-accent btn-lg">
+                            {% trans 'Завершить курс' %}
+                        </a>
+                    {% else %}
+                        <a href="{{ next_lesson_url }}" class="m-8pt btn btn-warning">
+                            {% trans 'Следующий модуль' %}
+                            <i class="material-icons icon--right">keyboard_arrow_right</i>
+                        </a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+        <!-- // END section: navbar -->
+
+        {% include '_messages.html' %}
+        <!-- section: content -->
+        {% if type_quiz and block_message %}
+            <div class="mdk-header-layout__content page-content pt-0">
+                <div class="page-section bg-white border-bottom-2">
+                    <div class="container page__container">
+                        <div class="row">
+                            <div class="col">
+                                <div class="page-headline text-center text-md-left p-0 my-3">
+                                    <h2>{{ block_message_header }}</h2>
+                                </div>
+                                <p>{{ block_message }}</p>
+                                <a href="{% url 'appaccounts:register' %}" class="btn btn-primary mt-2 mr-2">
+                                    {% trans 'Зарегистрироваться' %}
+                                </a>
+                                <a href="{% url 'appaccounts:register' %}" class="btn btn-outline-secondary mt-2">
+                                    {% trans 'Войти' %}
+                                </a>
+                                <div style="min-height: 21.9vh;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% elif is_course_review %}
+            <div class="mdk-header-layout__content page-content pt-0">
+                <div class="page-section border-bottom-1 pb-0">
+                    <div class="container">
+
+                        <!-- row: header -->
+                        <div class="row justify-content-center">
+                            <div class="col">
+                                <div class="page-headline text-center">
+                                    <h2>{% trans 'Отзыв о курсе' %}</h2>
+                                    <p class="lead text-70">
+                                        {% trans 'На сколько звезд ты оцениваешь курс? Можешь написать в комментах что не понравилось, мы обязательно будем это исправлять!' %}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- //END row: header -->
+
+                        <!-- row: stars -->
+                        <div class="row mb-48pt justify-content-center">
+                            {% for estimate_percent in estimate_list %}
+                                <div class="col-auto custom-control custom-radio px-1 px-sm-3">
+                                    <input form="form_review" id="star{{ forloop.counter }}" name="estimate"
+                                           type="radio"
+                                           class="custom-control-input"
+                                           value="{{ forloop.counter }}" hidden
+                                           {% if user_review.estimate == forloop.counter %}checked{% endif %}>
+                                    <label for="star{{ forloop.counter }}" class="custom-control-label">
+                                        <img src="{{ avatar_star_outline }}" class="avatar avatar-xl" alt=""
+                                             id="iStarOutline{{ forloop.counter }}">
+                                        <img src="{{ avatar_star }}" class="avatar avatar-xl d-none" alt=""
+                                             id="iStar{{ forloop.counter }}">
+                                    </label>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <!-- //END row: stars -->
+
+                        <!-- row: comment -->
+                        <div class="row mb-48pt justify-content-center">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="comment" class="form-label">
+                                        {% trans 'Комментарий' %}
+                                    </label>
+                                    <textarea form="form_review" class="form-control" name="comment" id="comment"
+                                              rows="5" maxlength="2000"
+                                              placeholder="{% trans 'Комментарий' %}...">{{ user_review.text }}</textarea>
+                                </div>
+                                {% if block_message %}
+                                    <p class="mt-4 mb-1">{{ block_message }}</p>
+                                    <a href="{% url 'appaccounts:register' %}" class="btn btn-primary mt-2 mr-2">
+                                        {% trans 'Зарегистрироваться' %}
+                                    </a>
+                                    <a href="{% url 'appaccounts:register' %}" class="btn btn-outline-secondary mt-2">
+                                        {% trans 'Войти' %}
+                                    </a>
+                                {% else %}
+                                    <form id="form_review" method="post" action="{{ course.get_review_url }}">
+                                        {% csrf_token %}
+                                        <button class="btn btn-outline-warning" type="submit">
+                                            <span class="mr-2">{% trans 'Отправить' %}</span>
+                                            <i class="material-icons">drafts</i>
+                                        </button>
+                                    </form>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <!-- //END row: comment -->
+
+                    </div>
+                </div>
+
+                <div class="page-section bg-white border-bottom-2">
+                    <div class="container">
+                        <!-- row: current estimate -->
+                        {% load course_filters %}
+                        <div class="row">
+                            <div class="col">
+                                <h4>{% trans 'Текущая оценка курса' %}</h4>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-3 mb-32pt mb-md-0">
+                                <div class="display-1">{{ total_estimate }}</div>
+                                <div class="rating rating-32">
+                                    {% for star in estimate_stars %}
+                                        <span class="rating__item"><span class="material-icons">{{ star }}</span></span>
+                                    {% endfor %}
+                                </div>
+                                <p class="text-muted mb-0">{% plural_form course.estimate_count 'оценка' 'оценки' 'оценок' %}</p>
+                            </div>
+                            <div class="col-md-9">
+                                {% for item in estimate_list %}
+                                    <div class="row align-items-center mb-8pt">
+                                        <div class="col-md-9 col-sm-6">
+                                            <div class="progress">
+                                                <div class="progress-bar bg-secondary" role="progressbar"
+                                                     aria-valuenow="{{ item.percent }}"
+                                                     style="width: {{ item.percent }}%"
+                                                     aria-valuemin="0"
+                                                     aria-valuemax="100"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 col-sm-6 d-none d-sm-flex align-items-center">
+                                            <div class="rating rating-24 mr-8pt">
+                                                {% for star in item.stars %}
+                                                    <span class="rating__item">
+                                                        <span class="material-icons">{{ star }}</span>
+                                                    </span>
+                                                {% endfor %}
+                                            </div>
+                                            <span class="text-muted">{{ item.percent }}%</span>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <!-- //END row: current estimate -->
+
+                        <!-- row: feedback -->
+                        <div class="row mt-64pt">
+                            <div class="col mb-16pt pb-16pt border-bottom row">
+                                <div class="col-md-3 mb-16pt mb-md-0">
+                                    <div class="d-flex">
+                                        <img src="{{ user.profile.get_avatar_url }}" alt=""
+                                             class="avatar avatar-list mr-2">
+                                        <div class="flex">
+                                            <p class="mb-0">{% trans 'Твой отзыв' %}</p>
+                                            <p class="text-muted m-0">{{ user_review.created }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="rating mb-8pt">
+                                        {% for star in user_estimate_stars %}
+                                            <span class="rating__item"><span
+                                                    class="material-icons">{{ star }}</span></span>
+                                        {% endfor %}
+                                    </div>
+                                    {% if user_review.text %}
+                                        <p class="text-70 mb-0">{{ user_review.text }}</p>
+                                    {% else %}
+                                        <p class="text-muted mb-0">{% trans 'нет комментария' %}</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- //END row: feedback -->
+                    </div>
+                </div>
+            </div>
+        {% elif is_review %}
+            <div class="mdk-header-layout__content page-content pt-0">
+                <div class="page-section border-bottom-2">
+                    <div class="container">
+                        <!-- row: header -->
+                        <div class="row">
+                            <div class="col">
+                                <div class="page-headline text-center">
+                                    <h2>{% trans 'Твое мнение' %}</h2>
+                                    <p class="lead text-70">
+                                        {% trans 'Поставь смайлик - как ты оцениваешь материал модуля? Мы будем рады даже если он будет грустным :) Потому что твой отзыв очень важен. Это поможет сделать курсы более крутыми и интересными!' %}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- //END row: header -->
+
+                        <!-- row: smile -->
+                        <div class="row">
+                            <div class="col text-center">
+                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                    <label class="btn btn-light px-1 pr-1 px-sm-4 rounded-circle {% if user_review.estimate == 1 %}active{% endif %}">
+                                        <input form="form_review" type="radio" name="estimate" id="option1"
+                                               autocomplete="off" hidden value="1"
+                                               {% if user_review.estimate == 1 %}checked{% endif %}>
+                                        <img src="{{ avatar_estimate_1 }}" alt=""
+                                             class="avatar avatar-xxl">
+                                    </label>
+                                    <label class="btn btn-light px-1 px-sm-4 rounded-circle {% if user_review.estimate == 2 %}active{% endif %}">
+                                        <input form="form_review" type="radio" name="estimate" id="option2"
+                                               autocomplete="off" hidden value="2"
+                                               {% if user_review.estimate == 2 %}checked{% endif %}>
+                                        <img src="{{ avatar_estimate_2 }}" alt=""
+                                             class="avatar avatar-xxl">
+                                    </label>
+                                    <label class="btn btn-light px-1 px-sm-4 rounded-circle {% if user_review.estimate == 3 %}active{% endif %}">
+                                        <input form="form_review" type="radio" name="estimate" id="option3"
+                                               autocomplete="off" hidden value="3"
+                                               {% if user_review.estimate == 3 %}checked{% endif %}>
+                                        <img src="{{ avatar_estimate_3 }}" alt=""
+                                             class="avatar avatar-xxl">
+                                    </label>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!-- //END row: smile -->
+
+                        <!-- row: comment -->
+                        <div class="row">
+                            <div class="col d-flex my-4">
+                                <img src="{% static 'images/ico/comment.svg' %}" alt=""
+                                     class="avatar mr-3 d-none d-sm-block">
+                                <div class="flex">
+                                    <div class="form-group">
+                                        <label for="comment" class="form-label">{% trans 'Комментарий' %}</label>
+                                        <textarea form="form_review" class="form-control" name="comment" id="comment"
+                                                  rows="5" maxlength="2000"
+                                                  placeholder="{% trans 'А если напишешь пару строк о том, что понравилось, а что нет, то вообще огонь' %}">{{ user_review.text }}</textarea>
+                                    </div>
+                                    {% if block_message %}
+                                        <p class="mt-4 mb-1">{{ block_message }}</p>
+                                        <a href="{% url 'appaccounts:register' %}" class="btn btn-primary mt-2 mr-2">
+                                            {% trans 'Зарегистрироваться' %}
+                                        </a>
+                                        <a href="{% url 'appaccounts:register' %}"
+                                           class="btn btn-outline-secondary mt-2">
+                                            {% trans 'Войти' %}
+                                        </a>
+                                    {% else %}
+                                        <form id="form_review" method="post" action="{{ module.get_review_url }}">
+                                            {% csrf_token %}
+                                            <button class="btn btn-outline-warning" type="submit">
+                                                <input type="text" name="module_id" readonly hidden
+                                                       value="{{ module.id }}">
+                                                <span class="mr-2">{% trans 'Отправить' %}</span>
+                                                <i class="material-icons">drafts</i>
+                                            </button>
+                                        </form>
+                                    {% endif %}
+                                </div>
+
+                            </div>
+                        </div>
+                        <!-- //END row: comment -->
+
+                        <!-- row: user review -->
+                        {% if user_review %}
+                            <div class="row">
+                                <div class="col d-flex pt-4">
+                                    <img src="{{ user_review.get_estimate_avatar }}" alt=""
+                                         class="avatar mr-3 d-none d-sm-block">
+                                    <div class="flex">
+                                        <img src="{{ user_review.get_estimate_avatar }}" alt=""
+                                             class="avatar mr-2 d-inline d-sm-none">
+                                        <h4 class="d-inline d-sm-block">{% trans 'Твой комментарий' %}</h4>
+                                        <p class="text-70">{{ user_review.text }}</p>
+                                        <div class="d-flex align-items-center mt-3">
+                                            <small class="text-50 mr-2">{{ user_review.created }}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                        <!-- //END row: user review -->
+
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="mdk-header-layout__content page-content">
+                <div class="container page__container px-3 px-sm-4 pt-64pt">
+                    {% if contents.type == 'text' %}
+                        <div class="card">
+                            <div class="card-body px-0 px-sm-2 px-md-4 x-lg-64pt">
+                                <div id="editor"></div>
+                            </div>
+                        </div>
+                    {% elif contents.type == 'video' %}
+                        <iframe style="width: 100%; height: 500px" allowfullscreen="true" src="{{ contents.content }}">
+                        </iframe>
+                        <div style="height: 150px;"></div>
+                    {% elif type_quiz %}
+                        <div id="questionContent">
+                            {% include 'appcourses/quiz/_quiz_question.html' %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+        <!-- // END section: content -->
+    </div>
+    <!-- // END Header Layout -->
+
+    <!-- section: sidebar-left -->
+    <div class="mdk-drawer js-mdk-drawer" id="default-drawer">
+        <div class="mdk-drawer__content ">
+            <div class="sidebar sidebar-left sidebar-light bg-white" data-perfect-scrollbar
+                 style="overflow: visible!important;">
+                <a href="{{ home_url }}"
+                   class="btn btn-light btn-block py-3 mb-4"
+                   style="border-radius: 0">
+                    <i class="material-icons icon--left font-size-20pt text-muted">home</i>
+                    {% trans 'ДОМОЙ' %}
+                </a>
+                <button class="navbar-toggler text-center" data-toggle="sidebar" type="button"
+                        style="left: 256px; position: absolute; background-color: #f8f9fa; border-radius: 0">
+                    <span class="material-icons">close</span>
+                </button>
+                <div class="sidebar-p-y pt-0">
+
+                    <div class="sidebar-heading">{% trans 'Содержание' %}</div>
+
+                    <ul class="sidebar-menu">
+
+                        {% for module in course_content.module_list %}
+                            <li class="sidebar-menu-item {% if module == current_module %}open{% endif %}">
+                                <a class="sidebar-menu-button sidebar-js-collapse my-2" data-toggle="collapse"
+                                   href="#module{{ module.id }}" style="line-height: 22px;">
+                                    <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">import_contacts</i>
+                                    {{ module.title }}
+                                    <span class="ml-auto sidebar-menu-toggle-icon"></span>
+                                </a>
+                                <ul class="sidebar-submenu sm-indent collapse" id="module{{ module.id }}">
+                                    {% for module_lesson in module.lesson_list %}
+                                        <li class="sidebar-menu-item {% if module_lesson == lesson %}active{% endif %}">
+                                            <div class="my-2"></div>
+                                            <a class="sidebar-menu-button" href="{{ module_lesson.get_absolute_url }}"
+                                               style="line-height: 20px;">
+                                                <span class="sidebar-menu-text">{{ module_lesson }}</span>
+                                                {% if module_lesson in completed_lessons %}
+                                                    <span class="sidebar-menu-badge badge badge-pill badge-success ml-auto">
+                                                    <i class="material-icons text-center">check</i>
+                                                </span>
+                                                {% endif %}
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- // END section: sidebar-left -->
+{% endblock %}
+
+{% block js_body_before %}
+    {% include '_perfect_scrollbar_js.html' %}
+{% endblock %}
+
+{% block js_body %}
+    {% if contents.type == 'text' %}
+        {% include '_hljs_js_pack.html' %}
+        {% include '_quill_js.html' %}
+        <script>
+            let container = document.getElementById('editor')
+            let toolbarOptions = []
+            let options = {
+                modules: {
+                    syntax: false,
+                    toolbar: toolbarOptions
+                },
+                theme: 'bubble',
+                readOnly: true
+            }
+            let editor = new Quill(container, options)
+
+            let description_HTML_JSON = '{{ contents.content|escapejs }}'
+            try {
+                editor.setContents(JSON.parse(description_HTML_JSON))
+            } catch (error) {
+            }
+
+            document.addEventListener('DOMContentLoaded', (event) => {
+                document.querySelectorAll('.ql-editor pre').forEach((block) => {
+                    hljs.highlightBlock(block)
+                })
+            })
+        </script>
+    {% elif contents.type == 'video' %}
+    {% elif type_quiz %}
+        {% include '_hljs_js_pack.html' %}
+        {% include '_sweetalert_js.html' %}
+        {% include '_quiz_js.html' %}
+    {% else %}
+        <script>
+            function changeStar() {
+                for (let i = 1; i <= 5; i++) {
+                    let starI = document.getElementById('iStar' + i)
+                    let starOutlineI = document.getElementById('iStarOutline' + i)
+                    if (starI && starOutlineI) {
+                        if (i <= this.value) {
+                            starOutlineI.classList.add('d-none')
+                            starI.classList.remove('d-none')
+                        } else {
+                            starOutlineI.classList.remove('d-none')
+                            starI.classList.add('d-none')
+                        }
+                    }
+                }
+            }
+
+            function ready() {
+                let inputsStars = document.getElementsByName('estimate')
+                let estimateValue = 0
+                for (let i = 0; i < inputsStars.length; i++) {
+                    inputsStars[i].addEventListener('change', changeStar)
+                    if (inputsStars[i].checked) {
+                        estimateValue = inputsStars[i].value
+                    }
+                }
+
+                for (let i = 0; i < inputsStars.length; i++) {
+                    let starI = document.getElementById('iStar' + (i + 1))
+                    let starOutlineI = document.getElementById('iStarOutline' + (i + 1))
+                    if (starI && starOutlineI) {
+                        if (inputsStars[i].value <= estimateValue) {
+                            starOutlineI.classList.add('d-none')
+                            starI.classList.remove('d-none')
+                        } else {
+                            starOutlineI.classList.remove('d-none')
+                            starI.classList.add('d-none')
+                        }
+                    }
+                }
+
+            }
+
+            document.addEventListener("DOMContentLoaded", ready)
+
+        </script>
+    {% endif %}
+{% endblock %}

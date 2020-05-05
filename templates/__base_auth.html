@@ -1,0 +1,45 @@
+{% load static %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+
+<!DOCTYPE html>
+<html lang="{{LANGUAGE_CODE}}">
+
+<head>
+    {% include '_yandex_counter.html' %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    {% block meta %}{% endblock %}
+    {% block meta_description %}{% endblock %}
+    {% block meta_kewwords %}{% endblock %}
+    <script src="https://use.fontawesome.com/621f900a06.js"></script>
+    <link type="text/css" href="{% static 'css/app.css' %}" rel="stylesheet">
+    {% include '_favicon.html' %}
+    {% block css_head %}{% endblock %}
+    <title>{% block title %}{% endblock %}</title>
+</head>
+
+<body class=" fixed-layout">
+
+    <div class="d-flex align-items-center">
+        <div class="col-sm-8 col-md-6 col-lg-4 mx-auto" style="min-width: 300px;">
+            <div class="text-center mt-0 mb-0 mt-md-5 mb-md-1">
+                <div class="avatar avatar-xxl">
+                    <a href="{% url 'appmain:index' %}">
+                        <img src="{% static 'images/logo/pumpskill_color.svg' %}" class="avatar-img" alt="PumpSkill">
+                    </a>
+                </div>
+            </div>
+            <div class="d-flex justify-content-center mb-0 mb-md-5 navbar-light">
+                <a href="{% url 'appmain:index' %}" class="navbar-brand m-0">PumpSkill</a>
+            </div>
+            <div class="card navbar-shadow">
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

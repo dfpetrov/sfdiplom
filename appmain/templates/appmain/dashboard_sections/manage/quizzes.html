@@ -1,0 +1,159 @@
+{% if is_manager %}
+    <!-- section: site-wrapper -->
+    <div class="site-wrapper-reveal">
+
+        <!-- section: quizzes Exam -->
+        <div class="saas-feature section-space--ptb_90 bg-gray">
+            <div class="container">
+                <!-- section: Head Quiz-Exam -->
+                <div class="row">
+                    <div class="col">
+                        <div class="section-title text-center section-space--mb_60">
+                            <h2 class="font-weight--light mb-15">Экзамены</h2>
+                            <span class="section-text">Тесты типа экзамен</span>
+                            <a href="{% url 'appcourses:manage_quiz_create' %}" class="ht-btn ht-btn-md my-2">
+                                Добавить экзамен
+                                <span class="btn-icon"><i class="material-icons">add</i></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- // END section: Head Quiz-Exam -->
+                <!-- section: objects list Quiz-Exam -->
+                <div class="row">
+                    {% for quiz in quizzes_exam %}
+                        <div class="col-lg-4 col-md-6 wow move-up">
+                            <div class="service-grid">
+                                <div class="ht-service-box--one style-03">
+                                    <a href="{{ quiz.get_manage_url }}">
+                                        <div class="image__media">
+                                            <img src="{{ quiz.get_avatar_url }}" class="img-fluid"
+                                                 alt="{{ quiz }}">
+                                        </div>
+                                        <div class="content">
+                                            <h6 class="heading">
+                                                {{ quiz }}
+                                            </h6>
+                                            <div class="service_text">{{ quiz.description }}
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <!-- // END section: objects list Quiz-Exam -->
+            </div>
+        </div>
+        <!-- // END section: quizzes Exam -->
+
+        <!-- section: quizzes Lesson -->
+        <div class="saas-feature section-space--ptb_90">
+            <div class="container">
+                <!-- section: Head Quiz-Lesson -->
+                <div class="row">
+                    <div class="col">
+                        <div class="section-title text-center section-space--mb_60">
+                            <h2 class="font-weight--light mb-15">Тесты к урокам</h2>
+                            <span class="section-text">Тесты привязанные к урокам</span>
+                            <a href="{% url 'appcourses:manage_quiz_create' %}" class="ht-btn ht-btn-md my-2">
+                                Добавить тест к уроку
+                                <span class="btn-icon"><i class="material-icons">add</i></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- // END section: Head Quiz-Lesson -->
+                <!-- section: objects list Quiz-Lesson -->
+                <div class="row">
+                    {% for quiz in quizzes_lesson %}
+                        <div class="col-lg-4 col-md-6 wow move-up">
+                            <div class="service-grid">
+                                <div class="ht-service-box--one style-03">
+                                    <a href="{{ quiz.get_manage_url }}">
+                                        <div class="image__media">
+                                            <img src="{{ quiz.get_avatar_url }}" class="img-fluid"
+                                                 alt="{{ quiz }}">
+                                        </div>
+                                        <div class="content">
+                                            <h6 class="heading">
+                                                {{ quiz }}
+                                            </h6>
+                                            <div class="service_text">{{ quiz.description }}
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <!-- // END section: objects list Quiz-Lesson -->
+            </div>
+        </div>
+        <!-- // END section: quizzes Lesson -->
+
+        <!-- section: quizzes Common -->
+        <div class="saas-feature section-space--ptb_90 bg-gray">
+            <div class="container">
+                <!-- section: Head Quiz-Common -->
+                <div class="row">
+                    <div class="col">
+                        <div class="section-title text-center section-space--mb_60">
+                            <h2 class="font-weight--light mb-15">Общие тесты</h2>
+                            <span class="section-text">Тесты общего типа не привязанные ни к чему</span>
+                            <a href="{% url 'appcourses:manage_quiz_create' %}" class="ht-btn ht-btn-md my-2">
+                                Добавить общий
+                                <span class="btn-icon"><i class="material-icons">add</i></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- // END section: Head Quiz-Common -->
+                <!-- section: objects list Quiz-Common -->
+                <div class="row">
+                    {% for quiz in quizzes_common %}
+                        <div class="col-lg-4 col-md-6 wow move-up">
+                            <div class="service-grid">
+                                <div class="ht-service-box--one style-03">
+                                    <a href="{{ quiz.get_manage_url }}">
+                                        <div class="image__media">
+                                            <img src="{{ quiz.get_avatar_url }}" class="img-fluid"
+                                                 alt="{{ quiz }}">
+                                        </div>
+                                        <div class="content">
+                                            <h6 class="heading">
+                                                {{ quiz }}
+                                            </h6>
+                                            <div class="service_text">{{ quiz.description }}
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <!-- // END section: objects list Quiz-Common -->
+            </div>
+        </div>
+        <!-- // END section: quizzes Common -->
+
+    </div>
+    <!-- // END section: site-wrapper -->
+{% else %}
+    <pre>
+
+
+
+
+    нет прав
+
+
+
+
+
+
+</pre>
+{% endif %}

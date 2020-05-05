@@ -1,0 +1,79 @@
+{% extends '__base.html' %}
+{% if type_code %}
+    {% block css_head %}
+        {% include '_hljs_css.html' %}
+    {% endblock %}
+    {% block style_head %}
+        {% include '_hljs_custom_style.html' %}
+    {% endblock %}
+{% endif %}
+{% load static %}
+{% load i18n %}
+{% block title %}{% trans 'Экзамен' %} {{ question.quiz.title }}{% endblock %}
+{% block content %}
+    <!-- Header Layout -->
+    <div class="mdk-header-layout js-mdk-header-layout">
+
+        <!-- Header -->
+        {% include '_main_menu.html' %}
+        <!-- // END Header -->
+
+        <!-- Header Layout Content -->
+        <div class="mdk-header-layout__content page-content">
+
+            {% include '_page_menu.html' %}
+
+            <!-- section: heading -->
+            <div class="bg-gradient-primary py-32pt">
+                <div class="container page__container">
+                    <div class="d-flex flex-wrap align-items-end justify-content-end mb-16pt">
+                        <h1 class="text-white flex m-0">
+                            {{ question.quiz.title }}
+                        </h1>
+                    </div>
+                </div>
+            </div>
+            <!-- // END section: heading -->
+
+            <!-- section: action -->
+            <div class="navbar navbar-expand-md navbar-list navbar-submenu navbar-light " style="white-space: nowrap;">
+                <div class="container page__container">
+                    <ul class="nav navbar-nav flex navbar-list__item">
+                        <li class="nav-item">
+                            <span class="text-black-70"
+                                  id="questionNumberText">Вопрос {{ question_number }} из {{ quiz_questions_count }}</span>
+                        </li>
+                    </ul>
+                    <div class="nav navbar-nav ml-sm-auto navbar-list__item">
+                        <div class="nav-item d-flex flex-column flex-sm-row ml-sm-16pt">
+                            <a href="{{ exit_url }}"
+                               class="btn justify-content-center btn-outline-secondary w-100 w-sm-auto mb-16pt mb-sm-0">
+                                {% trans 'Прервать тест' %}
+                                <i class="material-icons ml-2 font-size-20pt">exit_to_app</i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- // END section: action -->
+
+            {% include '_messages.html' %}
+
+            <div class="container page__container">
+                <div id="questionContent" class="my-64pt">
+                    {% include 'appcourses/quiz/_quiz_question.html' %}
+                </div>
+            </div>
+
+        </div>
+        <!-- // END Header Layout Content -->
+
+    </div>
+    <!-- // END Header Layout -->
+{% endblock %}
+
+{% block js_body %}
+    {% include '_sweetalert_js.html' %}
+    {% include '_hljs_js_pack.html' %}
+    {% include '_quiz_js.html' %}
+{% endblock %}

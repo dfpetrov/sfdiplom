@@ -1,0 +1,69 @@
+{% extends '__base_auth.html' %}
+
+{% load static %}
+
+{% block title %}Регистрация на PumpSkill{% endblock %}
+
+{% block content %}
+
+<div class="card-header text-center">
+    <h4 class="card-title">Регистрация</h4>
+</div>
+<div class="card-body">
+
+    <p>Вы используете <span class="text-info">{{account.get_provider.name}}</span> для авторизации на {{site.name}}.
+        Чтобы завершить, заполните следующую форму:</p>
+
+    <form class="signup" id="signup_form" method="post" action="{% url 'socialaccount_signup' %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label class="form-label" for="email">Email:</label>
+            <div class="input-group input-group-merge">
+                {{ form.email }}
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        <span class="fa fa-envelope"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if form.email.errors %}
+        <div class="alert alert-danger" role="alert" id="check_confirm_alert">
+            <ul class="py-0 px-3 my-0">
+                {% for error in form.email.errors %}
+                <li><strong>{{ error|escape }}</strong></li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        <div class="form-group">
+            <label class="form-label" for="password">Имя пользователя:</label>
+            <div class="input-group input-group-merge">
+                {{ form.username }}
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        <span class="fa fa-lock"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if form.username.errors %}
+        <div class="alert alert-danger" role="alert" id="check_confirm_alert">
+            <ul class="py-0 px-3 my-0">
+                {% for error in form.username.errors %}
+                <li><strong>{{ error|escape }}</strong></li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        {% if redirect_field_value %}
+        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" >
+        {% endif %}
+        <div class="form-group ">
+            <button type="submit" class="btn btn-primary btn-block">Регистрация</button>
+        </div>
+
+    </form>
+</div>
+{% endblock %}

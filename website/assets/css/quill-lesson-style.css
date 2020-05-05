@@ -1,0 +1,135 @@
+.ql-editor h1,
+.ql-editor h2,
+.ql-editor h3,
+.ql-editor h4,
+.ql-editor h5,
+.ql-editor h6 {
+    font-family: Rubik, Helvetica, Arial, sans-serif;
+    line-height: 1.1;
+}
+
+.ql-editor h6 {
+    font-size: 16px!important;
+    background-color: #f3e2bb;
+    color: #bd7342;
+    padding: 8px 16px;
+    margin: 0!important;
+    border-radius: .25rem .25rem 0 0;
+    font-family: SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;
+    position: relative;
+    height: 40px;
+}
+
+
+.ql-editor h6::after {
+    content: " ";
+    position: absolute;
+    top: 40px;
+    background-color: #f3e2bb;
+    height: 3px;
+    width: 100%;
+    left: 0;
+}
+
+.ql-editor strong {
+    font-weight: bold;
+}
+
+.ql-bubble .ql-editor blockquote,
+.ql-editor blockquote {
+    font-weight: 300;
+    background-color: #1c77c3;
+    color: #fff;
+    position: relative;
+    padding: 20px;
+    padding-left: 73px;
+    min-height: 56px;
+    border: none;
+}
+
+.ql-bubble .ql-editor blockquote::before,
+.ql-editor blockquote::before {
+    font-family: 'Material Icons';
+    content: 'sms_failed';
+    position: absolute;
+    top: 50%;
+    left: 13px;
+    margin-top: -23px;
+    display: block;
+    width: 46px;
+    height: 46px;
+    line-height: 46px;
+    text-align: center;
+    font-size: 34px;
+rgba(255, 255, 255, 0.59);
+}
+
+.ql-bubble .ql-editor blockquote a,
+.ql-editor blockquote a {
+    text-decoration: none;
+    color: #fff;
+    border-bottom: solid 1px rgba(255, 255, 255, .45);
+}
+
+.ql-container .ql-editor {
+    font-family: Rubik, Helvetica, Arial, sans-serif;
+    font-size: 1.0rem;
+    font-weight: 400;
+    line-height: 1.7;
+    color: #383b3d;
+}
+
+.ql-bubble .ql-editor h1,
+.ql-bubble .ql-editor h2,
+.ql-bubble .ql-editor h3,
+.ql-bubble .ql-editor h4,
+.ql-bubble .ql-editor h5,
+.ql-bubble .ql-editor h6 {
+    font-weight: 400;
+    line-height: 1.2;
+    margin-bottom: 15px;
+}
+
+@media (min-width: 576px) {
+    .ql-container .ql-editor h1,
+    .ql-container .ql-editor h2,
+    .ql-container .ql-editor h3,
+    .ql-container .ql-editor h4,
+    .ql-container .ql-editor h5,
+    .ql-container .ql-editor h6 {
+        line-height: 1.7;
+        margin-bottom: 5px;
+    }
+
+    .ql-bubble .ql-editor h1,
+    .ql-bubble .ql-editor h2,
+    .ql-bubble .ql-editor h3,
+    .ql-bubble .ql-editor h4,
+    .ql-bubble .ql-editor h5,
+    .ql-bubble .ql-editor h6 {
+        line-height: 1.7;
+        margin-bottom: 10px;
+    }
+}
+
+.ql-bubble .ql-editor h2 {
+    font-size: 36px;
+}
+
+.ql-bubble .ql-editor code,
+.ql-bubble .ql-editor pre.ql-syntax {
+    background-color: #373e4a;
+    padding: 16px;
+}
+
+.ql-snow .ql-editor code,
+.ql-snow .ql-editor pre,
+.ql-snow .ql-editor pre.ql-syntax {
+    background-color: #373e4a;
+    padding: 16px;
+}
+
+.ql-snow .ql-editor pre,
+.ql-bubble .ql-editor pre {
+    margin-top: 0;
+}

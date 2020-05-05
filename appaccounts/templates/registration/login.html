@@ -1,0 +1,80 @@
+{% extends '__base_auth.html' %}
+
+{% load i18n %}
+{% load static %}
+
+{% block title %}Login PumpSkill{% endblock %}
+
+{% block content %}
+
+<div class="card-header text-center">
+    <h4 class="card-title">{% trans 'Вход' %}</h4>
+    <p class="card-subtitle">{% trans 'Доступ в твой аккаунт' %}</p>
+</div>
+<div class="card-body">
+
+    {% load socialaccount %}
+    <a href="{% provider_login_url 'github' %}" class="btn btn-light btn-block">
+        <span class="fa fa-github fa-2x mr-2"></span>
+        {% trans 'Войти через' %} Github
+    </a>
+
+    <div class="page-separator">
+        <div class="page-separator__text">{% trans 'или' %}</div>
+    </div>
+
+    <form action="{% url 'appaccounts:login' %}" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label class="form-label" for="email">Email {% trans 'или' %} login:</label>
+            <div class="input-group input-group-merge">
+                {{ form.login }}
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        <span class="fa fa-envelope"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-label" for="password">{% trans 'Пароль' %}:</label>
+            <div class="input-group input-group-merge">
+                {{ form.password }}
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        <span class="fa fa-lock"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="custom-control custom-checkbox">
+                {{ form.remember }}
+                <label for="id_remember" class="custom-control-label">{% trans 'Запомнить меня' %}</label>
+            </div>
+        </div>
+
+        {% if form.errors %}
+        <div class="alert alert-danger" role="alert" id="check_confirm_alert">
+            <ul class="py-0 px-3 my-0">
+                {% for error in form.non_field_errors %}
+                <li><strong>{{ error|escape }}</strong></li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <div class="form-group ">
+            <button type="submit" class="btn btn-primary btn-block">{% trans 'Войти' %}</button>
+        </div>
+        <div class="text-center">
+            <a href="{% url 'appaccounts:password_reset' %}" class="text-black-70"
+                style="text-decoration: underline;">{% trans 'Забыл пароль' %}?</a>
+        </div>
+    </form>
+</div>
+<div class="card-footer text-center text-black-50">
+    {% trans 'Еще нет аккаунта' %}? <a href="{% url 'appaccounts:register' %}">{% trans 'Регистрация' %}</a>
+</div>
+{% endblock %}

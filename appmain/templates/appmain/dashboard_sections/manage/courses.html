@@ -1,0 +1,53 @@
+{% if is_manager %}
+<!-- section: page container -->
+<div class="container page__container page-section">
+    {% include '_messages.html' %}
+    <div class="mb-heading d-flex align-items-center">
+        <h4 class="flex m-0">Список курсов</h4>
+        <a href="{% url 'appcourses:manage_course_create' %}" class="btn btn-accent">Добавить курс</a>
+    </div>
+    <div class="row">
+        {% for course in all_courses %}
+        <div class="col-sm-6 col-md-4 col-xl-3">
+            <div class="card card--elevated card-course overlay mdk-reveal"
+                 title="" style="height: 208px;">
+                <a href="{{course.get_manage_url}}" class="bg-a"
+                   style="background-image: url({{ course.get_avatar_url }})">
+                    <span class="overlay__content">
+                        <span class="overlay__action d-flex flex-column text-center">
+                            Редактировать
+                        </span>
+                    </span>
+                </a>
+                <div class="card-body">
+                    <div class="d-flex">
+                        <div class="flex">
+                            <a class="card-title mb-4pt" href="instructor-edit-course.html">
+                                {{course.title}}
+                            </a>
+                        </div>
+                        <a href="{{course.get_manage_url}}"
+                           class="ml-4pt material-icons text-black-20 card-course__icon-favorite">edit</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<!-- //END section: page container -->
+{% else %}
+<pre>
+
+
+
+
+    нет прав
+
+
+
+
+
+
+</pre>
+{% endif %}

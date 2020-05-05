@@ -1,0 +1,239 @@
+{% extends '__base.html' %}
+
+{% load i18n %}
+{% load static %}
+
+{% block css_head %}{% endblock %}
+
+{% block title %}{% trans 'Профайл' %} {{ profile }} {% endblock %}
+
+{% block content %}
+
+<!-- Header Layout -->
+<div class="mdk-header-layout js-mdk-header-layout">
+
+    <!-- Header -->
+    {% include '_main_menu.html' %}
+    <!-- // END Header -->
+
+    <!-- Header Layout Content -->
+    <div class="mdk-header-layout__content d-flex flex-column">
+
+        {% include '_page_menu.html' %}
+
+        <div class="page pt-0">
+
+            <div class="bg-gradient-primary border-bottom-white py-32pt mb-4">
+                <div class="container d-flex flex-column flex-md-row align-items-center text-center text-md-left">
+                    <img src="{{ profile.get_avatar_url }}" width="104" class="mr-md-32pt mb-32pt mb-md-0" alt="{{ profile }}">
+                    <div class="flex mb-32pt mb-md-0">
+                        <h2 class="text-white mb-0">{{ profile.get_name }}</h2>
+                        <p class="lead text-white-50 d-flex align-items-center">{% trans 'На сайте с' %} {{ profile.created }}</p>
+                    </div>
+                    {% if its_me %}
+                    <a href="{% url 'appaccounts:profile_edit' %}" class="btn btn-outline-white">{% trans 'Редактировать профиль' %}</a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- container page__container -->
+            <div class="container page__container mb-3">
+
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'appmain:index' %}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'appmain:dashboard' %}">{% trans 'Панель управления' %}</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'apptasks:task_list' %}">{% trans 'Список всех задач' %}</a></li>
+                    <li class="breadcrumb-item active">{% trans 'Профайл' %} {{ profile.get_name }}</li>
+                </ol>
+
+                {% include '_messages.html' %}
+                
+                <!-- row container -->
+                <div class="row">
+
+                    <!-- col user data -->
+                    <div class="col-12 col-md-4">
+                        <h4 class="mt-4">{% trans 'Обо мне' %}</h4>
+                        <span class="text-muted">login: <span class="text-primary">{{ profile }}</span></span>
+                        <p class="text-black-70 my-2">{{ profile.get_description }}</p>
+                    </div>
+                    <!-- //END col user data -->
+
+                    <!-- col skill data -->
+                    <div class="col-12 col-md-8">
+
+                        <h1 class="h1 mb-2">{% trans 'Профайл' %} {{ profile.get_name }}</h1>
+                        <div class="row">
+                            <div class="col">
+                                <div class="card border-left-3 border-left-primary">
+                                    <div class="card-body">
+                                        <h2 class="card-title text-center text-warning">{% trans 'Решено задач' %}</h2>
+                                        <p class="card-text h1 text-center text-primary">{{ user_total_task_count }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="card border-left-3 border-left-success">
+                                    <div class="card-body">
+                                        <h2 class="card-title text-center text-warning">{% trans 'Всего баллов' %}</h2>
+                                        <p class="card-text h1 text-center text-success">{{ user_total_rate }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h2 class="h2 mb-1">{% trans 'Скилы' %}</h2>
+                        <div class="card">
+                            <div class="card-header d-flex align-items-center">
+                                <div class="h2 mb-0 mr-3 text-primary">{{ user_total_rate }}</div>
+                                <div class="flex">
+                                    <h4 class="card-title">{% trans 'Всего баллов' %}</h4>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart" style="height: 319px;">
+                                    <canvas id="topicIqChart" class="chart-canvas chartjs-render-monitor" width="697"
+                                        height="319" style="display: block; width: 697px; height: 319px;"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h2 class="h2 mb-1">{% trans 'Решенные задачи' %}</h2>
+                        {% for order in orders %}
+                        <div class="card">
+                            <div class="row p-4">
+                                <div class="col-sm-2">
+                                    <a href="{{ order.get_view_url }}" class="avatar avatar-4by3 avatar-lg mr-3"
+                                        title="{{ order.task.skill }}">
+                                        <img src="{{ order.task.skill.get_avatar_url }}" alt="{{ order.task.skill }}"
+                                            class="avatar-img rounded">
+                                    </a>
+                                </div>
+                                <div class="col-sm-10">
+                                    <h4 class="card-title mb-0">
+                                        <a href="{{ order.get_view_url }}" title="{% trans 'Смотреть решение' %}">{{ order.task_title_short }}</a>
+                                    </h4>
+                                    <small class="text-muted">{{ order.updated }}</small>
+                                    <p class="mt-1">{{ order.task_description_short }}</p>
+                                    <div class="mt-2">
+                                        <span class="text-muted mr-2">
+                                            <i class="material-icons mr-1"
+                                                style="font-size: inherit;">favorite_border</i>
+                                            {{ order.favourite_count|default_if_none:"--" }}
+                                        </span>
+                                        <span class="text-muted">
+                                            <i class="material-icons mr-1" style="font-size: inherit;">thumb_up</i>
+                                            {{ order.like_count|default_if_none:"--" }}
+                                        </span>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                    </div>
+                    <!-- //END col skill data -->
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- // END Header Layout Content -->
+
+</div>
+<!-- // END Header Layout -->
+
+{% endblock %}
+
+
+
+{% block js_body %}
+<!-- Global Settings -->
+<script src="{% static 'js/settings.js' %}"></script>
+
+<!-- Chart.js -->
+<script src="{% static 'vendor/Chart.min.js' %}"></script>
+
+<!-- UI Charts Page JS -->
+<script src="{% static 'js/chartjs.js' %}"></script>
+
+<script>
+    function DOMContentLoaded() {
+
+        var options = {
+            elements: {
+                point: {
+                    pointStyle: 'circle',
+                    radius: 4,
+                    hoverRadius: 5,
+                    backgroundColor: settings.colors.white,
+                    borderColor: settings.colors.primary[500],
+                    borderWidth: 2
+                }
+            },
+            scale: {
+                ticks: {
+                    display: false,
+                    beginAtZero: true,
+                    maxTicksLimit: 4
+                },
+                gridLines: {
+                    color: settings.colors.gray[300]
+                },
+                angleLines: {
+                    color: settings.colors.gray[300]
+                },
+                pointLabels: {
+                    fontSize: 14
+                }
+            },
+            tooltips: {
+                callbacks: {
+                    label: function (a, e) {
+                        var t = e.datasets[a.datasetIndex].label || "",
+                            o = a.yLabel,
+                            r = "";
+                        return 1 < e.datasets.length && (r += '<span class="popover-body-label mr-auto">' +
+                            t +
+                            "</span>"), r += '<span class="popover-body-value">' + o + " points</span>"
+                    }
+                }
+            }
+        }
+
+        let skill_labels = []
+        let skill_user_rates = []
+        try {
+            let user_skills_data = JSON.parse('{{user_skills_data|escapejs}}')
+            user_skills_data.forEach(element => {
+                skill_labels.push(element.skill)
+                skill_user_rates.push(element.rate)
+            });
+        } catch (error) {
+
+        }
+
+
+        var data = {
+            labels: skill_labels, //["JavaScript", "HTML", "Flinto", "Vue.js", "Sketch", "Priciple", "CSS", "Angular"],
+            datasets: [{
+                label: "Experience IQ",
+                data: skill_user_rates, //[30, 35, 33, 32, 31, 30, 28, 36],
+                pointHoverBorderColor: settings.colors.success[400],
+                pointHoverBackgroundColor: settings.colors.white,
+                borderJoinStyle: 'bevel',
+                lineTension: .1
+            }]
+        }
+
+        Charts.init()
+        Charts.create('#topicIqChart', 'radar', options, data)
+
+    }
+
+    document.addEventListener('DOMContentLoaded', DOMContentLoaded)
+</script>
+
+{% endblock %}

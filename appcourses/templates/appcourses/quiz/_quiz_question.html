@@ -1,0 +1,140 @@
+{% load i18n %}
+<div class="row mb-3">
+    <div class="col-12 col-lg-8 col-xl-9">
+        <span class="text-muted">{{ question.description_type }}</span>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12 col-lg-8 col-xl-9">
+        <div class="card--connect pb-32pt pb-lg-64pt">
+            <div class="card o-hidden mb-0">
+                <div class="list-group list-group-flush">
+                    <div class="list-group-item p-3">
+                        <div class="row align-items-center">
+                            <div class="col pl-sm-4">
+                                <p class="m-1 m-sm-3">
+                                    {{ question.text|safe }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if type_code %}
+            {{ code|safe }}
+            {% if expected_result %}
+                <div class="mt-32pt mt-md-64pt">{{ expected_result|safe }}</div>
+            {% endif %}
+        {% else %}
+            <div class="list-group">
+                {% for variant in variants %}
+                    <div class="list-group-item {{ variant.extra_class }} {{ disabled }}"
+                         id="userAnswer{{ forloop.counter }}ListItem">
+                        <div role="group" aria-labelledby="label-question"
+                             class="m-0 form-group">
+                            <div class="form-row d-flex">
+                                <div class="col-auto d-flex">
+                                    <div class="custom-control custom-{{ input_type }} d-inline">
+                                        <input id="userAnswer{{ forloop.counter }}"
+                                               name="user-answer"
+                                               type="{{ input_type }}"
+                                               class="custom-control-input"
+                                               form="form"
+                                               {% if variant.checked %}checked{% endif %}
+                                        >
+                                        <label for="userAnswer{{ forloop.counter }}"
+                                               class="custom-control-label text-left"
+                                               style="min-width: 20px"
+                                               id="userAnswer{{ forloop.counter }}Label">
+                                            {{ variant.title }}
+                                        </label>
+                                    </div>
+                                </div>
+                                {% if variant.show_correct_badge %}
+                                    <div class="col-auto">
+                                        <i class="material-icons mr-3 text-success"
+                                           id="answer{{ question.id }}{{ forloop.counter }}i">
+                                            check_circle
+                                        </i>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    <div class="col-12 col-lg-4 col-xl-3">
+        <div class="card mb-0">
+            <div class="progress m-0 mb-2" style="border-radius: 0;height: 8px;">
+                <div class="progress-bar bg-gradient-purple" role="progressbar" style="width: {{ progress }}%;"
+                     aria-valuenow="{{ progress }}"
+                     aria-valuemin="0" aria-valuemax="100" id="progress">
+                </div>
+            </div>
+            <div class="card-header text-center bg-white" style="border-radius: 5px">
+                <div class="row flex-column align-items-center">
+                    {% if quiz_completed %}
+                        <a href="{{ quiz.get_results_url }}" target="_blank"
+                           class="btn btn-black"
+                           id="btnResults">
+                            {% trans 'Результаты теста' %}
+                            <i class="material-icons ml-2 font-size-24pt">assignment_turned_in</i>
+                        </a>
+                    {% elif is_result %}
+                        <button type="button"
+                                class="btn btn-accent" id="btnNext">
+                            {% trans 'Следующий вопрос' %}
+                            <i class="material-icons ml-1">chevron_right</i>
+                        </button>
+                    {% else %}
+                        <form method="post" id="form">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <button type="button"
+                                    class="btn btn-lg btn-block btn-outline-accent"
+                                    id="btnCheck">
+                                {% trans 'Ответить' %}
+                            </button>
+                        </form>
+                    {% endif %}
+                    <p class="h3 mt-3 text-black-50" id="countdown">
+                        {% if need_countdown %}00:00{% endif %}
+                    </p>
+                    <img class="text-center avatar avatar-xxl"
+                         src="{{ questions_result_avatar }}" alt="" style="opacity: 0.8"
+                         id="answerIco">
+
+                </div>
+            </div>
+        </div>
+        {% if user_result %}
+            <span class="text-muted d-block mt-2">
+                {% trans 'Правильных ответов' %}: {{ user_result.correct_count }} {% trans 'из' %} {{ user_result.question_count }}
+            </span>
+            <span class="text-muted d-block mt-1">
+                {% trans 'Баллов' %}: {{ user_result.user_score }} {% trans 'из' %} {{ user_result.total_score }}
+            </span>
+        {% endif %}
+        {% if quiz_completed %}
+            <form method="post" id="formReset">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="button" class="btn btn-block btn-outline-accent mt-2" id="btnRestart">
+                    {% trans 'Пройти заново' %}
+                </button>
+            </form>
+        {% endif %}
+    </div>
+</div>
+<input type="text" hidden readonly id="timeLeft" value="{{ time_left }}">
+<input type="text" hidden readonly id="questionNumber" value="{{ question_number }}">
+<input type="text" hidden readonly id="questionCount" value="{{ quiz_questions_count }}">
+<input type="text" hidden readonly id="needCountdown" value="{% if need_countdown %}1{% else %}0{% endif %}">
+<input type="text" hidden readonly id="restartUrl" value="{% url 'appcourses:quiz_restart' %}">
+<input type="text" hidden readonly id="quizCompleted" value="{% if quiz_completed %}1{% else %}0{% endif %}">
+<input type="text" hidden readonly id="resetUrl" value="{{ reset_url }}">
+<input type="text" hidden readonly id="checkUrl" value="{{ check_url }}">
+<input type="text" hidden readonly id="exitUrl" value="{{ exit_url }}">

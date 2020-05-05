@@ -1,0 +1,278 @@
+{% extends 'appmain/dashboard.html' %}
+{% block section_css_head %}
+    {% include '_hljs_css.html' %}
+{% endblock %}
+{% block section_style_head %}
+    {% include '_hljs_custom_style.html' %}
+{% endblock %}
+{% load static %}
+{% load filters %}
+{% load course_filters %}
+{% load i18n %}
+
+{% block section_content %}
+    <!-- section: Heading -->
+    <div class="page-section border-bottom-2 bg-white">
+        <div class="container page__container">
+            <div class="row">
+                <div class="col">
+                    <div class="page-headline text-center text-md-left p-0">
+                        <h1>{{ quiz.title }}</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                {% if not quiz.complete_date %}
+                    <div class="col-lg-6">
+                        <p class="text-70 font-size-20pt">
+                            {% trans 'Тест еще не проходился' %}
+                        </p>
+                        <a href="{{ quiz.get_absolute_url }}" class="btn btn-lg btn-accent mr-2 mb-2">
+                            {% trans 'Хочу пройти' %}
+                        </a>
+                    </div>
+                    <div style="height: 25vh;"></div>
+                {% else %}
+                    <div class="col-lg-6">
+                        <span class="text-muted">{% trans 'завершен' %} {{ quiz.complete_date }}</span>
+                        <p class="font-size-20pt mt-3">
+                            {% trans 'Твой результат' %}
+                        </p>
+                    </div>
+                    <div class="col-lg-6 text-center">
+                        <p class="h2 text-center text-primary">{{ quiz.result_description.cup_description }}</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        {% if quiz.complete_date %}
+            <div class="container page__container">
+                <div class="row">
+                    <div class="col-lg-6 mb-0">
+                        <p class="text-70 mt-3 mb-2 d-flex">
+                            <i class="material-icons mr-2 text-muted">thumb_up_alt</i>
+                            Баллов: {{ quiz.user_score|default_if_none:0 }} из {{ quiz.total_score }}
+                        </p>
+                        <p class="text-70 mb-24pt d-flex">
+                            <i class="material-icons mr-2 text-muted">check_box</i>
+                            Правильных ответов: {{ quiz.correct_count }} из {{ quiz.question_count }}
+                        </p>
+                        {% if quiz.result_description.goal_avatar %}
+                            <p class="text-70 mb-24pt d-flex">
+                                <img src="{{ quiz.result_description.goal_avatar }}" alt=""
+                                     class="avatar avatar-xs mr-2">
+                                {{ quiz.result_description.goal_description }}
+                            </p>
+                        {% endif %}
+                    </div>
+                    <div class="col-lg-6 d-flex align-items-center justify-content-center">
+                        <div class="page-num-timeline d-flex flex-column flex-sm-row align-items-center justify-content-center flex">
+                    <span data-toggle="tooltip" data-placement="top" data-title="Серебряный кубок"
+                          class="page-num-timeline__item mb-30pt mb-sm-0" data-original-title="">
+                        <img src="{{ quiz.avatar_silver_cup }}" alt="" class="avatar avatar-sm">
+                    </span>
+                            <span data-toggle="tooltip" data-placement="top" data-title="Твой кубок"
+                                  class="page-num-timeline__item page-num-timeline__item-current mx-sm-128pt"
+                                  data-original-title="">
+                        <img src="{{ quiz.result_description.cup_avatar }}" alt="" class="avatar avatar-xxl">
+                    </span>
+                            <span data-toggle="tooltip" data-placement="top" data-title="Бронзовый кубок"
+                                  class="page-num-timeline__item m-0 mt-3 mt-sm-0 pr-0 pr-xl-3"
+                                  data-original-title="">
+                        <img src="{{ quiz.avatar_bronze_cup }}" alt="" class="avatar avatar-sm">
+                    </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+    <!-- // END section: Heading -->
+
+    <!-- section: questions -->
+    {% if quiz.complete_date %}
+        <div class="page-section pl-4">
+            {% for question in quiz.active_questions %}
+                <div class="container page__container border-left-2 pl-32pt pb-48pt">
+                    <div class="d-flex align-items-center page-num-container mb-0">
+                        <div class="page-num">{{ forloop.counter }}</div>
+                        <div class="d-flex align-items-center">
+                            <h3 class="my-0 mr-2">
+                                {% trans 'Вопрос' %} {{ forloop.counter }}
+                            </h3>
+                            {% if question.user_answer_list %}
+                                {% if question.correct %}
+                                    <span class="badge badge-success">correct</span>
+                                {% else %}
+                                    <span class="badge badge-danger">wrong</span>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% if question.user_answer_list %}
+                        {% if question.correct %}
+                            <small class="text-muted">
+                                {% plural_form question.score 'балл' 'балла' 'баллов' %} из {{ question.score }}
+                            </small>
+                        {% else %}
+                            <small class="text-muted">0 {% trans 'баллов' %} из {{ question.score }}</small>
+                        {% endif %}
+                        <p class="text-70 mb-lg-16pt mt-3">{{ question.text|safe }}</p>
+                        {% if question.description %}
+                            <p class="text-50">* {{ question.description }}</p>
+                        {% endif %}
+                        <div class="row mt-32pt">
+                            <div class="col-12 col-lg-6">
+                                <div class="row mb-2 align-items-center">
+                                    <div class="col-12 col-lg-6">
+                                        <h5 class="text-black-70 d-inline">{% trans 'Варианты ответа' %}</h5>
+                                    </div>
+                                    <div class="col-12 col-lg-6 text-left text-lg-right mt-2 mt-lg-0">
+                                        <button class="btn btn-light btn-sm"
+                                                id="answer{{ question.id }}"
+                                                name="showAnswer"
+                                                value="{{ question.variants_len }}"
+                                                data-closing="0">
+                                            {% trans 'Показать правильные' %}
+                                        </button>
+                                    </div>
+                                </div>
+                                {% if question.type_code %}
+                                    {{ question.code_for_question|safe }}
+                                    {% if question.need_expected_result %}
+                                        <div class="mt-4">{{ question.expected_result_code|safe }}</div>
+                                    {% endif %}
+                                {% else %}
+                                    <div class="list-group card--elevated">
+                                        {% for variant in question.variants_list %}
+                                            <div class="list-group-item">
+                                                {% if variant.correct %}
+                                                    <i class="material-icons mr-3 text-success d-none"
+                                                       id="answer{{ question.id }}{{ forloop.counter }}i">
+                                                        check_circle
+                                                    </i>
+                                                {% endif %}
+                                                <p class="d-inline mr-2 font-weight-bold text-black-50"
+                                                   id="answer{{ question.id }}{{ forloop.counter }}p">
+                                                    {{ variant.title }}
+                                                </p>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <h5 class="text-black-70">{% trans 'Твой ответ' %}</h5>
+                                {% if question.type_code %}
+                                    {{ question.user_answer_code|safe }}
+                                {% else %}
+                                    <div class="list-group card--elevated">
+                                        {% for user_answer in question.user_answer_list %}
+                                            {% if user_answer.checked %}
+                                                {% define 'text-black-100' as text_class %}
+                                                {% if user_answer.correct %}
+                                                    {% define 'border-left-4 border-left-success' as border_left %}
+                                                {% else %}
+                                                    {% define 'border-left-4 border-left-danger' as border_left %}
+                                                {% endif %}
+                                            {% else %}
+                                                {% define 'text-black-50' as text_class %}
+                                                {% define '' as border_left %}
+                                            {% endif %}
+                                            <div class="list-group-item {{ border_left }}">
+                                                <p class="d-inline mr-2 font-weight-bold {{ text_class }}">{{ user_answer.title }}</p>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% else %}
+                        <small class="text-muted">
+                            {% plural_form question.score 'балл' 'балла' 'баллов' %}
+                        </small>
+                        <p class="text-70 mb-lg-16pt mt-3">{% trans 'Ответа еще не было' %}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <!-- // END section: questions -->
+{% endblock %}
+
+{% block section_js_body %}
+    {% include '_hljs_js_pack.html' %}
+    <script>
+        function ready() {
+
+            document.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightBlock(block)
+            })
+
+            let btnsShowAnswer = document.getElementsByName('showAnswer')
+            if (btnsShowAnswer != undefined) {
+                for (let i = 0; i < btnsShowAnswer.length; i++) {
+                    btnShowAnswer = btnsShowAnswer[i]
+                    btnShowAnswer.onclick = function () {
+
+                        let show = Number(this.getAttribute('data-closing'))
+                        let did = false
+                        let variantsLen = Number(this.value)
+                        for (let j = 0; j < variantsLen; j++) {
+                            let elementI = document.getElementById(this.id + (j + 1) + 'i')
+                            let elementP = document.getElementById(this.id + (j + 1) + 'p')
+                            if (show == 0) {
+                                if (elementI != undefined) {
+                                    elementI.classList.remove('d-none')
+                                    did = true
+                                    if (elementP != undefined) {
+                                        elementP.classList.remove('text-black-50')
+                                        elementP.classList.add('text-black-100')
+                                    }
+                                }
+                            } else {
+                                if (elementI != undefined) {
+                                    elementI.classList.add('d-none')
+                                    did = true
+                                    if (elementP != undefined) {
+                                        elementP.classList.add('text-black-50')
+                                        elementP.classList.remove('text-black-100')
+                                    }
+                                }
+                            }
+                        }
+
+                        if (did == false) {
+
+                            let inputsName = this.id.replace('answer', '')
+                            let inputsBlank = document.getElementsByName('user-answer' + inputsName)
+                            if (inputsBlank != undefined) {
+                                for (let i = 0; i < inputsBlank.length; i++) {
+                                    let elementAnswer = document.getElementById(inputsBlank[i].id + 'Answer')
+                                    if (elementAnswer != undefined) {
+                                        if (show == 0) {
+                                            inputsBlank[i].value = elementAnswer.value
+                                        } else {
+                                            inputsBlank[i].value = ''
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        if (show == 0) {
+                            this.setAttribute('data-closing', 1)
+                            this.innerText = 'Скрыть правильные'
+                        } else {
+                            this.setAttribute('data-closing', 0)
+                            this.innerText = 'Показать правильные'
+                        }
+                    }
+                }
+            }
+
+        }
+
+        document.addEventListener("DOMContentLoaded", ready)
+    </script>
+{% endblock %}

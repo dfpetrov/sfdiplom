@@ -1,0 +1,167 @@
+{% extends '__base.html' %}{% load static %}{% load i18n %}
+{% block style_head %}
+    .icon--left:hover {
+        color: black!important;
+    }
+{% endblock %}
+{% block title %}{% trans 'Экзамен' %} {{ quiz.title }} {% endblock %}
+{% block content %}
+    <!-- Header Layout -->
+    <div class="mdk-header-layout js-mdk-header-layout">
+
+        <!-- Header -->
+        {% include '_main_menu.html' %}
+        <!-- // END Header -->
+
+        <!-- Header Layout Content -->
+        <div class="mdk-header-layout__content page-content pb-0">
+
+            {% include '_page_menu.html' %}
+            {% load course_filters %}
+
+            <!-- section: heading -->
+            <div class="mdk-box bg-primary mb-0">
+                <div class="mdk-box__bg-front"
+                     style="background-image: url({{ quiz.get_background_url }}); opacity: 0.75">
+                </div>
+                <div class="mdk-box__content">
+                    <div class="py-128pt text-center text-sm-left">
+                        <div class="container d-flex flex-column justify-content-center align-items-center">
+                            <h1 class="text-white mb-24pt">{{ quiz.title }}</h1>
+                            <form action="{{ quiz.get_progress_url }}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-lg btn-outline-white">
+                                    {% if quiz.complete_date %}
+                                        {% trans 'Улучшить результаты' %}
+                                    {% else %}
+                                        {% trans 'Начать тест' %}
+                                    {% endif %}
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="navbar navbar-expand-sm navbar-light navbar-submenu navbar-list p-0 m-0 align-items-center">
+                        <div class="container page__container">
+                            <ul class="nav navbar-nav flex align-items-sm-center">
+                                <li class="nav-item navbar-list__item">
+                                    <i class="material-icons text-muted icon--left">functions</i>
+                                    {% plural_form quiz.total_score 'балл' 'балла' 'баллов' %}
+                                </li>
+                                <li class="nav-item navbar-list__item">
+                                    <i class="material-icons text-muted icon--left">golf_course</i>
+                                    {% plural_form quiz.question_count 'вопрос' 'вопроса' 'вопросов' %}
+                                </li>
+                                <li class="nav-item navbar-list__item">
+                                    <i class="material-icons text-muted icon--left">assessment</i>
+                                    {{ quiz.get_level_display }}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- // END section: heading -->
+
+            <!-- section: breadcrumbs -->
+            {% include '_breadcrumb.html' %}
+            <!-- // END section: breadcrumbs -->
+
+            {% include '_messages.html' %}
+
+            <!-- section: user result -->
+            <div class="page-section bg-white border-bottom-2">
+                <div class="container page__container">
+                    <div class="row">
+                        <div class="col-lg-6 mb-24pt mb-sm-0">
+                            <div class="border-left-3 border-left-primary pl-24pt pl-md-32pt">
+                                <h4 class="mb-8pt">
+                                    {% trans 'Твой результат' %}
+                                </h4>
+                                {% if quiz.complete_date %}
+                                    <p class="h3 text-center text-primary">
+                                        {{ quiz.result_description.cup_description }}
+                                    </p>
+                                    <p class="text-70 mt-3 mb-2 d-flex">
+                                        <i class="material-icons mr-2 text-muted">thumb_up_alt</i>
+{#                                        {% blocktrans %}#}
+                                            Баллов: {{ quiz.user_score|default_if_none:0 }} из {{ quiz.total_score }}
+{#                                        {% endblocktrans %}#}
+                                    </p>
+                                    <p class="text-70 mb-24pt d-flex">
+                                        <i class="material-icons mr-2 text-muted">check_box</i>
+{#                                        {% blocktrans %}#}
+                                            Правильных ответов: {{ quiz.correct_count }} из {{ quiz.question_count }}
+{#                                        {% endblocktrans %}#}
+                                    </p>
+                                    <p class="text-70 mb-24pt d-flex">
+                                        {% if quiz.result_description.goal_avatar %}
+                                            <img src="{{ quiz.result_description.goal_avatar }}" alt="" class="avatar avatar-xs mr-2">
+                                        {% endif %}
+                                        {{ quiz.result_description.goal_description }}
+                                    </p>
+                                {% else %}
+                                    <p class="text-70 mb-24pt">
+                                        {% trans 'Тест еще не проходился' %}
+                                    </p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-lg-6 d-flex align-items-center justify-content-center">
+                            <div class="page-num-timeline d-flex flex-column flex-sm-row align-items-center justify-content-center flex">
+                                <span data-toggle="tooltip" data-placement="top" data-title="Серебряный кубок"
+                                      class="page-num-timeline__item mb-30pt mb-sm-0" data-original-title="">
+                                        <img src="{{ quiz.avatar_silver_cup }}" alt="" class="avatar avatar-sm">
+                                </span>
+                                <span data-toggle="tooltip" data-placement="top" data-title="Твой кубок"
+                                      class="page-num-timeline__item page-num-timeline__item-current mx-sm-128pt"
+                                      data-original-title="">
+                                    <img src="{{ quiz.result_description.cup_avatar }}" alt="" class="avatar avatar-xxl">
+                                </span>
+                                <span data-toggle="tooltip" data-placement="top" data-title="Бронзовый кубок"
+                                      class="page-num-timeline__item m-0 mt-3 mt-sm-0 pr-0 pr-xl-3"
+                                      data-original-title="">
+                                        <img src="{{ quiz.avatar_bronze_cup }}" alt="" class="avatar avatar-sm">
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- // END section: user result -->
+
+            <!-- section: quiz description -->
+            <div class="container page__container">
+                <div class="border-left pl-32pt page-section">
+                    <div class="d-flex align-items-center page-num-container">
+                        <div class="page-num">
+                            <i class="material-icons text-muted">assignment</i>
+                        </div>
+                        <h4>{% trans 'Описание' %}</h4>
+                    </div>
+                    <p class="text-70 mb-lg-32pt">{{ quiz.description }}</p>
+                    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-sm-start mt-8pt">
+                        <form action="{{ quiz.get_progress_url }}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-accent mr-2 mb-2">
+                                {% if quiz.complete_date %}
+                                    {% trans 'Улучшить результаты' %}
+                                {% else %}
+                                    {% trans 'Начать тест' %}
+                                {% endif %}
+                            </button>
+                        </form>
+                        <a href="{{ quiz.get_results_url }}"
+                           class="btn btn-outline-secondary w-100 w-sm-auto mb-8pt mb-2">
+                            {% trans 'Статистика моих ответов' %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- // END section: quiz description -->
+
+        </div>
+        <!-- // END Header Layout Content -->
+
+    </div>
+    <!-- // END Header Layout -->
+{% endblock %}

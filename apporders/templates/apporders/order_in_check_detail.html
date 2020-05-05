@@ -1,0 +1,284 @@
+{% extends '__base.html' %}
+
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans 'Проверка задачи' %} {{ orderincheck }} {% endblock %}
+
+{% block css_head %}
+<link type="text/css" href="{% static 'vendor/perfect-scrollbar.css' %}" rel="stylesheet">
+<style>
+    .breadcrumb {
+        overflow: hidden;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- Header Layout -->
+<div class="mdk-header-layout js-mdk-header-layout">
+
+    <!-- Header -->
+    {% include '_main_menu.html' %}
+    <!-- // END Header -->
+
+    <!-- Header Layout Content -->
+    <div class="mdk-header-layout__content d-flex flex-column">
+
+        {% include '_page_menu.html' %}
+
+        <div class="page pt-0">
+
+            <div class="bg-primary mdk-box js-mdk-box mb-0" style="height: 192px;"
+                data-effects="parallax-background blend-background">
+                <div class="mdk-box__bg">
+                    <div class="mdk-box__bg-front"
+                        style="background-image: url({% static 'images/1280_rsz_aman-dhakal-205796-unsplash.jpg' %}); background-position: center;">
+                    </div>
+                </div>
+            </div>
+            <div class="container page__container d-flex align-items-end position-relative mb-4">
+                <div class="avatar avatar-xxl position-absolute bottom-0 left-0 right-0" style="top: -100px">
+                    <img src="{{ profile_avatar }}" alt="{{ profile_name }}"
+                        class="avatar-img rounded-circle border-3">
+                </div>
+            </div>
+
+            <!-- container page__container -->
+            <div class="container page__container mb-3">
+
+                <!-- row container -->
+                <div class="row">
+
+                    <!-- col user data -->
+                    <div class="col-12 col-md-4 col-lg-2">
+                        
+                        <h2 class="h2 mb-1">{{ profile_name }}</h2>
+                        
+                        <p class="d-flex align-items-center mb-4">
+                            <a href="{{ profile_url }}" class="btn btn-sm btn-success mr-2">{% trans 'Смотреть профиль' %}</a>
+                        </p>
+                        
+                        <div class="text-muted d-flex align-items-center mb-2">
+                            <i class="material-icons mr-1">account_box</i>
+                            <div class="flex">{% trans 'На сайте с' %} <br>{{ profile_created }}</div>
+                        </div>
+                        <h4>О себе</h4>
+                        <p class="text-black-70 measure-paragraph">{{ profile_description }}</p>
+                    </div>
+                    <!-- //END col user data -->
+
+                    <!-- col task/answer data -->
+                    <div class="col-12 col-md-8 col-lg-7">
+
+                        <!-- task data -->
+                        <h2 class="h2">{% trans 'Задача' %}</h2>
+
+                        <div class="card">
+
+                            <div class="row p-2">
+
+                                <div class="col-auto col-md-2 text-center">
+
+                                    <a href="{{ orderincheck.order.task.get_absolute_url }}" class="avatar avatar-lg"
+                                        title="{% trans 'Смотреть задачу' %}">
+                                        <img src="{{ orderincheck.order.task.skill.get_avatar_url }}"
+                                            alt="{{ orderincheck.order.task.skill.title }}"
+                                            class="avatar-img rounded-circle">
+                                    </a>
+                                </div>
+
+                                <div class="col col-md-10">
+                                    <h4 class="card-title mb-0">
+                                        <a href="{{ orderincheck.order.task.get_absolute_url }}"
+                                            title="{% trans 'Смотреть задачу' %}">{{ orderincheck.order.task.title }}</a>
+                                    </h4>
+                                    <small class="text-muted">{{ orderincheck.order.task.created }}</small>
+                                    <p class="mt-2">{{ orderincheck.order.task.description }}</p>
+                                    <a href="{{ orderincheck.order.task.skill.get_absolute_url }}"
+                                        title="{% trans 'Показать все задачи по' %} {{ orderincheck.order.task.skill }}">#{{ orderincheck.order.task.skill }}</a>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <!-- //END task data -->
+
+                        <!-- answer data -->
+                        <h2 class="h2 m-0">{% trans 'Решение от' %} {{ orderincheck.order.user }}</h2>
+                        <small class="text-muted">{{ orderincheck.order.updated }}</small>
+                        <div class="card mt-3">
+                            <div class="card-body">
+                                <div class="mb-2">
+                                    <strong>{% trans 'Ссылка на исходники' %}</strong>
+                                    <a href="{{ orderincheck.order.code_url }}" target="_blank"
+                                        class="d-block">{{ orderincheck.order.code_url }}</a>
+                                </div>
+                                {% if orderincheck.order.task.build_storage != '1' and orderincheck.order.build_url %}
+                                <div class="my-2">
+                                    <strong>{% trans 'Опубликованное решение' %}</strong>
+                                    <a href="{{ orderincheck.order.build_url }}" target="_blank"
+                                        class="d-block">{{ orderincheck.order.build_url }}</a>
+                                </div>
+                                {% endif %}
+                                <div class="mt-2">
+                                    <strong>{% trans 'Комментарий пользователя' %}</strong>
+                                    <p>{{ orderincheck.order.comment }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h2 class="h2 mb-1">{% trans 'Проверка решения' %}</h2>
+                        <small class="form-text text-muted mt-0">{% trans 'В комментариях можешь прикладывать ссылку на свои решения' %}</small>
+
+                        {% for checkpoint in checkpoints %}
+                        <div class="card mt-3">
+                            <div class="list-group list-group-fit">
+                                <div class="list-group-item">
+                                    <input form="form_order_in_check_update" type="text" name="checkpoint_id"
+                                        value="{{ checkpoint.id }}" hidden required>
+                                    <h4 class="m-0"><span class="text-primary">#{{ forloop.counter }}.</span> {{ checkpoint.title }}</h4>
+                                </div>
+                                <div class="list-group-item">
+                                    <div role="group" aria-labelledby="label-question" class="m-0 form-group">
+                                        <div class="form-row">
+                                            <label id="label-question" for="question"
+                                                class="col-md-3 col-form-label form-label">{% trans 'Комментарий' %}</label>
+                                            <div class="col-md-9">
+                                                <textarea form="form_order_in_check_update"
+                                                    id="comment{{ checkpoint.id }}" name="comment{{ checkpoint.id }}"
+                                                    placeholder="{% trans 'Твой комментарий к проверке' %} ..." rows="3" maxlength="1000"
+                                                    class="form-control">{{ checkpoint.comment }}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="list-group-item">
+                                    <div class="form-group m-0" role="group" aria-labelledby="label-topic">
+                                        <div class="form-row align-items-center">
+                                            <label id="label-topic" for="topic"
+                                                class="col-md-3 col-form-label form-label">Оценка</label>
+                                            <div class="col-md-9">
+                                                <select form="form_order_in_check_update" id="rate{{ checkpoint.id }}"
+                                                    name="rate{{ checkpoint.id }}"
+                                                    class="form-control custom-select w-auto">
+                                                    <option {% if checkpoint.rate == 1 %}selected{% endif %} value="1">1
+                                                    </option>
+                                                    <option {% if checkpoint.rate == 2 %}selected{% endif %} value="2">2
+                                                    </option>
+                                                    <option {% if checkpoint.rate == 3 %}selected{% endif %} value="3">3
+                                                    </option>
+                                                    <option {% if checkpoint.rate == 4 %}selected{% endif %} value="4">4
+                                                    </option>
+                                                    <option {% if checkpoint.rate == 5 %}selected{% endif %} value="5">5
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                        <div class="card mt-3">
+                            <form method="post" id="form_order_in_check_update">
+                                <div class="list-group list-group-fit">
+                                    <div class="list-group-item">
+                                        <h4 class="m-0">{% trans 'Комментарий к решению' %}</h4>
+                                    </div>
+                                    <div class="list-group-item">
+                                        <div role="group" aria-labelledby="label-question" class="m-0 form-group">
+                                            <div class="form-row">
+                                                <label id="label-question" for="id_comment"
+                                                    class="col-md-3 col-form-label form-label">{% trans 'Комментарий' %}</label>
+                                                <div class="col-md-9">
+                                                    {{ form.comment }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="list-group-item">
+                                        <div class="alert alert-danger" role="alert" id="check_confirm_alert" hidden>
+                                            {% trans 'Необходимо подтвердить, что ознакомился с правилами' %}!
+                                        </div>
+                                        <div class="custom-control custom-checkbox custom-control-inline">
+                                            {{ form.check_confirm }}
+
+                                            <label for="id_check_confirm" class="custom-control-label">
+{% trans 'Я подтверждаю, что ознакомился с правилами ответа' %}.
+{% trans 'Мой ответ грамотный, вежливый, конструктивный никого не обидит и не нарушит ни чью психику, а наоборот придаст автору' %} 
+<a href="#">{{ orderincheck.order.user }}</a> 
+{% trans 'мотивацию прокачивать свои скилы' %}!
+                                            </label>
+                                        </div>
+                                        <small id="description-notify" class="form-text text-muted">
+{% trans 'Подтверди перед отправкой ответа' %}
+                                        </small>
+                                    </div>
+                                    {{ form.user }}{{ form.order }}
+                                    {% csrf_token %}
+                                    <div class="list-group-item">
+                                        <input type="submit" class="btn btn-success" value="{% trans 'Отправить мою оценку' %}"
+                                            name="btnSentRate" id="btnSentRate">
+                                    </div>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- //END col task data -->
+
+                <!-- col answer rules -->
+                <div class="col-12 col-md-12 col-lg-3 page-nav" id="page-nav">
+                    <div data-perfect-scrollbar="" data-perfect-scrollbar-wheel-propagation="true" class="ps">
+                        <div class="page-section pt-lg-32pt">
+                            <div class="nav page-nav__menu">
+                                <a href="javascript:void(0)" class="nav-link active">{% trans 'Правила ответа' %}!</a>
+                            </div>
+                            <div class="page-nav__content">
+                                <p class="text-black-70">{% trans 'Оставляя комментарий, обязательно следуй этим правилам' %}:</p>
+                                <ol class="px-3">
+                                    <li class="text-black-70 my-2"><b><u>{% trans 'Главное правило' %}</u>: 
+{% trans 'относись к людям так как хочешь чтобы относились к тебе' %}</b></li>
+                                    <li class="text-black-70 my-2"><b>{% trans 'Не топи' %}!</b> 
+{% trans 'Слишком негативная оценка, может напрочь отбить желание человека развивать свои навыки' %}
+                                    </li>
+                                    <li class="text-black-70 my-2"><b>{% trans 'Подбадривай' %}!</b> 
+{% trans 'Даже если ответ тебе не понравился, напиши что-нибудь хорошее - это всегда придает уверенности и в другой раз тебе ответят тем же' %}
+                                    </li>
+                                    <li class="text-black-70 my-2"><b>{% trans 'Будь профессионалом' %}!</b> 
+{% trans 'Не используй слова-паразиты. Ругательства СТРОЖАЙШЕ ЗАПРЕЩЕНЫ' %}
+                                    </li>
+                                    <li class="text-black-70 my-2">
+{% trans 'Поделись улыбкою своей и она к тебе не раз еще вернется' %}
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                        <div class="ps__rail-x" style="left: 0px; bottom: 0px;">
+                            <div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div>
+                        </div>
+                        <div class="ps__rail-y" style="top: 0px; right: 0px;">
+                            <div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 0px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- //END col answer rules -->
+
+            </div>
+            <!-- //END row container -->
+
+        </div>
+        <!-- //END container page__container -->
+
+    </div>
+</div>
+<!-- // END Header Layout Content -->
+
+</div>
+<!-- // END Header Layout -->
+<script src="{% static 'vendor/perfect-scrollbar.min.js' %}"></script>
+{% endblock %}

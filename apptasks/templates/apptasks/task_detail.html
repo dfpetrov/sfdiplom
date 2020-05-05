@@ -1,0 +1,768 @@
+{% extends '__base.html' %}
+
+{% load i18n %}
+{% load static %}
+
+{% block css_head %}
+<link type="text/css" href="{% static 'css/rating.css' %}" rel="stylesheet">
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+<link href="https://cdn.quilljs.com/1.3.6/quill.bubble.css" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'vendor/hljs/vs2015.css' %}">
+<style>
+    .swal2-actions .swal2-cancel {
+        margin: 12px;
+    }
+
+    .ql-editor strong {
+        font-weight: bold;
+    }
+
+    .ql-container .ql-editor {
+        font-size: .9375rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #383b3d;
+    }
+
+    .ql-bubble .ql-editor code,
+    .ql-bubble .ql-editor pre {
+        background-color: #002b36;
+        border-radius: 3px;
+    }
+
+    .media-body {
+        overflow: hidden;
+    }
+
+    .breadcrumb {
+        overflow: hidden;
+    }
+</style>
+{% endblock %}
+
+{% block title %}{% trans 'Задача по' %} {{ task.skill }} {{ task.title_short }} {% endblock %}
+
+{% block content %}
+<!-- Header Layout -->
+<div class="mdk-header-layout js-mdk-header-layout">
+
+    <!-- Header -->
+    {% include '_main_menu.html' %}
+    <!-- // END Header -->
+
+    <!-- Header Layout Content -->
+    <div class="mdk-header-layout__content d-flex flex-column">
+
+        {% include '_page_menu.html' %}
+
+        <!-- row page -->
+        <div class="page">
+
+            <!-- row container -->
+            <div class="container page__container">
+
+                <!-- row breadcrumb -->
+                <div class="row">
+                    <div class="col">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% url 'appmain:index' %}">Home</a></li>
+                            <li class="breadcrumb-item"><a href="{% url 'appmain:dashboard' %}">{% trans 'Панель управления' %}</a>
+                            </li>
+                            <li class="breadcrumb-item"><a href="{% url 'apptasks:task_list' %}">{% trans 'Список всех задач' %}</a>
+                            </li>
+                            <li class="breadcrumb-item active">{{ task.title_short }}</li>
+                        </ol>
+                    </div>
+                </div>
+                {% include '_messages.html' %}
+                <!-- //END row breadcrumb -->
+
+                <!-- row title -->
+                <div class="row mb-4">
+                    <!-- col title -->
+                    <div class="col-12 col-md-8">
+                        <h2 class="card-title mb-0" style="overflow: hidden;">{{ task.title }}</h2>
+                        {% if order %}
+                        <p class="text-muted">{% trans 'я взял в работу эту задачу' %} {{ order.created }}
+                        </p>
+                        {% endif %}
+                    </div>
+                    <!-- //END col title -->
+
+                    <!-- col favourite -->
+                    {% if user_authenticated %}
+                    <div class="col-12 col-md-4 text-lg-right">
+                        <form class="d-inline" id="favourite_update_form" method="post">
+                            {{ favourite_update_form }}
+                            {% csrf_token %}
+                            {% if is_favorite %}
+                            <button type="button" class="btn btn-info mb-2" value="{% trans 'Убрать из избранного' %}"
+                                name="btnAddFavourites" id="btnAddFavourites">
+                                <i class="material-icons mr-2">favorite_border</i><span id="textAddFavourites">
+{% trans 'Убрать из избранного' %}</span>
+                            </button>
+                            {% else %}
+                            <button type="button" class="btn btn-outline-info mb-2" value="{% trans 'Добавить в избранное' %}"
+                                name="btnAddFavourites" id="btnAddFavourites">
+                                <i class="material-icons mr-2">favorite_border</i><span id="textAddFavourites">
+{% trans 'Добавить в избранное' %}</span>
+                            </button>
+                            {% endif %}
+                        </form>
+                        <form class="d-inline" id="like_update_form" method="post">
+                            {{ like_update_form }}
+                            {% csrf_token %}
+                            {% if is_like %}
+                            <button type="button" class="btn btn-warning mb-2" value="{% trans 'Снять лайк' %}" name="btnLike"
+                                title="{% trans 'Снять лайк' %}" id="btnLike"><i class="material-icons">thumb_up</i>
+                            </button>
+                            {% else %}
+                            <button type="button" class="btn btn-outline-warning mb-2" value="{% trans 'Поставить лайк' %}"
+                                name="btnLike" title="{% trans 'Поставить лайк' %}" id="btnLike"><i
+                                    class="material-icons">thumb_up</i>
+                            </button>
+                            {% endif %}
+                        </form>
+                    </div>
+                    {% endif %}
+                    <!-- //END col favourite -->
+                </div>
+                <!-- //END row title -->
+
+                <!-- row body -->
+                <div class="row">
+
+                    <!-- col task -->
+                    <div class="col-md-8">
+
+                        <!-- task description -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">{% trans 'Описание задачи' %}</h4>
+                            </div>
+                            <div class="card-body border-left-3 border-left-info p-0">
+                                <div id="task_description_editor"></div>
+                            </div>
+                        </div>
+                        <!-- //END task description -->
+
+                        <!-- task checkpoints -->
+                        <h2 class="h2" id="CheckPoints">{% trans 'Что будет проверяться' %}</h2>
+                        <ul class="card list-group list-group-fit">
+                            {% for checkpoint in checkpoints %}
+                            <li class="list-group-item">
+                                <div class="media">
+                                    <div class="media-left">
+                                        <div class="text-muted">{{ forloop.counter }}.</div>
+                                    </div>
+                                    <div class="media-body">
+                                        <a href="#CheckPoints">{{ checkpoint }}</a>
+                                    </div>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        <!-- //END task checkpoints -->
+
+                        <!-- Решения других пользователей -->
+                        <h2 class="h2">{% trans 'Решения других пользователей' %}</h2>
+                        {% if not answers_available %}
+                        <p>{% trans 'Просмотр решений других пользователей доступен только по выполненным задачам' %}</p>
+                        {% endif %}
+                        {% if order_for_check_list %}
+
+                        <ul class="card list-group list-group-fit">
+                            {% for order_for_check in order_for_check_list %}
+                            <li class="list-group-item">
+
+                                {% if order_for_check.order_in_check_status == 'done' %}
+                                <div class="card border-left-3 border-left-success">
+                                    <div class="card-body align-items-center">
+                                        <b>{% trans 'Проверено' %}!</b>
+                                        <small
+                                            class="ml-auto text-muted d-block">{{ order_for_check.order_in_check_update }}</small>
+                                    </div>
+                                </div>
+                                {% elif order_for_check.order_in_check_status == 'incheck' %}
+                                <div class="card border-left-3 border-left-info">
+                                    <div class="card-body">
+                                        {% trans 'Решение у меня на проверке (c' %} {{ order_for_check.order_in_check_update }})
+                                    </div>
+                                </div>
+                                {% endif %}
+
+                                <div class="border rounded bg-light">
+
+                                    <div class="row mt-3 pb-3">
+                                        <div class="col-auto col-md-2 text-center">
+                                            <a href="{{ order_for_check.user.profile.get_absolute_url }}"
+                                                class="avatar avatar-lg" title="{% trans 'Смотреть задачу' %}">
+                                                <img src="{{ order_for_check.user.profile.get_avatar_url }}"
+                                                    alt="{{ order_for_check.user.profile }}"
+                                                    class="avatar-img rounded-circle">
+                                            </a>
+                                            <small
+                                                class="ml-auto text-muted d-block mt-2">{{ order_for_check.updated }}</small>
+                                        </div>
+                                        <div class="col col-md-10">
+                                            <a href="{{ order_for_check.user.profile.get_absolute_url }}"
+                                                class="text-body"><strong>{{ order_for_check.user.profile }}</strong></a>
+                                            {% if order_for_check.code_url %}
+                                            {% if answers_available %}
+                                            <p class="card-subtitle my-1">{% trans 'Ссылка на исходники' %}:</p>
+                                            <a href="{{ order_for_check.code_url }}"
+                                                target="_blank">{{ order_for_check.code_url }}</a>
+                                            {% else %}
+                                            <p class="card-subtitle my-1">{% trans 'Ссылка на исходники' %}:
+                                                <span class="text-info">{% trans 'Просмотр не доступен' %}</span>
+                                            </p>
+                                            {% endif %}
+                                            {% endif %}
+                                            {% if order_for_check.task.need_build and order_for_check.build_url %}
+                                            <div class="mt-3">
+                                                {% if answers_available %}
+                                                <p class="card-subtitle my-1">{% trans 'Опубликованное решение' %}:</p>
+                                                <a href="{{ order_for_check.build_url }}" target="_blank"
+                                                    class="d-block">{{ order_for_check.build_url }}</a>
+                                                {% else %}
+                                                <p class="card-subtitle my-1">{% trans 'Опубликованное решение' %}:
+                                                    <span class="text-info">{% trans 'Просмотр не доступен' %}</span>
+                                                </p>
+                                                {% endif %}
+                                            </div>
+                                            {% endif %}
+                                            <div class="mt-3">
+                                                {% if answers_available %}
+                                                <p class="card-subtitle my-1">{% trans 'Комментарий пользователя' %}:</p>
+                                                <p>{{ order_for_check.comment|truncatechars:50 }}</p>
+                                                {% else %}
+                                                <p class="card-subtitle my-1">{% trans 'Комментарий пользователя' %}:
+                                                    <span class="text-info">{% trans 'Просмотр не доступен' %}</span>
+                                                </p>
+                                                {% endif %}
+                                            </div>
+
+                                            <a href="{% url 'apporders:order_view' order_for_check.id %}"
+                                                class="btn btn-primary mt-3" target="_blank"
+                                                rel="noopener noreferrer">{% trans 'Открыть решение' %}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+
+                        {% else %}
+                        <div class="card border-left-3 border-left-info">
+                            <div class="card-header d-flex align-items-center">
+                                <div class="flex">
+                                    {% if order.status == 'inprogress' or order.status == 'for_check' %}
+                                    <h4 class="card-title">{% trans 'Ты единственный' %}!</h4>
+                                    {% elif task.is_my_task %}
+                                    <h4 class="card-title">{% trans 'Проверять пока нечего' %}</h4>
+                                    {% else %}
+                                    <h4 class="card-title">{% trans 'Покажи класс' %}!</h4>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                {% if order %}
+
+                                {% if order.status == 'done' or order.status == 'for_check' %}
+                                <p class="card-text">{% trans 'Эту задачу выполнил только ты' %}. <b>{% trans 'Молодец' %}!</b></p>
+                                {% else %}
+                                <p class="card-text">{% trans 'Эту задачу решился выполнить только ты' %}. <b>{% trans 'Молодец' %}!</b></p>
+                                {% endif %}
+
+                                <p>
+{% trans 'Еще никто не брался за неё. Когда кто-нибудь ее сделает, то здесь появятся их решения, которые ты сможешь проверить' %}.
+                                </p>
+
+                                {% if order.status == 'inprogress' %}
+                                <p>
+{% trans 'Но сначала тебе нужно выполнить ее самому, иначе решения других пользователей показываться не будут' %}.
+                                </p>
+                                {% endif %}
+
+                                {% else %}
+
+                                <p class="card-text">
+{% trans 'Еще никто не решал эту задачу' %}.
+                                    {% if not task.is_my_task %}
+{% trans 'Возьми этот челендж, покажи всем как надо' %}!
+                                    {% else %}
+{% trans 'Когда кто-нибудь ее сделает, то здесь появятся их решения, которые ты сможешь проверить' %}.
+                                    {% endif %}
+                                </p>
+
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                    </div>
+                    <!-- //END col task -->
+
+                    <!-- col meta -->
+                    <div class="col-md-4">
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">{% trans 'Действие' %}</h4>
+                                <p class="card-subtitle">{% trans 'Статус задачи' %}:
+                                    <span class="text-info">
+                                        {% if task.is_my_task %}
+                                        {% trans 'Это моя задача' %}
+                                        {% elif order %}
+                                        {{ order.get_status_display }}
+                                        {% else %}
+                                        {% trans 'Не выполнялась' %}
+                                        {% endif %}
+                                    </span>
+                                </p>
+                            </div>
+
+                            <div class="card-body text-center">
+                                {% if task.is_my_task %}
+                                <a href="{{ task.get_update_url }}" class="btn btn-success btn-block flex-columnn">
+                                    {% trans 'Редактировать задачу' %}
+                                </a>
+                                {% else %}
+                                {% if order %}
+                                {% if order.status == 'inprogress' %}
+                                <form id="formActionTask" method="post">
+                                    {{ order_status_update_form }}
+                                    {% csrf_token %}
+                                    <input id="btnActionTask" type="button"
+                                        class="btn btn-success btn-block flex-column" value="{% trans 'Завершить' %}"
+                                        name="btnActionTask">
+                                </form>
+                                <div class="page-separator">
+                                    <div class="page-separator__text">or</div>
+                                </div>
+                                <a href="{{ order.get_absolute_url }}" class="btn btn-white btn-block flex-column">
+                                    {% trans 'Перейти к решению' %}
+                                </a>
+                                {% elif order.status == 'for_check' or status == 'done' %}
+                                <a href="{{ order.get_absolute_url }}" class="btn btn-success btn-block flex-columnn">
+                                    {% trans 'Открыть мое решение' %}
+                                </a>
+                                {% endif %}
+                                {% else %}
+                                <form action="{% url 'apporders:order_create' %}" method="post">
+                                    {{ order_creation_form }}
+                                    {% csrf_token %}
+                                    <input type="submit" class="btn btn-success btn-block flex-column"
+                                        value="{% trans 'Взять в работу' %}" name="btnActionTask">
+                                </form>
+                                {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="media align-items-center">
+                                    <div class="media-left">
+                                        <img src="{{ task.author.profile.get_avatar_url }}"
+                                            alt="{{ task.author.profile }}" width="50" class="rounded-circle">
+                                    </div>
+                                    <div class="media-body">
+                                        <h4 class="card-title">{% trans 'Автор' %}: <a
+                                                href="{{ task.author.profile.get_absolute_url }}">{{ task.author.profile }}</a>
+                                        </h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <p>{{ task.author.profile.get_description }}</p>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <ul class="list-group list-group-fit">
+                                <li class="list-group-item">
+                                    <div class="media align-items-center">
+                                        <div class="media-left">
+                                            <i class="material-icons text-muted-light">info</i>
+                                        </div>
+                                        <div class="media-body">
+                                            <p>{% trans 'Требования' %}</p>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="media align-items-center">
+                                        <div class="media-left">
+                                            <i class="material-icons text-muted-light">link</i>
+                                        </div>
+                                        <div class="media-body">
+                                            {% if task.code_storage == '1' %}
+                                            <span>{% trans 'Исходники нужно выложить на' %} <b class="text-info">github</b></span>
+                                            {% elif task.code_storage == '2' %}
+                                            <span>{% trans 'Исходники можно выложить на github или на любое облако' %}</span>
+                                            {% elif task.code_storage == '3' %}
+                                            <span>{% trans 'Решение можно написать в комментарии или выложить на github' %}</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </li>
+                                {% if task.need_build %}
+                                <li class="list-group-item">
+                                    <div class="media align-items-center">
+                                        <div class="media-left">
+                                            <i class="material-icons text-muted-light">http</i>
+                                        </div>
+                                        <div class="media-body">
+                                            {% if task.build_storage == '2' %}
+                                            <span>{% trans 'Нужен deploy на' %} <b class="text-info">github pages</b></span>
+                                            {% elif task.build_storage == '3' %}
+                                            <span>{% trans 'Нужен deploy на' %} <b class="text-info">heroku</b></span>
+                                            {% elif task.build_storage == '4' %}
+                                            <span>{% trans 'Нужен deploy на' %} <b class="text-info">github pages</b> {% trans 'или' %} <b class="text-info">heroku</b></span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </div>
+
+                        <div class="card">
+                            <ul class="list-group list-group-fit">
+                                <li class="list-group-item">
+                                    <div class="media align-items-center">
+                                        <div class="media-left">
+                                            <i class="material-icons text-muted-light">schedule</i>
+                                        </div>
+                                        <div class="media-body">
+                                            <small class="text-muted">{% trans 'дата создания' %}</small>
+                                            <p>{{ task.updated }}</p>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="media align-items-center">
+                                        <div class="media-left">
+                                            <i class="material-icons text-muted-light">code</i>
+                                        </div>
+                                        <div class="media-body">
+                                            <a href="{{ task.skill.get_absolute_url }}" class="text-decoration-0"><strong>#{{ task.skill }}</strong></a>
+                                            {% if task.extra_skill1 %}
+                                            <a href="{{ task.extra_skill1.get_absolute_url }}" class="text-decoration-0">#{{ task.extra_skill1 }}</a>
+                                            {% endif %}
+                                            {% if task.extra_skill2 %}
+                                            <a href="{{ task.extra_skill2.get_absolute_url }}" class="text-decoration-0">#{{ task.extra_skill2 }}</a>
+                                            {% endif %}
+                                            {% if task.extra_skill3 %}
+                                            <a href="{{ task.extra_skill3.get_absolute_url }}" class="text-decoration-0">#{{ task.extra_skill3 }}</a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="card py-0">
+                            <div class="card-header">
+                                <h4 class="card-title">{% trans 'Рейтинг задачи' %}</h4>
+                            </div>
+
+                            <div class="card-body">
+                                <div class="rating">
+
+                                    <form class="rating_rating" method="post" id="form_set_rating">
+
+                                        {% csrf_token %}
+                                        {{ set_rating_form }}
+                                        <input type="button" id="5star" name="btnSetRate" value="5">
+                                        <label id="label5star"
+                                            class="rating_rating_label {% if task.rating > 4 %} rating_active {% endif %}"
+                                            for="5star" title="Excellent"></label>
+
+                                        <input type="button" id="4star" name="btnSetRate" value="4">
+                                        <label id="label4star"
+                                            class="rating_rating_label {% if task.rating > 3 %} rating_active {% endif %}"
+                                            for="4star" title="Pretty good"></label>
+
+                                        <input type="button" id="3star" name="btnSetRate" value="3">
+                                        <label id="label3star"
+                                            class="rating_rating_label {% if task.rating > 2 %} rating_active {% endif %}"
+                                            for="3star" title="Ok"></label>
+
+                                        <input type="button" id="2star" name="btnSetRate" value="2">
+                                        <label id="label2star"
+                                            class="rating_rating_label {% if task.rating > 1 %} rating_active {% endif %}"
+                                            for="2star" title="Bad"></label>
+
+                                        <input type="button" id="1star" name="btnSetRate" value="1">
+                                        <label id="label1star"
+                                            class="rating_rating_label {% if task.rating > 0 %} rating_active {% endif %}"
+                                            for="1star" title="Umm"></label>
+
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <!-- //END col meta -->
+
+                </div>
+                <!-- //END row body -->
+            </div>
+            <!-- //END row container -->
+
+        </div>
+        <!-- //END row page -->
+
+    </div>
+    <!-- //END Header Layout Content -->
+
+</div>
+<!-- //END Header Layout -->
+
+
+
+{% endblock %}
+
+{% block js_body %}
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script src="{% static 'vendor/hljs/highlight.pack.js' %}"></script>
+<script>
+    var container = document.getElementById('task_description_editor')
+    var toolbarOptions = []
+    var options = {
+        theme: 'bubble',
+        readOnly: true
+    };
+    var editor = new Quill(container, options)
+
+    let description_HTML_JSON = '{{ task.description_HTML|escapejs }}'
+    try {
+        editor.setContents(JSON.parse(description_HTML_JSON))
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('pre').forEach((block) => {
+                if (block.classList.contains('ql-syntax')) {
+                    hljs.highlightBlock(block)
+                    block.classList.remove('ql-syntax')
+                }
+            })
+        })
+
+    } catch (error) {
+
+    }
+
+    {% if order %}
+    
+    var btnAddFavourites = document.getElementById('btnActionTask')
+    if (btnAddFavourites != null) {
+
+        btnAddFavourites.onclick = function () {
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            })
+
+            swalWithBootstrapButtons.fire({
+                title: '{% trans 'Завершить задачу' %}?',
+                text: "{% trans 'Задача будет сохранена и доступна для проверки другими пользователями' %}",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: '{% trans 'Да, завершить' %}!',
+                cancelButtonText: '{% trans 'Нет, не надо' %}!',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.value) {
+
+                    let formData = new FormData(document.forms.formActionTask)
+                    let postUrl = "{% url 'apporders:order_status_update' order.id %}"
+                    var xhr = new XMLHttpRequest()
+                    xhr.open("POST", postUrl)
+                    formData.append("return_json_url", true);
+                    xhr.send(formData)
+                    xhr.onloadend = function () {
+                        if (xhr.status == 200) {
+
+                            let response = JSON.parse(xhr.response)
+                            
+                            if (response.response !== 'error') {
+                                window.location = response.response
+                            } else {
+
+                            }
+
+                        } else {}
+                    }
+
+                } else if (
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+
+                }
+            })
+
+        }
+    }
+
+    {% endif %}
+
+    var btnAddFavourites = document.getElementById('btnAddFavourites')
+    if (btnAddFavourites != null) {
+        btnAddFavourites.onclick = function () {
+            var postUrl = "{% url 'apptasks:task_favourite_update' task.id %}"
+            var formData = new FormData(document.forms.favourite_update_form)
+            var xhr = new XMLHttpRequest()
+            xhr.open("POST", postUrl)
+            xhr.send(formData)
+            xhr.onloadend = function () {
+                var classList = btnAddFavourites.classList;
+                if (xhr.status == 200) {
+                    let response = JSON.parse(xhr.response)
+                    if (response.is_favourite) {
+
+                        Swal.fire({
+                            title: '{% trans 'Готово' %}!',
+                            text: '{% trans 'Задача добавлена в избранное' %}',
+                            icon: 'success',
+                            confirmButtonText: 'Ok',
+                            footer: "<a href={% url 'apptasks:favourite_task_list' %}>{% trans 'Перейти в избранное' %}</a>"
+                        })
+
+                        classList.remove('btn-outline-info');
+                        classList.add('btn-info');
+                        textAddFavourites.innerHTML = "{% trans 'Убрать из избранного' %}"
+                    } else {
+
+                        Swal.fire({
+                            title: '{% trans 'Задача удалена из избранных' %}!',
+                            icon: 'warning',
+                            confirmButtonText: 'Ok'
+                        })
+
+                        classList.remove('btn-info');
+                        classList.add('btn-outline-info');
+                        textAddFavourites.innerHTML = "{% trans 'Добавить в избранное' %}"
+                    }
+                } else {
+
+                }
+
+            }
+        }
+    }
+
+    var btnLike = document.getElementById('btnLike')
+    if (btnLike != null) {
+
+
+        btnLike.onclick = function () {
+
+            var postUrl = "{% url 'apptasks:task_like_update' %}"
+            var formData = new FormData(document.forms.like_update_form)
+            var xhr = new XMLHttpRequest()
+            xhr.open("POST", postUrl)
+            xhr.send(formData)
+            xhr.onloadend = function () {
+                var classList = btnLike.classList;
+                if (xhr.status == 200) {
+                    let response = JSON.parse(xhr.response)
+                    if (response.is_like) {
+                        classList.remove('btn-outline-warning');
+                        classList.add('btn-warning');
+                        btnLike.title = "{% trans 'Снять лайк' %}"
+
+                        Swal.fire({
+                            title: '{% trans 'Лайк поставлен' %} :)',
+                            icon: 'success',
+                            confirmButtonText: 'Ok'
+                        })
+
+                    } else {
+                        classList.remove('btn-warning');
+                        classList.add('btn-outline-warning');
+                        btnLike.title = "{% trans 'Поставить лайк' %}"
+
+                        Swal.fire({
+                            title: '{% trans 'Лайк снят' %} :(',
+                            icon: 'warning',
+                            confirmButtonText: 'Ok'
+                        })
+                    }
+                } else {
+
+                }
+
+            }
+        }
+    }
+
+    function delegate(el, evt, sel, handler) {
+        el.addEventListener(evt, function (event) {
+            var t = event.target;
+            while (t && t !== this) {
+                if (t.name == sel) {
+                    handler.call(t, event);
+                }
+                t = t.parentNode;
+            }
+        });
+    }
+    
+    delegate(document, "click", "btnSetRate", function (event) {
+
+        {% if user_authenticated %}
+            var postUrl = "{% url 'apptasks:task_set_rating' %}"
+            var formData = new FormData(document.forms.form_set_rating)
+            formData.append("value", this.value);
+            var xhr = new XMLHttpRequest()
+            xhr.open("POST", postUrl)
+            xhr.send(formData)
+            xhr.onloadend = function () {
+                if (xhr.status == 200) {
+                    let response = JSON.parse(xhr.response)
+                    if (response.rating !== 0) {
+
+                        for (let i = 0; i < 5; i++) {
+                            var label = document.getElementById('label' + (i + 1) + 'star')
+
+                            if (response.rating > i) {
+                                label.classList.add('rating_active')
+                            } else {
+                                label.classList.remove('rating_active')
+                            }
+                        }
+
+                        Swal.fire({
+                            title: '{% trans 'Рейтинг принят' %}',
+                            text: '{% trans 'новый рейтинг задачи' %}: ' + response.rating,
+                            icon: 'info',
+                            confirmButtonText: 'Ok'
+                        })
+
+                    }
+                } else {
+
+                }
+            }
+        {% else %}
+
+            Swal.fire({
+                title: '{% trans 'Чтобы установить рейтинг задаче необходимо войти на сайт' %}',
+                icon: 'info',
+                confirmButtonText: 'Ok',
+                footer: "<span><a href={% url 'appaccounts:login' %}>{% trans 'Войти' %}</a> {% trans 'или' %} <a href={% url 'appaccounts:register' %}>{% trans 'Создать аккаунт' %}</a></span>"
+            })
+
+        {% endif %}
+    })
+</script>
+{% endblock %}

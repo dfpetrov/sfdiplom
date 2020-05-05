@@ -1,0 +1,96 @@
+{% extends '__base.html' %}
+{% load i18n %}
+{% load static %}
+{% block title %}{% trans 'Экзамен' %} {{quiz.title}}{% endblock %}
+{% block content %}
+<!-- Header Layout -->
+<div class="mdk-header-layout js-mdk-header-layout">
+
+    <!-- Header -->
+    {% include '_main_menu.html' %}
+    <!-- // END Header -->
+
+    <!-- Header Layout Content -->
+    <div class="mdk-header-layout__content page-content " style="padding-top: 64px;">
+
+        <!-- section: navbar -->
+        <div class="navbar navbar-list navbar-submenu navbar-light border-0 navbar-expand-sm"
+             style="white-space: nowrap;">
+            <div class="container page__container">
+                <nav class="nav navbar-nav">
+                    <div class="nav-item navbar-list__item">
+                        <a href="student-take-course.html" class="nav-link">
+                            <i class="material-icons icon--left">keyboard_backspace</i>
+                            {% trans 'Назад к экзаменам' %}
+                        </a>
+                    </div>
+                    <div class="nav-item navbar-list__item">
+                        <div class="d-flex align-items-center flex-nowrap">
+                            <div class="mr-16pt">
+                                <a href="student-take-course.html">
+                                    <img src="{{quiz.get_avatar_url}}" width="40" alt="{{quiz.title}}" class="rounded">
+                                </a>
+                            </div>
+                            <div class="flex">
+                                <a href="student-take-course.html" class="card-title text-body mb-0">
+                                    {{quiz.title}}
+                                </a>
+                                {% if quiz.subject or quiz.language %}
+                                <p class="lh-1 d-flex align-items-center mb-0">
+                                    <span class="text-50 small font-weight-bold mr-8pt">{{quiz.subject}}</span>
+                                    <span class="text-50 small">{{quiz.language}}</span>
+                                </p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+        <!-- // END section: navbar -->
+
+        <!-- section: heading -->
+        <div class="bg-gradient-primary pb-lg-64pt py-32pt">
+            <div class="container page__container">
+                <nav class="course-nav">
+                    {% for question in questions %}
+                    <a href="{{question.get_absolute_url}}" data-toggle="tooltip" data-placement="bottom"
+                       data-title="Getting Started with Angular: Introduction" data-original-title="" title="">
+                        <span class="material-icons text-primary">check_circle</span>
+                    </a>
+                    {% endfor %}
+                    <a href="student-take-lesson.html" data-toggle="tooltip" data-placement="bottom"
+                       data-title="Getting Started with Angular: Introduction to TypeScript"
+                       data-original-title="" title="">
+                        <span class="material-icons text-primary">check_circle</span>
+                    </a>
+                    <a href="student-take-lesson.html" data-toggle="tooltip" data-placement="bottom"
+                       data-title="Getting Started with Angular: Comparing Angular to AngularJS"
+                       data-original-title="" title="">
+                        <span class="material-icons text-primary">check_circle</span>
+                    </a>
+                    <a class="active" href="student-take-quiz.html" data-toggle="tooltip" data-placement="bottom"
+                       data-title="Quiz: Getting Started with Angular" data-original-title="" title="">
+                        <span class="material-icons">account_circle</span>
+                    </a>
+                </nav>
+
+                <div class="d-flex flex-wrap align-items-end justify-content-end mb-16pt">
+                    <h1 class="text-white flex m-0">Question 1 of 5</h1>
+                    <p class="h1 text-white-50 font-weight-light m-0">00:14</p>
+                </div>
+
+                <p class="hero__lead measure-hero-lead text-white-50">An angular 2 project written in typescript is*
+                    transpiled to javascript duri*ng the build process. Which of the following additional features are
+                    provided to the developer while programming on typescript over javascript?</p>
+            </div>
+        </div>
+        <!-- // END section: heading -->
+
+    </div>
+    <!-- // END Header Layout Content -->
+
+</div>
+<!-- // END Header Layout -->
+
+{% endblock %}

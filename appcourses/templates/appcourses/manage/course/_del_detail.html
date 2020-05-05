@@ -1,0 +1,128 @@
+{% extends '__base.html' %}
+
+{% load i18n %}
+{% load static %}
+
+{% block css_head %}
+<link type="text/css" href="{% static 'css/style.css' %}" rel="stylesheet">
+<link type="text/css" href="{% static 'css/timeline.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block title %}{% trans 'Редактирование курса' %} {{course.title}} {% endblock %}
+
+{% block content %}
+
+<!-- Header Layout -->
+<div class="mdk-header-layout js-mdk-header-layout">
+
+    <!-- Header -->
+    {% include '_main_menu.html' %}
+    <!-- // END Header -->
+
+    <!-- Header Layout Content -->
+    <div class="mdk-header-layout__content page-content pb-0">
+
+        <div class="mdk-box bg-dark mdk-box--bg-gradient-primary js-mdk-box mb-0" data-effects="blend-background">
+            <div class="mdk-box__bg">
+                <div class="mdk-box__bg-front"
+                     style="transform: translateZ(0px); will-change: opacity; opacity: 1;"></div>
+                <div class="mdk-box__bg-rear"
+                     style="transform: translateZ(0px); will-change: opacity; opacity: 0;"></div>
+            </div>
+            <div class="mdk-box__content">
+                <div class="hero pt-128pt py-64pt text-center text-sm-left">
+                    <div class="container">
+                        <h1 class="text-white">{{ course }}</h1>
+                        <p class="lead text-white-50 measure-hero-lead">{{ course.overview }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="navbar navbar-expand-sm navbar-submenu navbar-light navbar-list p-0 m-0 align-items-center">
+            <div class="container page__container">
+                <ul class="nav navbar-nav flex align-items-sm-center">
+                    <li class="nav-item navbar-list__item">
+                        <i class="material-icons text-muted icon--left">schedule</i>
+                        2h 46m
+                    </li>
+                    <li class="nav-item navbar-list__item">
+                        <i class="material-icons text-muted icon--left">assessment</i>
+                        Beginner
+                    </li>
+                    <li class="nav-item ml-sm-auto text-sm-center flex-column navbar-list__item">
+                        <div class="rating rating-24">
+                            <div class="rating__item"><i class="material-icons">star</i></div>
+                            <div class="rating__item"><i class="material-icons">star</i></div>
+                            <div class="rating__item"><i class="material-icons">star</i></div>
+                            <div class="rating__item"><i class="material-icons">star</i></div>
+                            <div class="rating__item"><i class="material-icons">star_border</i></div>
+                        </div>
+                        <p class="lh-1 mb-0"><small class="text-muted">20 ratings</small></p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="page-section border-bottom-2 pt-3">
+            <div class="container page__container">
+
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'appmain:index' %}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'appmain:dashboard' %}">{% trans 'Панель управления' %}</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'appcourses:library' %}">{% trans 'Библиотека курсов' %}</a></li>
+                    <li class="breadcrumb-item active">{{course.title}}</li>
+                </ol>
+                {% include '_messages.html' %}
+
+                <h2 class="py-4">Содержание курса</h2>
+
+                {% for module in course.modules.all %}
+                <div class="card-group card-group--lg-up mb-3">
+                    <div class="card card--elevated card-shadow">
+                        <ul class="accordion accordion--boxed js-accordion list-group-flush" id="course-toc">
+
+                            <li class="accordion__item open">
+                                <a class="accordion__toggle" data-toggle="collapse" data-parent="#course-toc"
+                                   href="#course-toc-{{forloop.counter}}">
+                                    <div class=" timeline-head">
+                                        <div class="timeline-emoji">
+                                            <img src="{% static 'images/courses/lesson.svg' %}" class="avatar avatar-xl mr-2" alt="lesson{{forloop.counter}}">
+                                        </div>
+                                        <div class="timeline-subtitle">{{forloop.counter}}. {{module.title}}</div>
+                                        <span class="position-absolute"
+                                              style="font-size: 3em; color: #dedede; position: absolute; top: 42px; right: 30px; color: #000;">
+                                        <span class="accordion__toggle-icon material-icons">keyboard_arrow_down</span>
+                                        </span>
+                                    </div>
+                                </a>
+                                <div class="accordion__menu ml-md-3">
+                                    <ul class="list-unstyled collapse {% if forloop.counter == 1 %}show{% endif %}"
+                                        id="course-toc-{{forloop.counter}}">
+                                        {% for lesson in module.lessons.all %}
+                                        <li class="accordion__menu-link">
+                                            <img src="{% static 'images/courses/code.svg' %}" class="avatar avatar-xs mr-4" alt="lesson{{forloop.counter}}">
+                                            <a class="flex timeline-text"
+                                               href="{{lesson.get_manage_url}}">{{lesson.title}}</a>
+                                            <span class="text-muted">8m 42s</span>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+        </div>
+
+    </div>
+    <!-- // END Header Layout Content -->
+
+</div>
+<!-- // END Header Layout -->
+
+{% endblock %}

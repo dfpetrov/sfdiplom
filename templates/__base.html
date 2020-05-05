@@ -1,0 +1,56 @@
+{% load static %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+
+<head>
+    {% include '_yandex_counter.html' %}
+    <meta name="robots" content="noindex">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    {% block meta %}{% endblock %}
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}">
+    {% include '_favicon.html' %}
+    {% block css_before %}{% endblock %}
+    {% include '_material_icon_css.html' %}
+    {% if base_css_path %}
+        {% include base_css_path %}
+    {% else %}
+        {% include '_base_css_assets_main.html' %}
+    {% endif %}
+    {% block css_head %}{% endblock %}
+    <style>{% block style_head %}{% endblock %}</style>
+    <title>{% block title %}{% endblock %}</title>
+</head>
+
+<body class="fixed-layout">
+
+{% if preloader_path %}
+    {% include preloader_path %}
+{% else %}
+    <div class="preloader">
+        <div class="sk-double-bounce">
+            <div class="sk-child sk-double-bounce1"></div>
+            <div class="sk-child sk-double-bounce2"></div>
+        </div>
+    </div>
+{% endif %}
+
+{% block content %}{% endblock %}
+{% if style != 'lesson' %}
+    {% include '_page_footer.html' %}
+{% endif %}
+{% block js_body_before %}{% endblock %}
+{% if base_js_path %}
+    {% include base_js_path %}
+{% else %}
+    {% include '_base_js_assets_main.html' %}
+{% endif %}
+{% block js_body %}{% endblock %}
+
+</body>
+
+</html>

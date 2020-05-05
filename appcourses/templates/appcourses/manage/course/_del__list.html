@@ -1,0 +1,77 @@
+{% extends '__base.html' %}
+
+{% load i18n %}
+{% load static %}
+
+{% block css_head %}{% endblock %}
+
+{% block title %}{% trans 'Управление курсами' %}{% endblock %}
+
+{% block content %}
+
+    <!-- Header Layout -->
+    <div class="mdk-header-layout js-mdk-header-layout">
+
+        <!-- Header -->
+        {% include '_main_menu.html' %}
+        <!-- // END Header -->
+
+        <!-- Header Layout Content -->
+        <div class="mdk-header-layout__content d-flex flex-column">
+
+            <div class="page ">
+
+                <div class="container page__container">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'appmain:index' %}">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'appmain:dashboard' %}">{% trans 'Панель управления' %}</a></li>
+                        <li class="breadcrumb-item active">{% trans 'Управление курсами' %}</li>
+                    </ol>
+                    {% include '_messages.html' %}
+
+                    <div class="col">
+                        {% for course in courses %}
+                        <!-- course item card -->
+                        <div class="card">
+                            <!-- course item card body -->
+                            <div class="row p-2 p-sm-3">
+                                <!-- course avatar -->
+                                <div class="col-12 col-md-3 col-lg-2 text-center">
+                                    <a href="{{ course.get_manage_url }}" class="avatar avatar-xl avatar-4by3" title="{% trans 'Смотреть курс' %}">
+                                        <img src="{{ course.get_avatar_url }}" alt="{{ course.title }}" class="avatar-img rounded">
+                                    </a>
+                                </div>
+                                <!-- //END course avatar -->
+
+                                <!-- course description -->
+                                <div class="col-12 col-md-9 col-lg-10">
+                                    <h4 class="card-title mb-0">
+                                        <a href="{{ course.get_manage_url }}" title="{% trans 'Смотреть курс' %}">{{ course.title }}</a>
+                                    </h4>
+                                    <small class="text-muted">{{ course.created }}</small>
+                                    <span class="text-black-50 mr-2">
+                                        {% trans 'от' %} <a href="{{ course.owner.profile.get_absolute_url }}" class="text-black-50"
+                                            style="text-decoration: underline;">{{ course.owner.profile }}</a>
+                                    </span>
+                                    <p class="mt-2">{{ course.overview }}</p>
+                                </div>
+                                <!-- //END course description -->
+
+                            </div>
+                            <!-- //END course item card body -->
+                        </div>
+                        <!-- //END course item card -->
+                        {% endfor %}
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+        <!-- // END Header Layout Content -->
+
+    </div>
+    <!-- // END Header Layout -->
+{% endblock %}

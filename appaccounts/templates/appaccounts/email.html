@@ -1,0 +1,113 @@
+{% extends 'appaccounts/__base_profile_edit.html' %}
+
+{% load i18n %}
+
+{% block section1_title %}{% trans 'Изменение e-mail' %}{% endblock %}
+
+{% block section1_content %}
+
+{% if user.emailaddress_set.all %}
+
+<p>{% trans 'Следующие e-mail адреса прикреплены к вашему аккаунту' %}:</p>
+
+<div class="list-group list-group-form">
+
+        <fieldset>
+
+            {% for emailaddress in user.emailaddress_set.all %}
+            <div class="list-group-item">
+                <div class="custom-control custom-radio">
+                    <input id="email_radio_{{forloop.counter}}" name="email" type="radio" class="custom-control-input"
+                        {% if emailaddress.primary or user.emailaddress_set.count == 1 %}checked="checked" {%endif %}
+                        value="{{emailaddress.email}}">
+                    <label for="email_radio_{{forloop.counter}}"
+                        class="custom-control-label {% if emailaddress.primary %}primary_email{%endif%}">{{emailaddress.email}}</label>
+                </div>
+                <div class="mt-2">
+                    {% if emailaddress.verified %}
+                    <span class="badge badge-pill badge-info mr-3">{% trans "Verified" %}</span>
+                    {% else %}
+                    <span class="badge badge-pill badge-secondary">{% trans "Unverified" %}</span>
+                    {% endif %}
+                    {% if emailaddress.primary %}<span class="badge badge-pill badge-success">{% trans "Primary" %}</span>{% endif %}
+                </div>
+            </div>
+            {% endfor %}
+
+            <div class="my-3 px-3">
+                <button class="btn btn-success mr-3 my-1" type="submit"
+                    name="action_primary">{% trans 'Сделать основным' %}</button>
+                <button class="btn btn-outline-secondary my-1" type="submit"
+                    name="action_send">{% trans 'Отправить подтверждение' %}</button>
+                <button class="btn btn-outline-danger my-1" type="submit" name="action_remove">{% trans 'Удалить' %}</button>
+            </div>
+
+        </fieldset>
+
+    
+
+</div>
+
+{% else %}
+<p><strong>{% trans 'Внимание:'%}</strong>
+{% trans 'В настоящее время у вас нет настроенного адреса электронной почты. Вы должны добавить адрес электронной почты, чтобы вы могли получать уведомления, сбросить пароль и т. д.' %}
+</p>
+
+{% endif %}
+
+
+{% endblock %}
+
+{% block section2_title %}{% trans "Добавить E-mail" %}{% endblock %}
+
+{% block section2_content %}
+
+<div class="list-group list-group-form">
+    <form method="post" action="{% url 'appaccounts:account_email' %}" class="add_email">
+        {% csrf_token %}
+        <div class="list-group-item">
+            <div class="form-group row mb-0">
+                <label class="col-form-label col-sm-2">E-mail</label>
+                <div class="col-sm-10">
+                    {{ form.email }}
+                    {% if form.email.errors %}
+                    <div class="alert alert-danger my-2" role="alert" id="check_confirm_alert">
+                        <ul class="py-0 px-3 my-0">
+                            {% for error in form.email.errors %}
+                            <li><strong>{{ error|escape }}</strong></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+
+        <div class="my-3 px-3">
+            <button class="btn btn-primary" name="action_add" type="submit">{% trans "Добавить E-mail" %}</button>
+        </div>
+    </form>
+</div>
+
+
+
+{% endblock %}
+
+{% block js_body %}
+
+<script type="text/javascript">
+    (function () {
+        var message = "{% trans 'Вы действительно хотите удалить выбранный адрес электронной почты?' %}";
+        var actions = document.getElementsByName('action_remove');
+        if (actions.length) {
+            actions[0].addEventListener("click", function (e) {
+                if (!confirm(message)) {
+                    e.preventDefault();
+                }
+            });
+        }
+    })();
+</script>
+
+{% endblock %}

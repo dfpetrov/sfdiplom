@@ -1,0 +1,1739 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-03-23 19:08+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: .\PumpSkill\settings.py:177
+msgid "English"
+msgstr "English"
+
+#: .\PumpSkill\settings.py:178
+msgid "Russian"
+msgstr "Russian"
+
+#: .\PumpSkill\settings.py:261
+msgid "Открыть решение задачи"
+msgstr "Watch solution"
+
+#: .\PumpSkill\settings.py:262
+msgid "Открыть задачу"
+msgstr "Open task"
+
+#: .\PumpSkill\settings.py:263
+#: .\apporders\templates\apporders\order_in_check_detail.html:100
+#: .\apptasks\templates\apptasks\favourite_task_list.html:89
+msgid "Показать все задачи по"
+msgstr "Show all tasks of "
+
+#: .\PumpSkill\settings.py:264
+msgid "Смотреть профайл"
+msgstr "Profile"
+
+#: .\appaccounts\forms.py:34 .\appaccounts\forms.py:84
+#: .\appaccounts\forms.py:153 .\appaccounts\forms.py:241
+#: .\appaccounts\templates\appaccounts\register.html:68
+#: .\appaccounts\templates\registration\login.html:40
+msgid "Пароль"
+msgstr "Password"
+
+#: .\appaccounts\forms.py:39 .\appaccounts\forms.py:186
+#: .\appaccounts\forms.py:191 .\appaccounts\forms.py:208
+#: .\appaccounts\forms.py:246
+#: .\appaccounts\templates\appaccounts\password_change.html:44
+#: .\appaccounts\templates\appaccounts\register.html:90
+#: .\templates\account\email_confirm.html:8
+#: .\templates\account\email_confirm.html:13
+#: .\templates\account\password_reset_from_key.html:55
+msgid "Подтверждение"
+msgstr "Confirm"
+
+#: .\appaccounts\forms.py:46
+msgid "Уже есть пользователь с таким e-mail, выберите другое имя."
+msgstr "Already have a user with this email, select a different name"
+
+#: .\appaccounts\forms.py:63
+msgid "Такое имя пользователя не может быть использовано, выберите другое."
+msgstr "This username cannot be used, select another username"
+
+#: .\appaccounts\forms.py:73
+msgid "Не правильное имя пользователя и/или пароль"
+msgstr "Invalid username and/or password"
+
+#: .\appaccounts\forms.py:79 .\appaccounts\forms.py:148
+msgid "Email или login"
+msgstr "Email or login"
+
+#: .\appaccounts\forms.py:158
+msgid "Не правильное имя пользователя или пароль"
+msgstr "Invalid username or password"
+
+#: .\appaccounts\forms.py:172
+msgid "Пользователь с таким e-mail в базе не найден"
+msgstr "A user with this e-mail was not found"
+
+#: .\appaccounts\forms.py:181
+msgid "Старый пароль"
+msgstr "Old password"
+
+#: .\appaccounts\forms.py:196 .\appaccounts\forms.py:214
+#: .\appaccounts\forms.py:225
+msgid "Пароль и подтверждение не совпадают"
+msgstr "Password and confirmation do not match"
+
+#: .\appaccounts\forms.py:203
+#: .\appaccounts\templates\appaccounts\password_change.html:27
+#: .\templates\account\password_reset_from_key.html:34
+msgid "Новый пароль"
+msgstr "New password"
+
+#: .\appaccounts\forms.py:252
+msgid "Пользователь с таким e-mail уже существует"
+msgstr "User with this e-mail already exists."
+
+#: .\appaccounts\forms.py:266
+#: .\appaccounts\templates\appaccounts\profile-edit.html:20
+#: .\appaccounts\templates\appaccounts\profile-edit.html:23
+msgid "Имя"
+msgstr "Name"
+
+#: .\appaccounts\forms.py:282
+msgid "Пара слов о себе..."
+msgstr "A few words about me..."
+
+#: .\appaccounts\templates\appaccounts\email.html:5
+msgid "Изменение e-mail"
+msgstr "Change e-mail"
+
+#: .\appaccounts\templates\appaccounts\email.html:11
+msgid "Следующие e-mail адреса прикреплены к вашему аккаунту"
+msgstr "The following e-mail addresses are attached to your account"
+
+#: .\appaccounts\templates\appaccounts\email.html:28
+msgid "Verified"
+msgstr ""
+
+#: .\appaccounts\templates\appaccounts\email.html:30
+msgid "Unverified"
+msgstr ""
+
+#: .\appaccounts\templates\appaccounts\email.html:32
+msgid "Primary"
+msgstr ""
+
+#: .\appaccounts\templates\appaccounts\email.html:39
+msgid "Сделать основным"
+msgstr "Make primary"
+
+#: .\appaccounts\templates\appaccounts\email.html:41
+msgid "Отправить подтверждение"
+msgstr "Send confirmation"
+
+#: .\appaccounts\templates\appaccounts\email.html:42
+msgid "Удалить"
+msgstr "Remove"
+
+#: .\appaccounts\templates\appaccounts\email.html:52
+msgid "Внимание:"
+msgstr "Warning:"
+
+#: .\appaccounts\templates\appaccounts\email.html:53
+msgid ""
+"В настоящее время у вас нет настроенного адреса электронной почты. Вы должны "
+"добавить адрес электронной почты, чтобы вы могли получать уведомления, "
+"сбросить пароль и т. д."
+msgstr ""
+"You currently do not have any e-mail address set up. You should really add "
+"an e-mail address so you can receive notifications, reset your password, etc"
+
+#: .\appaccounts\templates\appaccounts\email.html:61
+#: .\appaccounts\templates\appaccounts\email.html:88
+msgid "Добавить E-mail"
+msgstr "Add e-mail"
+
+#: .\appaccounts\templates\appaccounts\email.html:101
+msgid "Вы действительно хотите удалить выбранный адрес электронной почты?"
+msgstr "Do you really want to remove the selected e-mail address?"
+
+#: .\appaccounts\templates\appaccounts\password_change.html:4
+msgid "Изменение пароля"
+msgstr "Change password"
+
+#: .\appaccounts\templates\appaccounts\password_change.html:10
+msgid "Текущий пароль"
+msgstr "Current password"
+
+#: .\appaccounts\templates\appaccounts\profile-detail.html:8
+#: .\appaccounts\templates\appaccounts\profile-detail.html:46
+#: .\appaccounts\templates\appaccounts\profile-detail.html:65
+msgid "Профайл"
+msgstr "Profile"
+
+#: .\appaccounts\templates\appaccounts\profile-detail.html:31
+#: .\apporders\templates\apporders\order_in_check_detail.html:65
+#: .\templates\__base_profile_edit.html:102
+msgid "На сайте с"
+msgstr "Since"
+
+#: .\appaccounts\templates\appaccounts\profile-detail.html:34
+#: .\templates\_page_menu.html:28
+msgid "Редактировать профиль"
+msgstr "Edit profile"
+
+#: .\appaccounts\templates\appaccounts\profile-detail.html:44
+#: .\appmain\templates\appmain\dashboard.html:6
+#: .\appmain\templates\appmain\dashboard.html:42
+#: .\appmain\templates\appmain\dashboard.html:47
+#: .\appmain\templates\appmain\myorder_list.html:35
+#: .\apporders\templates\apporders\favourite_order_list.html:38
+#: .\apporders\templates\apporders\order_update.html:136
+#: .\apporders\templates\apporders\order_view.html:54
+#: .\apptasks\templates\apptasks\favourite_task_list.html:38
+#: .\apptasks\templates\apptasks\my_task_list.html:27
+#: .\apptasks\templates\apptasks\skill_detail.html:40
+#: .\apptasks\templates\apptasks\task_detail.html:69
+#: .\apptasks\templates\apptasks\task_list.html:36
+#: .\apptasks\templates\apptasks\task_update.html:73
+#: .\templates\__base_profile_edit.html:112 .\templates\_page_menu.html:11
+msgid "Панель управления"
+msgstr "Dashboard"
+
+#: .\appaccounts\templates\appaccounts\profile-detail.html:45
+#: .\apptasks\templates\apptasks\task_detail.html:71
+#: .\templates\_page_menu.html:17
+msgid "Список всех задач"
+msgstr "All tasks"
+
+#: .\appaccounts\templates\appaccounts\profile-detail.html:56
+msgid "Обо мне"
+msgstr "About me"
+
+#: .\appaccounts\templates\appaccounts\profile-detail.html:70
+msgid "Решено задач"
+msgstr "Completed tasks"
+
+#: .\appaccounts\templates\appaccounts\profile-detail.html:78
+#: .\appaccounts\templates\appaccounts\profile-detail.html:90
+msgid "Всего баллов"
+msgstr "Total score"
+
+#: .\appaccounts\templates\appaccounts\profile-detail.html:85
+msgid "Скилы"
+msgstr "Skills"
+
+#: .\appaccounts\templates\appaccounts\profile-detail.html:101
+msgid "Решенные задачи"
+msgstr "Completed tasks"
+
+#: .\appaccounts\templates\appaccounts\profile-detail.html:114
+msgid "Смотреть решение"
+msgstr "Watch solution"
+
+#: .\appaccounts\templates\appaccounts\profile-edit.html:5
+#: .\apptasks\templates\apptasks\task_update.html:113
+#: .\templates\__base_profile_edit.html:142
+msgid "Основная информация"
+msgstr "Basic information"
+
+#: .\appaccounts\templates\appaccounts\profile-edit.html:29
+#: .\apptasks\models.py:14
+msgid "Аватар"
+msgstr "Avatar"
+
+#: .\appaccounts\templates\appaccounts\profile-edit.html:59
+msgid "О себе"
+msgstr "About me"
+
+#: .\appaccounts\templates\appaccounts\register.html:6
+msgid "Регистрация на"
+msgstr "Sign up"
+
+#: .\appaccounts\templates\appaccounts\register.html:11
+#: .\appaccounts\templates\registration\login.html:78
+#: .\templates\_main_menu.html:38
+msgid "Регистрация"
+msgstr "Sign up"
+
+#: .\appaccounts\templates\appaccounts\register.html:12
+msgid "Создание нового аккаунта"
+msgstr "Sign up"
+
+#: .\appaccounts\templates\appaccounts\register.html:19
+#: .\appaccounts\templates\registration\login.html:19
+msgid "Войти через"
+msgstr "Sign in via"
+
+#: .\appaccounts\templates\appaccounts\register.html:23
+#: .\appaccounts\templates\registration\login.html:23
+#: .\appaccounts\templates\registration\login.html:29
+#: .\apporders\templates\apporders\order_update.html:340
+#: .\apptasks\templates\apptasks\task_detail.html:422
+#: .\apptasks\templates\apptasks\task_detail.html:762
+#: .\apptasks\templates\apptasks\task_update.html:293
+msgid "или"
+msgstr "or"
+
+#: .\appaccounts\templates\appaccounts\register.html:77
+#: .\templates\account\password_reset_from_key.html:43
+msgid "Минимум 8 символов. Не должен состоять только из цифр"
+msgstr "Minimum 8 characters. Should not consist of numbers only"
+
+#: .\appaccounts\templates\appaccounts\register.html:110
+#: .\appmain\templates\appmain\index.html:86
+#: .\apptasks\templates\apptasks\task_detail.html:762
+msgid "Создать аккаунт"
+msgstr "Sign up"
+
+#: .\appaccounts\templates\appaccounts\register.html:113
+msgid "Уже зарегестрированы"
+msgstr "Already registered"
+
+#: .\appaccounts\templates\appaccounts\register.html:114
+#: .\appaccounts\templates\registration\login.html:69
+#: .\appmain\templates\appmain\index.html:88
+#: .\apptasks\templates\apptasks\task_detail.html:762
+#: .\templates\_main_menu.html:35 .\templates\account\email_confirm.html:41
+#: .\templates\account\password_reset.html:44
+#: .\templates\account\password_reset_from_key_done.html:14
+msgid "Войти"
+msgstr "Sign in"
+
+#: .\appaccounts\templates\registration\login.html:11
+msgid "Вход"
+msgstr "Sign in"
+
+#: .\appaccounts\templates\registration\login.html:12
+msgid "Доступ в твой аккаунт"
+msgstr "Access to your account"
+
+#: .\appaccounts\templates\registration\login.html:54
+msgid "Запомнить меня"
+msgstr "Remember me"
+
+#: .\appaccounts\templates\registration\login.html:73
+msgid "Забыл пароль"
+msgstr "Forgot password"
+
+#: .\appaccounts\templates\registration\login.html:78
+msgid "Еще нет аккаунта"
+msgstr "No account yet"
+
+#: .\appmain\templates\appmain\dashboard.html:59
+msgid "Ты можешь создать новую задачу"
+msgstr "You can create a new task"
+
+#: .\appmain\templates\appmain\dashboard.html:62 .\apptasks\views.py:409
+#: .\templates\_page_menu.html:19
+msgid "Создать задачу"
+msgstr "Сreate a new task"
+
+#: .\appmain\templates\appmain\dashboard.html:80
+msgid "Новые задачи"
+msgstr "New tasks"
+
+#: .\appmain\templates\appmain\dashboard.html:81
+msgid "Последние поступления в задачах"
+msgstr "Latest tasks"
+
+#: .\appmain\templates\appmain\dashboard.html:85
+msgid "Смотреть все"
+msgstr "All tasks"
+
+#: .\appmain\templates\appmain\dashboard.html:147
+#: .\apptasks\templates\apptasks\my_task_list.html:6
+#: .\apptasks\templates\apptasks\my_task_list.html:28
+#: .\apptasks\templates\apptasks\my_task_list.html:31
+#: .\templates\_page_menu.html:21
+msgid "Мои задачи"
+msgstr "My tasks"
+
+#: .\appmain\templates\appmain\dashboard.html:148
+msgid "Задачи созданные мной"
+msgstr "Tasks created by me"
+
+#: .\appmain\templates\appmain\dashboard.html:151
+#: .\appmain\templates\appmain\dashboard.html:206
+msgid "Показать все"
+msgstr "Show all"
+
+#: .\appmain\templates\appmain\dashboard.html:202
+#: .\appmain\templates\appmain\myorder_list.html:6
+#: .\appmain\templates\appmain\myorder_list.html:36
+#: .\appmain\templates\appmain\myorder_list.html:39
+#: .\apporders\templates\apporders\order_update.html:137
+#: .\templates\_page_menu.html:22
+msgid "Мои решения"
+msgstr "My solutions"
+
+#: .\appmain\templates\appmain\dashboard.html:203
+msgid "Задачи, которые я решаю"
+msgstr "Tasks in progress"
+
+#: .\appmain\templates\appmain\dashboard.html:255
+msgid "Избранное: задачи"
+msgstr "Favourites: tasks"
+
+#: .\appmain\templates\appmain\dashboard.html:256
+msgid "Задачи добавленные в избранное"
+msgstr "Tasks added to favorites"
+
+#: .\appmain\templates\appmain\dashboard.html:308
+msgid "Избранное: решения"
+msgstr "Favourites: solutions"
+
+#: .\appmain\templates\appmain\dashboard.html:309
+msgid "Решения добавленные в избранное"
+msgstr "Solutions added to favorites"
+
+#: .\appmain\templates\appmain\index.html:10
+#: .\appmain\templates\appmain\skill_list.html:6
+msgid "PumpSkill Прокачай свои скилы"
+msgstr "PumpSkill Upgrade your skills"
+
+#: .\appmain\templates\appmain\index.html:32
+msgid "Здесь ты прокачаешь свои скилы"
+msgstr "You will take your skill set to a whole new level"
+
+#: .\appmain\templates\appmain\index.html:34
+msgid ""
+"Решай интересные задачи от пользователей со всего мира. Получай комментарии "
+"своих решений. Создавай свои задачи и оценивай решения других."
+msgstr ""
+"Solve complicated tasks from users all over the world and receive "
+"comments on your solutions. Create your own tasks and evaluate how other users "
+"solve them."
+
+#: .\appmain\templates\appmain\index.html:44
+msgid "Задачи по программированию"
+msgstr "Programming tasks"
+
+#: .\appmain\templates\appmain\index.html:46
+msgid ""
+"Повышай свои навыки, решая интересные задачи и получай оценки и комментарии "
+"других пользователей."
+msgstr ""
+"Improve your skills by solving interesting tasks and get ratings and "
+"comments from other users"
+
+#: .\appmain\templates\appmain\index.html:74
+msgid "Смотреть все задачи"
+msgstr "All tasks"
+
+#: .\appmain\templates\appmain\index.html:83
+msgid "Работаем!"
+msgstr "Let's get to work!"
+
+#: .\appmain\templates\appmain\index.html:87
+msgid "Уже зарегистрирован?"
+msgstr "Already registered?"
+
+#: .\appmain\templates\appmain\index.html:97
+msgid "Решай задачи или создавай свои"
+msgstr "Solve tasks or create your own"
+
+#: .\appmain\templates\appmain\index.html:100
+msgid ""
+"Практикуйся, выполняя задачи на разные темы. Ты можешь создавать свои задачи "
+"и смотреть как их решат другие пользователи. Добавляй интересные задачи в "
+"избранное и ставь лайки."
+msgstr ""
+"Practice it. Complete tasks on different topics. You can create your own "
+"tasks and see how other users solve them. Add interesting tasks to favorites"
+
+#: .\appmain\templates\appmain\index.html:111
+msgid "Получай обратную связь"
+msgstr "Get Feedback"
+
+#: .\appmain\templates\appmain\index.html:114
+msgid ""
+"Безответная работа - это не прикольно. Поэтому на PumpSkill другие "
+"пользователи проверяют твои решения и оставляют полезные комментарии, "
+"подсказки, советы (ну или почти всегда полезные)."
+msgstr ""
+"Unrequited job is not cool. On PumpSkill, other users will check your "
+"decisions and write useful comments and tips (well, or almost always useful)"
+
+#: .\appmain\templates\appmain\index.html:125
+msgid "Следи за достижениями"
+msgstr "Watch your achievements"
+
+#: .\appmain\templates\appmain\index.html:128
+msgid ""
+"Чем больше ты практикуешься, тем выше твой прогресс. Оценивай свои "
+"достижения на удобном графике в профайле."
+msgstr ""
+"More practice - higher progress. Watch your achievements on a convenient "
+"profile chart"
+
+#: .\appmain\templates\appmain\index.html:141
+msgid "Каталог задач"
+msgstr "Task catalog"
+
+#: .\appmain\templates\appmain\index.html:150
+#: .\appmain\templates\appmain\index.html:159
+#: .\appmain\templates\appmain\index.html:168
+#: .\apptasks\templates\apptasks\skill_detail.html:8
+#: .\apptasks\templates\apptasks\skill_detail.html:32
+#: .\apptasks\templates\apptasks\skill_detail.html:42
+msgid "Задачи по"
+msgstr "Tasks of"
+
+#: .\appmain\templates\appmain\index.html:171
+#: .\appmain\templates\appmain\skill_list.html:27
+#: .\apptasks\templates\apptasks\skill_detail.html:41
+#: .\apptasks\templates\apptasks\task_list.html:37
+msgid "Все задачи"
+msgstr "All tasks"
+
+#: .\appmain\templates\appmain\index.html:182
+msgid ""
+"PumpSkill - это он-лайн платформа, основанная на принципах взаимного "
+"обучения, которая помогает любому человеку развивать профессиональные навыки "
+"и достигать новые цели."
+msgstr ""
+"PumpSkill is a peer-to-peer online platform that helps anyone improve "
+"professional skills and achieve new goals."
+
+#: .\appmain\templates\appmain\myorder_list.html:42
+#: .\apptasks\templates\apptasks\my_task_list.html:34
+msgid "Всего задач"
+msgstr "Total tasks"
+
+#: .\appmain\templates\appmain\myorder_list.html:54
+#: .\apporders\templates\apporders\favourite_order_list.html:57
+#: .\apporders\templates\apporders\order_in_check_detail.html:76
+#: .\apptasks\templates\apptasks\favourite_task_list.html:57
+#: .\apptasks\templates\apptasks\my_task_list.html:48
+msgid "Задача"
+msgstr "Task"
+
+#: .\appmain\templates\appmain\myorder_list.html:57
+#: .\apptasks\templates\apptasks\favourite_task_list.html:60
+msgid "Результат"
+msgstr "Score"
+
+#: .\appmain\templates\appmain\myorder_list.html:60
+#: .\apporders\templates\apporders\order_update.html:394
+#: .\apptasks\templates\apptasks\favourite_task_list.html:63
+msgid "Статус"
+msgstr "Status"
+
+#: .\appmain\templates\appmain\myorder_list.html:63
+#: .\apporders\templates\apporders\favourite_order_list.html:60
+#: .\apptasks\templates\apptasks\favourite_task_list.html:66
+msgid "Дата"
+msgstr "Date"
+
+#: .\appmain\templates\appmain\skill_list.html:33
+#: .\apptasks\templates\apptasks\task_list.html:8
+#: .\apptasks\templates\apptasks\task_list.html:28
+#: .\templates\account\email\email_confirmation_message.html:231
+#: .\templates\account\email\password_reset_key_message.html:225
+msgid "Задачи для прокачки скилов"
+msgstr "Tasks for improving skills"
+
+#: .\apporders\api.py:58
+msgid "Текст комментария должен быть менее"
+msgstr "Comment text should be less than"
+
+#: .\apporders\api.py:59 .\apptasks\api.py:132 .\apptasks\api.py:136
+msgid "символов. Сейчас"
+msgstr "characters. Now"
+
+#: .\apporders\forms.py:21
+msgid "Задача удалена пользователем"
+msgstr "Task deleted by user"
+
+#: .\apporders\forms.py:32
+#: .\apporders\templates\apporders\order_in_check_detail.html:114
+#: .\apporders\templates\apporders\order_view.html:81
+#: .\apptasks\templates\apptasks\task_detail.html:212
+#: .\apptasks\templates\apptasks\task_detail.html:216
+msgid "Ссылка на исходники"
+msgstr "Source link"
+
+#: .\apporders\forms.py:33
+msgid "Ссылка на публикацию решения"
+msgstr "Deploy link"
+
+#: .\apporders\forms.py:77
+msgid "Общий комментарий к работе ..."
+msgstr "General comment on the work ..."
+
+#: .\apporders\templates\apporders\favourite_order_list.html:17
+#: .\apporders\templates\apporders\favourite_order_list.html:39
+#: .\apporders\templates\apporders\favourite_order_list.html:42
+msgid "Избранные решения"
+msgstr "Favorite solutions"
+
+#: .\apporders\templates\apporders\favourite_order_list.html:45
+msgid "Всего решений в избранных"
+msgstr "Total solutions in favorite"
+
+#: .\apporders\templates\apporders\order_in_check_detail.html:6
+msgid "Проверка задачи"
+msgstr "Check task"
+
+#: .\apporders\templates\apporders\order_in_check_detail.html:60
+#: .\apptasks\templates\apptasks\favourite_task_list.html:83
+msgid "Смотреть профиль"
+msgstr "Profile"
+
+#: .\apporders\templates\apporders\order_in_check_detail.html:85
+#: .\apporders\templates\apporders\order_in_check_detail.html:95
+#: .\apptasks\templates\apptasks\favourite_task_list.html:76
+#: .\apptasks\templates\apptasks\favourite_task_list.html:80
+#: .\apptasks\templates\apptasks\task_detail.html:199
+#: .\templates\_task_list_col_task.html:12
+#: .\templates\_task_list_col_task.html:28
+msgid "Смотреть задачу"
+msgstr "Open task"
+
+#: .\apporders\templates\apporders\order_in_check_detail.html:109
+msgid "Решение от"
+msgstr "Solutions by"
+
+#: .\apporders\templates\apporders\order_in_check_detail.html:120
+#: .\apporders\templates\apporders\order_view.html:85
+#: .\apptasks\templates\apptasks\task_detail.html:224
+#: .\apptasks\templates\apptasks\task_detail.html:228
+msgid "Опубликованное решение"
+msgstr "Deploy link"
+
+#: .\apporders\templates\apporders\order_in_check_detail.html:126
+#: .\apporders\templates\apporders\order_view.html:91
+#: .\apptasks\templates\apptasks\task_detail.html:236
+#: .\apptasks\templates\apptasks\task_detail.html:239
+msgid "Комментарий пользователя"
+msgstr "User comment"
+
+#: .\apporders\templates\apporders\order_in_check_detail.html:132
+msgid "Проверка решения"
+msgstr "Check solution"
+
+#: .\apporders\templates\apporders\order_in_check_detail.html:133
+msgid "В комментариях можешь прикладывать ссылку на свои решения"
+msgstr "You can attach a link to your solution in comment"
+
+#: .\apporders\templates\apporders\order_in_check_detail.html:147
+#: .\apporders\templates\apporders\order_in_check_detail.html:196
+msgid "Комментарий"
+msgstr "Comment"
+
+#: .\apporders\templates\apporders\order_in_check_detail.html:151
+msgid "Твой комментарий к проверке"
+msgstr "Your comment"
+
+#: .\apporders\templates\apporders\order_in_check_detail.html:190
+msgid "Комментарий к решению"
+msgstr "Your comment for this solution"
+
+#: .\apporders\templates\apporders\order_in_check_detail.html:205
+msgid "Необходимо подтвердить, что ознакомился с правилами"
+msgstr "You must confirm that you have read the rules"
+
+#: .\apporders\templates\apporders\order_in_check_detail.html:211
+msgid "Я подтверждаю, что ознакомился с правилами ответа"
+msgstr "I confirm that I have read the response rules"
+
+#: .\apporders\templates\apporders\order_in_check_detail.html:212
+msgid ""
+"Мой ответ грамотный, вежливый, конструктивный никого не обидит и не нарушит "
+"ни чью психику, а наоборот придаст автору"
+msgstr ""
+"My answer is competent, polite, constructive and will not offend anyone and "
+"will not disturb anyone's psyche and will give the author"
+
+#: .\apporders\templates\apporders\order_in_check_detail.html:214
+msgid "мотивацию прокачивать свои скилы"
+msgstr "the motivation to improve his skills"
+
+#: .\apporders\templates\apporders\order_in_check_detail.html:218
+msgid "Подтверди перед отправкой ответа"
+msgstr "Confirm before submit"
+
+#: .\apporders\templates\apporders\order_in_check_detail.html:224
+msgid "Отправить мою оценку"
+msgstr "Submit my rating"
+
+#: .\apporders\templates\apporders\order_in_check_detail.html:239
+msgid "Правила ответа"
+msgstr "Rules"
+
+#: .\apporders\templates\apporders\order_in_check_detail.html:242
+msgid "Оставляя комментарий, обязательно следуй этим правилам"
+msgstr "Be sure to follow these rules when leaving a comment"
+
+#: .\apporders\templates\apporders\order_in_check_detail.html:244
+msgid "Главное правило"
+msgstr "Main rule"
+
+#: .\apporders\templates\apporders\order_in_check_detail.html:245
+msgid "относись к людям так как хочешь чтобы относились к тебе"
+msgstr "treat people the way you want to be treated"
+
+#: .\apporders\templates\apporders\order_in_check_detail.html:246
+msgid "Не топи"
+msgstr "Don't drown"
+
+#: .\apporders\templates\apporders\order_in_check_detail.html:247
+msgid ""
+"Слишком негативная оценка, может напрочь отбить желание человека развивать "
+"свои навыки"
+msgstr ""
+"Too negative assessment may completely discourage a person’s desire to "
+"develop his skills"
+
+#: .\apporders\templates\apporders\order_in_check_detail.html:249
+msgid "Подбадривай"
+msgstr "Be cheerful"
+
+#: .\apporders\templates\apporders\order_in_check_detail.html:250
+msgid ""
+"Даже если ответ тебе не понравился, напиши что-нибудь хорошее - это всегда "
+"придает уверенности и в другой раз тебе ответят тем же"
+msgstr ""
+"Even if you don’t like the answer, write something good - it always gives "
+"confidence. And another time they will answer you the same"
+
+#: .\apporders\templates\apporders\order_in_check_detail.html:252
+msgid "Будь профессионалом"
+msgstr "Be a professional"
+
+#: .\apporders\templates\apporders\order_in_check_detail.html:253
+msgid "Не используй слова-паразиты. Ругательства СТРОЖАЙШЕ ЗАПРЕЩЕНЫ"
+msgstr "Do not use bad words. Swearing is STRICTLY FORBIDDEN"
+
+#: .\apporders\templates\apporders\order_in_check_detail.html:256
+msgid "Поделись улыбкою своей и она к тебе не раз еще вернется"
+msgstr "Share your smile and it will come back to you more than once"
+
+#: .\apporders\templates\apporders\order_update.html:115
+msgid "Заказ на выполнение задачи"
+msgstr "Task order"
+
+#: .\apporders\templates\apporders\order_update.html:150
+msgid "автор"
+msgstr "author"
+
+#: .\apporders\templates\apporders\order_update.html:160
+msgid "статус"
+msgstr "status"
+
+#: .\apporders\templates\apporders\order_update.html:171
+msgid "дата изменения"
+msgstr "date"
+
+#: .\apporders\templates\apporders\order_update.html:183
+#: .\apptasks\templates\apptasks\task_update.html:121
+#: .\apptasks\templates\apptasks\task_update.html:362
+msgid "Текст задачи"
+msgstr "Description"
+
+#: .\apporders\templates\apporders\order_update.html:186
+msgid "Результат проверки"
+msgstr "Feedback"
+
+#: .\apporders\templates\apporders\order_update.html:193
+msgid "Итого баллов"
+msgstr "Total score"
+
+#: .\apporders\templates\apporders\order_update.html:198
+msgid "в т.ч."
+msgstr "including"
+
+#: .\apporders\templates\apporders\order_update.html:199
+msgid "по дополнительным скилам"
+msgstr "for additional skills"
+
+#: .\apporders\templates\apporders\order_update.html:208
+msgid "оценок"
+msgstr "ratings"
+
+#: .\apporders\templates\apporders\order_update.html:219
+msgid "Проверок пока нет"
+msgstr "No checks yet"
+
+#: .\apporders\templates\apporders\order_update.html:222
+msgid "Решение находится в статусе"
+msgstr "Solution status"
+
+#: .\apporders\templates\apporders\order_update.html:223
+msgid ""
+"Чтобы оно стало доступно для проверки другим пользователям - заполни раздел"
+msgstr "To make it available for check to other users - fill out the section"
+
+#: .\apporders\templates\apporders\order_update.html:224
+#: .\apporders\templates\apporders\order_update.html:295
+#: .\apporders\templates\apporders\order_view.html:55
+msgid "Решение"
+msgstr "Solution"
+
+#: .\apporders\templates\apporders\order_update.html:225
+msgid "и нажми"
+msgstr "and click"
+
+#: .\apporders\templates\apporders\order_update.html:225
+#: .\apporders\views.py:309 .\apporders\views.py:312
+#: .\apptasks\templates\apptasks\task_detail.html:337
+msgid "Завершить"
+msgstr "Done"
+
+#: .\apporders\templates\apporders\order_update.html:227
+msgid ""
+"Решение еще никто не проверял. Как только его проверят - здесь появятся "
+"комментарии и оценки"
+msgstr ""
+"No one has checked the solution yet. Comments and ratings will appear here "
+"as soon as someone checks it"
+
+#: .\apporders\templates\apporders\order_update.html:265
+msgid "комментарий"
+msgstr "comments"
+
+#: .\apporders\templates\apporders\order_update.html:269
+msgid "общий комментарий к работе"
+msgstr "comment on the work"
+
+#: .\apporders\templates\apporders\order_update.html:272
+msgid "итого баллов от"
+msgstr "total points from"
+
+#: .\apporders\templates\apporders\order_update.html:302
+msgid "Исходники с решением нужно выложить на"
+msgstr "Sources must be uploaded to"
+
+#: .\apporders\templates\apporders\order_update.html:304
+#: .\apptasks\templates\apptasks\task_detail.html:403
+msgid "Исходники можно выложить на github или на любое облако"
+msgstr "Sources must be uploaded to github or any other clouds"
+
+#: .\apporders\templates\apporders\order_update.html:306
+#: .\apptasks\templates\apptasks\task_detail.html:405
+msgid "Решение можно написать в комментарии или выложить на github"
+msgstr "You can write the code in the comments or post on github"
+
+#: .\apporders\templates\apporders\order_update.html:312
+msgid "здесь должна быть ссылка на github"
+msgstr "there should be a link to github"
+
+#: .\apporders\templates\apporders\order_update.html:314
+msgid "здесь должна быть ссылка на github или на любое облако"
+msgstr "there should be a link to github or to any other cloud"
+
+#: .\apporders\templates\apporders\order_update.html:316
+msgid ""
+"здесь должна быть ссылка на github (можно не выкладывать исходники, а "
+"написать ответ в комментарии)"
+msgstr ""
+"there should be a link to github or you can write the code in the comments"
+
+#: .\apporders\templates\apporders\order_update.html:325
+#: .\apporders\templates\apporders\order_update.html:327
+#: .\apporders\templates\apporders\order_update.html:329
+msgid "Решение нужно опубликовать на"
+msgstr "Need deploy on"
+
+#: .\apporders\templates\apporders\order_update.html:336
+#: .\apporders\templates\apporders\order_update.html:338
+#: .\apporders\templates\apporders\order_update.html:340
+msgid "здесь должна быть"
+msgstr "there should be"
+
+#: .\apporders\templates\apporders\order_update.html:336
+#: .\apporders\templates\apporders\order_update.html:338
+#: .\apporders\templates\apporders\order_update.html:340
+msgid "ссылка на"
+msgstr "a link to"
+
+#: .\apporders\templates\apporders\order_update.html:348
+msgid "Здесь можно написать комментарий к ответу"
+msgstr "Here you can write a comment for the answer"
+
+#: .\apporders\templates\apporders\order_update.html:366
+msgid "История проверок"
+msgstr "Review history"
+
+#: .\apporders\templates\apporders\order_update.html:372
+msgid "Всего проверок"
+msgstr "Total checks"
+
+#: .\apporders\templates\apporders\order_update.html:386
+msgid "Дата проверки"
+msgstr "Date"
+
+#: .\apporders\templates\apporders\order_update.html:390
+#: .\apptasks\templates\apptasks\task_detail.html:371
+msgid "Автор"
+msgstr "Author"
+
+#: .\apporders\templates\apporders\order_update.html:398
+msgid "Баллы"
+msgstr "Score"
+
+#: .\apporders\templates\apporders\order_update.html:519
+msgid "Комментарий к решению или код самого решения"
+msgstr "Comment or code"
+
+#: .\apporders\templates\apporders\order_update.html:640
+#: .\apptasks\templates\apptasks\task_detail.html:576
+msgid "Завершить задачу"
+msgstr "Done"
+
+#: .\apporders\templates\apporders\order_update.html:641
+msgid "Твое решение станет доступным для проверки другим пользователям"
+msgstr "Your solution will be available for review by other users"
+
+#: .\apporders\templates\apporders\order_update.html:644
+#: .\apptasks\templates\apptasks\task_detail.html:580
+msgid "Да, завершить"
+msgstr "Yes"
+
+#: .\apporders\templates\apporders\order_update.html:645
+#: .\apptasks\templates\apptasks\task_detail.html:581
+#: .\apptasks\templates\apptasks\task_update.html:484
+msgid "Нет, не надо"
+msgstr "No"
+
+#: .\apporders\templates\apporders\order_view.html:33
+msgid "Решение задачи"
+msgstr "The solution of the task"
+
+#: .\apporders\templates\apporders\order_view.html:33
+msgid "пользователя"
+msgstr "from user"
+
+#: .\apporders\templates\apporders\order_view.html:66
+#: .\apptasks\templates\apptasks\task_detail.html:141
+msgid "Описание задачи"
+msgstr "Description"
+
+#: .\apporders\templates\apporders\order_view.html:75
+msgid "Решение пользователя"
+msgstr "The solution from user"
+
+#: .\apporders\templates\apporders\order_view.html:98
+#: .\apptasks\templates\apptasks\task_detail.html:217
+#: .\apptasks\templates\apptasks\task_detail.html:229
+#: .\apptasks\templates\apptasks\task_detail.html:240
+msgid "Просмотр не доступен"
+msgstr "Not available"
+
+#: .\apporders\templates\apporders\order_view.html:103
+msgid ""
+"Решения других пользователей доступны для просмотра только по выполненным "
+"задачам"
+msgstr ""
+"Other user's solutions are available for viewing only on completed tasks."
+
+#: .\apporders\templates\apporders\order_view.html:105
+msgid "У тебя эта задача находится в статусе"
+msgstr "You have this task in status"
+
+#: .\apporders\templates\apporders\order_view.html:126
+#: .\apporders\templates\apporders\order_view.html:129
+#: .\apporders\templates\apporders\order_view.html:372
+msgid "Убрать решение из избранного"
+msgstr "Remove from favorites"
+
+#: .\apporders\templates\apporders\order_view.html:132
+#: .\apporders\templates\apporders\order_view.html:135
+#: .\apporders\templates\apporders\order_view.html:383
+msgid "Добавить решение в избранное"
+msgstr "Add in favorites"
+
+#: .\apporders\templates\apporders\order_view.html:143
+#: .\apporders\templates\apporders\order_view.html:144
+#: .\apporders\templates\apporders\order_view.html:410
+#: .\apptasks\templates\apptasks\task_detail.html:116
+#: .\apptasks\templates\apptasks\task_detail.html:117
+#: .\apptasks\templates\apptasks\task_detail.html:681
+msgid "Снять лайк"
+msgstr "Remove like"
+
+#: .\apporders\templates\apporders\order_view.html:147
+#: .\apporders\templates\apporders\order_view.html:148
+#: .\apporders\templates\apporders\order_view.html:421
+#: .\apptasks\templates\apptasks\task_detail.html:120
+#: .\apptasks\templates\apptasks\task_detail.html:121
+#: .\apptasks\templates\apptasks\task_detail.html:692
+msgid "Поставить лайк"
+msgstr "Like"
+
+#: .\apporders\templates\apporders\order_view.html:159
+#: .\apptasks\templates\apptasks\task_detail.html:311
+msgid "Действие"
+msgstr "Action"
+
+#: .\apporders\templates\apporders\order_view.html:160
+msgid "Состояние задачи у меня"
+msgstr "I have a task status"
+
+#: .\apporders\templates\apporders\order_view.html:163
+#: .\apptasks\templates\apptasks\task_detail.html:315
+msgid "Это моя задача"
+msgstr "This is my task"
+
+#: .\apporders\templates\apporders\order_view.html:167
+#: .\apptasks\templates\apptasks\task_detail.html:319
+msgid "Не выполнялась"
+msgstr "Not done"
+
+#: .\apporders\templates\apporders\order_view.html:177
+msgid "Оценка решения"
+msgstr "Rating"
+
+#: .\apporders\templates\apporders\order_view.html:185
+msgid "Изменить оценку"
+msgstr "Change my rating"
+
+#: .\apporders\templates\apporders\order_view.html:188
+msgid "Продолжить проверку"
+msgstr "Continue checking"
+
+#: .\apporders\templates\apporders\order_view.html:191
+#: .\apporders\templates\apporders\order_view.html:202
+#: .\apptasks\templates\apptasks\favourite_task_list.html:99
+#: .\apptasks\templates\apptasks\favourite_task_list.html:103
+#: .\apptasks\templates\apptasks\favourite_task_list.html:107
+#: .\apptasks\templates\apptasks\task_detail.html:348
+msgid "Открыть мое решение"
+msgstr "Open my solution"
+
+#: .\apporders\templates\apporders\order_view.html:196
+msgid "Взять в проверку"
+msgstr "Сheck up"
+
+#: .\apporders\templates\apporders\order_view.html:208
+#: .\apptasks\templates\apptasks\task_detail.html:356
+msgid "Взять в работу"
+msgstr "Get to work"
+
+#: .\apporders\templates\apporders\order_view.html:232
+msgid "Решил"
+msgstr "Decided"
+
+#: .\apporders\templates\apporders\order_view.html:251
+msgid "Автор задачи"
+msgstr "Task author"
+
+#: .\apporders\templates\apporders\order_view.html:270
+msgid "Дата изменения"
+msgstr "Updated"
+
+#: .\apporders\templates\apporders\order_view.html:363
+#: .\apptasks\templates\apptasks\task_detail.html:633
+msgid "Готово"
+msgstr "Done"
+
+#: .\apporders\templates\apporders\order_view.html:364
+msgid "Решение добавлено в избранное"
+msgstr "Solutions added to favorites"
+
+#: .\apporders\templates\apporders\order_view.html:367
+#: .\apptasks\templates\apptasks\task_detail.html:637
+msgid "Перейти в избранное"
+msgstr "Go to favorites"
+
+#: .\apporders\templates\apporders\order_view.html:376
+msgid "Решение удалено из избранных"
+msgstr "Remove from favorites"
+
+#: .\apporders\templates\apporders\order_view.html:413
+#: .\apptasks\templates\apptasks\task_detail.html:684
+msgid "Лайк поставлен"
+msgstr "Like set"
+
+#: .\apporders\templates\apporders\order_view.html:424
+#: .\apptasks\templates\apptasks\task_detail.html:695
+msgid "Лайк снят"
+msgstr "Like removed"
+
+#: .\apporders\views.py:205 .\apptasks\views.py:386
+msgid "Такой страницы не существует"
+msgstr "This page does not exist"
+
+#: .\apporders\views.py:314
+msgid "Сохранить ответ"
+msgstr "Save changes"
+
+#: .\apporders\views.py:316
+msgid "Вернуть в работу"
+msgstr "Return to work"
+
+#: .\apptasks\api.py:131
+msgid "Текст задачи должен быть более"
+msgstr "The text of the task must be more than"
+
+#: .\apptasks\api.py:135
+msgid "Текст задачи должно быть менее"
+msgstr "The text of the task must be less than"
+
+#: .\apptasks\forms.py:34 .\apptasks\templates\apptasks\task_update.html:117
+msgid "Название задачи"
+msgstr "Task name"
+
+#: .\apptasks\models.py:13
+msgid "Навык"
+msgstr "Skill"
+
+#: .\apptasks\models.py:16
+msgid "Краткое описание"
+msgstr "Short description"
+
+#: .\apptasks\templates\apptasks\favourite_task_list.html:17
+#: .\apptasks\templates\apptasks\favourite_task_list.html:39
+#: .\apptasks\templates\apptasks\favourite_task_list.html:42
+msgid "Избранные задачи"
+msgstr "Favorite tasks"
+
+#: .\apptasks\templates\apptasks\favourite_task_list.html:45
+msgid "Всего задач в избранных"
+msgstr "Total tasks in favorite"
+
+#: .\apptasks\templates\apptasks\my_task_list.html:51
+msgid "Дата обновления"
+msgstr "Updated"
+
+#: .\apptasks\templates\apptasks\task_detail.html:43
+msgid "Задача по"
+msgstr "Task of"
+
+#: .\apptasks\templates\apptasks\task_detail.html:86
+msgid "я взял в работу эту задачу"
+msgstr "I took this task to work"
+
+#: .\apptasks\templates\apptasks\task_detail.html:99
+#: .\apptasks\templates\apptasks\task_detail.html:102
+#: .\apptasks\templates\apptasks\task_detail.html:642
+msgid "Убрать из избранного"
+msgstr "Remove from favorite"
+
+#: .\apptasks\templates\apptasks\task_detail.html:105
+#: .\apptasks\templates\apptasks\task_detail.html:108
+#: .\apptasks\templates\apptasks\task_detail.html:653
+msgid "Добавить в избранное"
+msgstr "Add to favorite"
+
+#: .\apptasks\templates\apptasks\task_detail.html:150
+msgid "Что будет проверяться"
+msgstr "It will be checked"
+
+#: .\apptasks\templates\apptasks\task_detail.html:168
+msgid "Решения других пользователей"
+msgstr "Other user solutions"
+
+#: .\apptasks\templates\apptasks\task_detail.html:170
+msgid ""
+"Просмотр решений других пользователей доступен только по выполненным задачам"
+msgstr "Other users' solutions are available only for completed tasks"
+
+#: .\apptasks\templates\apptasks\task_detail.html:181
+msgid "Проверено"
+msgstr "Checked"
+
+#: .\apptasks\templates\apptasks\task_detail.html:189
+msgid "Решение у меня на проверке (c"
+msgstr "I'm checking (since"
+
+#: .\apptasks\templates\apptasks\task_detail.html:247
+msgid "Открыть решение"
+msgstr "Watch solution"
+
+#: .\apptasks\templates\apptasks\task_detail.html:260
+msgid "Ты единственный"
+msgstr "You're the one"
+
+#: .\apptasks\templates\apptasks\task_detail.html:262
+msgid "Проверять пока нечего"
+msgstr "There is nothing to check yet"
+
+#: .\apptasks\templates\apptasks\task_detail.html:264
+msgid "Покажи класс"
+msgstr "Do it cool"
+
+#: .\apptasks\templates\apptasks\task_detail.html:272
+msgid "Эту задачу выполнил только ты"
+msgstr "This task was completed only by you"
+
+#: .\apptasks\templates\apptasks\task_detail.html:272
+#: .\apptasks\templates\apptasks\task_detail.html:274
+msgid "Молодец"
+msgstr "Well done"
+
+#: .\apptasks\templates\apptasks\task_detail.html:274
+msgid "Эту задачу решился выполнить только ты"
+msgstr "Only you decided to complete this task."
+
+#: .\apptasks\templates\apptasks\task_detail.html:278
+msgid ""
+"Еще никто не брался за неё. Когда кто-нибудь ее сделает, то здесь появятся "
+"их решения, которые ты сможешь проверить"
+msgstr ""
+"Nobody has done it yet. When someone does it, their decisions will appear "
+"here that you can check"
+
+#: .\apptasks\templates\apptasks\task_detail.html:283
+msgid ""
+"Но сначала тебе нужно выполнить ее самому, иначе решения других "
+"пользователей показываться не будут"
+msgstr ""
+"But first you need to do it yourself, otherwise the decisions of other users "
+"will not be shown"
+
+#: .\apptasks\templates\apptasks\task_detail.html:290
+msgid "Еще никто не решал эту задачу"
+msgstr "Nobody has done it yet"
+
+#: .\apptasks\templates\apptasks\task_detail.html:292
+msgid "Возьми этот челендж, покажи всем как надо"
+msgstr "Take this challenge"
+
+#: .\apptasks\templates\apptasks\task_detail.html:294
+msgid ""
+"Когда кто-нибудь ее сделает, то здесь появятся их решения, которые ты "
+"сможешь проверить"
+msgstr ""
+"When someone does it, their decisions will appear here that you can check"
+
+#: .\apptasks\templates\apptasks\task_detail.html:312
+msgid "Статус задачи"
+msgstr "Status"
+
+#: .\apptasks\templates\apptasks\task_detail.html:328
+msgid "Редактировать задачу"
+msgstr "Edit task"
+
+#: .\apptasks\templates\apptasks\task_detail.html:344
+msgid "Перейти к решению"
+msgstr "Watch my solution"
+
+#: .\apptasks\templates\apptasks\task_detail.html:390
+msgid "Требования"
+msgstr "Requirements"
+
+#: .\apptasks\templates\apptasks\task_detail.html:401
+msgid "Исходники нужно выложить на"
+msgstr "Sources must be uploaded to"
+
+#: .\apptasks\templates\apptasks\task_detail.html:418
+#: .\apptasks\templates\apptasks\task_detail.html:420
+#: .\apptasks\templates\apptasks\task_detail.html:422
+msgid "Нужен deploy на"
+msgstr "Need deploy on"
+
+#: .\apptasks\templates\apptasks\task_detail.html:439
+msgid "дата создания"
+msgstr "Created"
+
+#: .\apptasks\templates\apptasks\task_detail.html:468
+msgid "Рейтинг задачи"
+msgstr "Rating"
+
+#: .\apptasks\templates\apptasks\task_detail.html:577
+msgid "Задача будет сохранена и доступна для проверки другими пользователями"
+msgstr "The task will be saved and available for users"
+
+#: .\apptasks\templates\apptasks\task_detail.html:634
+msgid "Задача добавлена в избранное"
+msgstr "Task added to favorites"
+
+#: .\apptasks\templates\apptasks\task_detail.html:646
+msgid "Задача удалена из избранных"
+msgstr "Task removed to favorites"
+
+#: .\apptasks\templates\apptasks\task_detail.html:745
+msgid "Рейтинг принят"
+msgstr "Accepted"
+
+#: .\apptasks\templates\apptasks\task_detail.html:746
+msgid "новый рейтинг задачи"
+msgstr "New rating"
+
+#: .\apptasks\templates\apptasks\task_detail.html:759
+msgid "Чтобы установить рейтинг задаче необходимо войти на сайт"
+msgstr "You have to enter the site to set the rating"
+
+#: .\apptasks\templates\apptasks\task_update.html:136
+msgid "Чекпоинты"
+msgstr "Checkpoints"
+
+#: .\apptasks\templates\apptasks\task_update.html:137
+msgid "пункты, которые будут оцениваться при проверке задачи"
+msgstr "items to be evaluated when checking the task"
+
+#: .\apptasks\templates\apptasks\task_update.html:140
+#: .\apptasks\templates\apptasks\task_update.html:142
+msgid "Добавить чекпоинт"
+msgstr "Add checkpoint"
+
+#: .\apptasks\templates\apptasks\task_update.html:165
+#: .\apptasks\templates\apptasks\task_update.html:628
+msgid "Редактировать чекпоинт"
+msgstr "Edit checkpoint"
+
+#: .\apptasks\templates\apptasks\task_update.html:167
+msgid "Изменить"
+msgstr "Edit"
+
+#: .\apptasks\templates\apptasks\task_update.html:170
+#: .\apptasks\templates\apptasks\task_update.html:172
+#: .\apptasks\templates\apptasks\task_update.html:632
+#: .\apptasks\templates\apptasks\task_update.html:633
+msgid "Удалить чекпоинт"
+msgstr "Remove checkpoint"
+
+#: .\apptasks\templates\apptasks\task_update.html:193
+msgid "Свойства"
+msgstr "Properties"
+
+#: .\apptasks\templates\apptasks\task_update.html:197
+msgid "Основной"
+msgstr "Main"
+
+#: .\apptasks\templates\apptasks\task_update.html:202
+msgid "Дополнительные"
+msgstr "Additional"
+
+#: .\apptasks\templates\apptasks\task_update.html:204
+msgid "Можно указать дополнительные скилы, которые охватывает задача"
+msgstr "You can specify additional skills that the task covers"
+
+#: .\apptasks\templates\apptasks\task_update.html:209
+#: .\apptasks\templates\apptasks\task_update.html:215
+#: .\apptasks\templates\apptasks\task_update.html:221
+msgid "Дополнительный скилл не может быть равен основному"
+msgstr "Additional skill cannot be equal to the main"
+
+#: .\apptasks\templates\apptasks\task_update.html:229
+msgid "Куда выложить исходники"
+msgstr "Source link"
+
+#: .\apptasks\templates\apptasks\task_update.html:236
+msgid "Только на"
+msgstr "Only on "
+
+#: .\apptasks\templates\apptasks\task_update.html:244
+msgid "или любое облако"
+msgstr "or any other clouds"
+
+#: .\apptasks\templates\apptasks\task_update.html:252
+msgid "или написать решение в комментарии"
+msgstr "or write code in the comments"
+
+#: .\apptasks\templates\apptasks\task_update.html:261
+msgid "Ссылка на решение"
+msgstr "Deploy link"
+
+#: .\apptasks\templates\apptasks\task_update.html:268
+msgid "Не нужна"
+msgstr "Need not"
+
+#: .\apptasks\templates\apptasks\task_update.html:277
+#: .\apptasks\templates\apptasks\task_update.html:285
+#: .\apptasks\templates\apptasks\task_update.html:293
+msgid "Опубликовать на"
+msgstr "Need deploy on"
+
+#: .\apptasks\templates\apptasks\task_update.html:479
+msgid "Сохранить изменения?"
+msgstr "Save changes?"
+
+#: .\apptasks\templates\apptasks\task_update.html:480
+msgid "Задача будет сохранена и опубликована на сайте"
+msgstr "The task will be saved and published on the site"
+
+#: .\apptasks\templates\apptasks\task_update.html:483
+msgid "Да, сохранить"
+msgstr "Yes"
+
+#: .\apptasks\templates\apptasks\task_update.html:602
+msgid "Новый чекпоинт"
+msgstr "New checkpoint"
+
+#: .\apptasks\templates\apptasks\task_update.html:605
+msgid "Например: правила оформления кода соблюдены"
+msgstr "For example: code style rules are OK"
+
+#: .\apptasks\templates\apptasks\task_update.html:667
+msgid "Редактирование чекпоинта"
+msgstr "Edit checkpoint"
+
+#: .\apptasks\templates\apptasks\task_update.html:684
+msgid "Удалить чекпоинт?"
+msgstr "Remove checkpoint?"
+
+#: .\apptasks\templates\apptasks\task_update.html:690
+msgid "Нет, не удалять"
+msgstr "No"
+
+#: .\apptasks\templates\apptasks\task_update.html:691
+msgid "Да, удалить"
+msgstr "Yes"
+
+#: .\apptasks\views.py:218
+msgid "Page is not “last”, nor can it be converted to an int."
+msgstr ""
+
+#: .\apptasks\views.py:223
+#, python-format
+msgid "Invalid page (%(page_number)s): %(message)s"
+msgstr ""
+
+#: .\apptasks\views.py:391
+msgid "Редактирование задачи"
+msgstr "Edit task"
+
+#: .\apptasks\views.py:392 .\templates\__base_profile_edit.html:156
+msgid "Сохранить изменения"
+msgstr "Save changes"
+
+#: .\apptasks\views.py:406
+msgid "Результат решения соответствует ожиданиям"
+msgstr "The result of the program meets expectations"
+
+#: .\apptasks\views.py:408
+msgid "Создание задачи"
+msgstr "New task"
+
+#: .\templates\__base_profile_edit.html:78
+#: .\templates\__base_profile_edit.html:113
+msgid "Редактирование профайла"
+msgstr "Edit profile"
+
+#: .\templates\__base_profile_edit.html:145
+msgid "Подтвердить/Изменить"
+msgstr "Confirm/Change"
+
+#: .\templates\__base_profile_edit.html:148 .\templates\_page_menu.html:31
+msgid "Изменить пароль"
+msgstr "Change password"
+
+#: .\templates\__base_profile_edit.html:151 .\templates\_page_menu.html:30
+#: .\templates\account\email\password_reset_key_message.html:215
+#: .\templates\account\password_reset.html:41
+msgid "Сбросить пароль"
+msgstr "Reset password"
+
+#: .\templates\_main_menu.html:23
+msgid "Мой профайл"
+msgstr "My Profile"
+
+#: .\templates\_main_menu.html:26 .\templates\_page_menu.html:33
+msgid "Выйти"
+msgstr "Sign out"
+
+#: .\templates\_page_footer.html:10
+msgid "Язык"
+msgstr "Language"
+
+#: .\templates\_page_menu.html:9
+msgid "Главное"
+msgstr "Main"
+
+#: .\templates\_page_menu.html:15
+msgid "Задачи"
+msgstr "Tasks"
+
+#: .\templates\_page_menu.html:26
+msgid "Аккаунт"
+msgstr "Account"
+
+#: .\templates\_task_list_col_task.html:32
+msgid "от"
+msgstr "by"
+
+#: .\templates\_task_list_filter.html:4
+msgid "Фильтр"
+msgstr "Filter"
+
+#: .\templates\_task_list_filter.html:8
+msgid "Фильтр по состоянию"
+msgstr "Filter by status"
+
+#: .\templates\_task_list_filter.html:13 .\templates\_task_list_filter.html:38
+msgid "Все"
+msgstr "All"
+
+#: .\templates\_task_list_filter.html:19
+msgid "Задачи не взятые в работу"
+msgstr "Tasks not taken to work"
+
+#: .\templates\_task_list_filter.html:25
+msgid "Задачи взятые в работу"
+msgstr "Tasks in work"
+
+#: .\templates\_task_list_filter.html:33
+msgid "Фильтр по автору"
+msgstr "Filter by author"
+
+#: .\templates\_task_list_filter.html:44
+msgid "Только не мои задачи"
+msgstr "Only not my tasks"
+
+#: .\templates\_task_list_filter.html:50
+msgid "Только мои задачи"
+msgstr "Only my tasks"
+
+#: .\templates\_task_list_filter.html:55
+msgid "Применить"
+msgstr "Set filter"
+
+#: .\templates\_task_list_filter.html:56
+msgid "Сбросить"
+msgstr "Reset filter"
+
+#: .\templates\account\email\email_confirmation_message.html:191
+#: .\templates\account\email\email_confirmation_message.html:210
+msgid "Подтверждение регистрации"
+msgstr "Confirmation of registration"
+
+#: .\templates\account\email\email_confirmation_message.html:204
+msgid "Добро пожаловать на"
+msgstr "Welcome to"
+
+#: .\templates\account\email\email_confirmation_message.html:205
+msgid "Остался один шаг и ты готов прокачивать свои скилы"
+msgstr "One more step and you are ready to pump your skills"
+
+#: .\templates\account\email\email_confirmation_message.html:213
+msgid "Ты получил это письмо, потому что пользователь"
+msgstr "You received this email because the user"
+
+#: .\templates\account\email\email_confirmation_message.html:215
+msgid "указал этот e-mail для подключения к своему аккаунту"
+msgstr "assigned this e-mail to connect to your account"
+
+#: .\templates\account\email\email_confirmation_message.html:218
+msgid "Чтобы завершить регистрацию, нажми на кнопку \"Подтвердить e-mail\""
+msgstr "To complete the registration, click on the button \"Confirm e-mail\""
+
+#: .\templates\account\email\email_confirmation_message.html:221
+#: .\templates\account\email_confirm.html:38
+msgid "Подтвердить"
+msgstr "Confirm"
+
+#: .\templates\account\email\email_confirmation_message.html:223
+#: .\templates\account\email\password_reset_key_message.html:217
+msgid ""
+"Если кнопка не отображается, перейди по ссылке или скопируй ее и вставь в "
+"браузере"
+msgstr ""
+"If the button does not appear, follow the link or copy it and paste in the "
+"browser"
+
+#: .\templates\account\email\email_confirmation_message.html:226
+#: .\templates\account\email\password_reset_key_message.html:220
+msgid "Если ты не понимаешь о чем идет речь, просто проигнорируй это письмо"
+msgstr "If you don’t understand what it is about, just ignore this letter"
+
+#: .\templates\account\email\password_reset_key_message.html:191
+#: .\templates\account\password_reset_done.html:10
+#: .\templates\account\password_reset_from_key_done.html:6
+msgid "Сброс пароля"
+msgstr "Reset password"
+
+#: .\templates\account\email\password_reset_key_message.html:204
+msgid "Восстановление пароля на"
+msgstr "Password recovery on"
+
+#: .\templates\account\email\password_reset_key_message.html:205
+msgid "Письмо с инструкцией для восстановления пароля"
+msgstr "Password recovery email"
+
+#: .\templates\account\email\password_reset_key_message.html:210
+#: .\templates\account\password_reset_done.html:6
+msgid "Восстановление пароля"
+msgstr "Password recovery"
+
+#: .\templates\account\email\password_reset_key_message.html:211
+msgid ""
+"Ты получил это письмо потому, что ты или кто-то другой запросил смену пароля "
+"для своего аккаунта"
+msgstr ""
+"You received this email because you or someone else requested a password "
+"change for your account"
+
+#: .\templates\account\email\password_reset_key_message.html:212
+msgid ""
+"Если ты этого не делал, просто проигнорируй это письмо. Иначе, нажми на "
+"кнопку \"Сбросить пароль\""
+msgstr ""
+"If you did not, then ignore this letter. Otherwise, click on the \"Reset "
+"Password\" button"
+
+#: .\templates\account\email\password_reset_key_subject.txt:3
+msgid "Password Reset E-mail"
+msgstr "Password Reset E-mail"
+
+#: .\templates\account\email_confirm.html:24
+#, python-format
+msgid ""
+"Пожалуйста подтвердите что <a href=\"mailto:%(email)s\">%(email)s</a> этот "
+"адрес электронной почты для пользователя %(user_display)s."
+msgstr ""
+"Please confirm that <a href=\"mailto:%(email)s\">%(email)s</a> this email "
+"address is for the user %(user_display)s."
+
+#: .\templates\account\email_confirm.html:30
+#, python-format
+msgid ""
+"Срок действия ссылки для подтверждения по электронной почте истек или "
+"недействителен. Пожалуйста <a href=\"%(email_url)s\">оформить новый запрос "
+"на подтверждение по электронной почте</a>."
+msgstr ""
+"The email confirmation link has expired or is invalid. Please <a href="
+"\"%(email_url)s\">submit a new confirmation email request</a>."
+
+#: .\templates\account\email_confirm.html:41
+#: .\templates\account\password_reset.html:44
+msgid "Вспомнил пароль?"
+msgstr "Remember password?"
+
+#: .\templates\account\password_reset.html:6
+msgid "Сброс пароля PumpSkill"
+msgstr "Password reset PumpSkill"
+
+#: .\templates\account\password_reset.html:10
+msgid "Забыл пароль?"
+msgstr "Forgot password?"
+
+#: .\templates\account\password_reset.html:11
+msgid "Сброс пароля от аккаунта"
+msgstr "Account Password Reset"
+
+#: .\templates\account\password_reset.html:17
+msgid ""
+"На указанный e-mail будет отправлено письмо с инструкциями по сбросу пароля. "
+"Если письма нет - проверь папку СПАМ"
+msgstr ""
+"An email with password reset instructions will be sent to this email "
+"address. If there is no message, check the SPAM folder"
+
+#: .\templates\account\password_reset_done.html:13
+msgid "Мы отправили на указанный e-mail инструкции для восстановления пароля"
+msgstr "We sent password recovery instructions to this email address."
+
+#: .\templates\account\password_reset_done.html:14
+msgid "Если письма нет"
+msgstr "If you have not received the letter"
+
+#: .\templates\account\password_reset_done.html:14
+msgid "проверь папку"
+msgstr "check the folder"
+
+#: .\templates\account\password_reset_done.html:14
+#: .\templates\account\verified_email_required.html:24
+msgid "СПАМ"
+msgstr "SPAM"
+
+#: .\templates\account\password_reset_from_key.html:6
+#: .\templates\account\password_reset_from_key.html:11
+msgid "Установка нового пароля"
+msgstr "Setting a new password"
+
+#: .\templates\account\password_reset_from_key.html:16
+msgid "Введи новый пароль и подтверждение"
+msgstr "Enter new password and confirmation"
+
+#: .\templates\account\password_reset_from_key.html:22
+msgid "Срок действия ссылки для сброса пароля истек"
+msgstr "Password reset link expired"
+
+#: .\templates\account\password_reset_from_key.html:23
+msgid "Отправьте"
+msgstr "Submit"
+
+#: .\templates\account\password_reset_from_key.html:24
+msgid "новый запрос"
+msgstr "new request"
+
+#: .\templates\account\password_reset_from_key.html:25
+msgid "на сброс пароля"
+msgstr "for password reset"
+
+#: .\templates\account\password_reset_from_key.html:74
+msgid "Установить новый пароль"
+msgstr "Set new password"
+
+#: .\templates\account\password_reset_from_key.html:77
+msgid "Ваш пароль успешно изменен"
+msgstr "Your password has been successfully changed"
+
+#: .\templates\account\password_reset_from_key_done.html:10
+msgid "Пароль изменен"
+msgstr "Password changed"
+
+#: .\templates\account\password_reset_from_key_done.html:13
+msgid "Пароль успешно изменен"
+msgstr "Password changed successfully"
+
+#: .\templates\account\password_reset_from_key_done.html:14
+msgid "Теперь можно"
+msgstr "Now you can"
+
+#: .\templates\account\verified_email_required.html:8
+#: .\templates\account\verified_email_required.html:13
+msgid "Подтвердите свой e-mail"
+msgstr "Confirm your e-mail"
+
+#: .\templates\account\verified_email_required.html:20
+msgid "Эта часть сайта требует подтверждения e-mail адреса"
+msgstr "This part of the site requires confirmation of the e-mail address."
+
+#: .\templates\account\verified_email_required.html:22
+msgid ""
+"Мы отправили письмо с подтверждением. Пожалуйста, перейди по ссылке в письме"
+msgstr "We sent a confirmation email. Please follow the link in the letter"
+
+#: .\templates\account\verified_email_required.html:24
+msgid "Проверь папку"
+msgstr "Check folder"
+
+#: .\templates\account\verified_email_required.html:24
+msgid "если письма нет"
+msgstr "if you have not received the letter"
+
+#: .\templates\account\verified_email_required.html:26
+msgid "Заметка"
+msgstr "Note"
+
+#: .\templates\account\verified_email_required.html:26
+msgid "в настройках профиля"
+msgstr "in profile settings"
+
+#: .\templates\account\verified_email_required.html:26
+msgid ""
+"ты можешь изменить свой e-mail или повторно запросить письмо с подтверждением"
+msgstr "you can change your e-mail or re-request a confirmation email"
+
+#, python-brace-format
+#~ msgid ""
+#~ "Текст задачи должен быть более {settings.TASK_DESCRIPTION_LEN_MIN} "
+#~ "символов. Сейчас {text_len}"
+#~ msgstr ""
+#~ "The text of the task must be more than {settings."
+#~ "TASK_DESCRIPTION_LEN_MIN} characters. Now {text_len}"
+
+#~ msgid "В работе"
+#~ msgstr "in progress"
+
+#~ msgid "Выполнена"
+#~ msgstr "done"
+
+#~ msgid "Не активна"
+#~ msgstr "in active"

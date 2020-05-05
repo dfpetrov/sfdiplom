@@ -1,0 +1,65 @@
+{% extends '__base.html' %}
+
+{% load i18n %}
+{% load static %}
+
+{% block css_head %} {% include '_task_list_css_head.html' %} {% endblock %}
+
+{% block title %}{% trans 'Задачи для прокачки скилов' %}{% endblock %}
+
+{% block content %}
+
+<!-- Header Layout -->
+<div class="mdk-header-layout js-mdk-header-layout">
+
+    <!-- Header -->
+    {% include '_main_menu.html' %}
+    <!-- // END Header -->
+
+    <!-- Header Layout Content -->
+    <div class="mdk-header-layout__content d-flex flex-column">
+
+        {% include '_page_menu.html' %}
+
+        <div class="page pt-0">
+            <div class="hero bg-gradient-primary py-64pt text-center text-sm-left mb-4">
+                <div class="container d-flex flex-column flex-md-row align-items-center text-center">
+                    <img src="{% static 'images/superhero_white.svg' %}" width="154" class="mr-md-32pt " alt="{{ profile }}">
+                    <h1 class="text-white">{% trans 'Задачи для прокачки скилов' %}</h1>
+                </div>
+            </div>
+            <!-- container -->
+            <div class="container page__container">
+
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'appmain:index' %}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'appmain:dashboard' %}">{% trans 'Панель управления' %}</a></li>
+                    <li class="breadcrumb-item active">{% trans 'Все задачи' %}</li>
+                </ol>
+
+                {% include '_messages.html' %}
+                
+                <!-- row Body -->
+                <div class="row">
+
+                    {% include '_task_list_filter.html' %}
+
+                    {% include '_task_list_col_task.html' %}
+
+                </div>
+                <!-- //END row Body -->
+            </div>
+            <!-- //END container -->
+
+            {% include '_pagination.html' %}
+
+        </div>
+        <!-- //END page -->
+
+    </div>
+    <!-- // END Header Layout Content -->
+
+</div>
+<!-- // END Header Layout -->
+
+{% endblock %}

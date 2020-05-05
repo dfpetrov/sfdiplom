@@ -1,0 +1,437 @@
+{% extends '__base.html' %}
+
+{% load i18n %}
+{% load static %}
+
+{% block css_head %}
+<link rel="stylesheet" href="//cdn.quilljs.com/1.3.6/quill.bubble.css">
+<link rel="stylesheet" href="{% static 'vendor/hljs/vs2015.css' %}">
+<style>
+    .ql-editor strong {
+        font-weight: bold;
+    }
+
+    .ql-bubble .ql-editor code,
+    .ql-bubble .ql-editor pre {
+        background-color: #002b36;
+        border-radius: 3px;
+    }
+
+    .ql-container .ql-editor {
+        font-size: .9375rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #383b3d;
+    }
+
+    .breadcrumb {
+        overflow: hidden;
+    }
+</style>
+{% endblock %}
+
+{% block title %}{% trans 'Решение задачи' %} {{ task.title_short }} {% trans 'пользователя' %} {{ order.user.profile }}{% endblock %}
+
+{% block content %}
+
+<!-- Header Layout -->
+<div class="mdk-header-layout js-mdk-header-layout">
+
+    <!-- Header -->
+    {% include '_main_menu.html' %}
+    <!-- // END Header -->
+
+    <!-- Header Layout Content -->
+    <div class="mdk-header-layout__content d-flex flex-column">
+
+        {% include '_page_menu.html' %}
+
+        <div class="page ">
+
+            <div class="container page__container">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'appmain:index' %}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'appmain:dashboard' %}">{% trans 'Панель управления' %}</a></li>
+                    <li class="breadcrumb-item active">{% trans 'Решение' %} {{ task.title_short }}</li>
+                </ol>
+                {% include '_messages.html' %}
+                <h2 class="card-title" style="overflow: hidden;">
+                    <a href="{{ task.get_absolute_url }}">{{ task.title }}</a>
+                </h2>
+                <div class="row">
+                    <div class="col-md-8">
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">{% trans 'Описание задачи' %}</h4>
+                            </div>
+                            <div class="card-body">
+                                <div id="task_description_editor"></div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">{% trans 'Решение пользователя' %}</h4>
+                            </div>
+                            <div class="card-body">
+                                {% load filters %}
+
+                                {% if answers_available %}
+                                <p class="card-subtitle my-1">{% trans 'Ссылка на исходники' %}:</p>
+                                <a href="{{ order.get_code_url }}" target="_blank">{{ order.get_code_url }}</a>
+                                {% if task.need_build and order.get_build_url %}
+                                <div class="mt-3">
+                                    <p class="card-subtitle my-1">{% trans 'Опубликованное решение' %}:</p>
+                                    <a href="{{ order.get_build_url }}" target="_blank"
+                                        class="d-block">{{ order.get_build_url }}</a>
+                                </div>
+                                {% endif %}
+                                <div class="mt-3">
+                                    <p class="card-subtitle my-1">{% trans 'Комментарий пользователя' %}:</p>
+                                    <div id="editor" class="border"></div>
+                                </div>
+                                {% else %}
+                                <div class="card border-left-3 border-left-info">
+                                    <div class="card-header d-flex align-items-center">
+                                        <div class="flex">
+                                            <h4 class="card-title">{% trans 'Просмотр не доступен' %}</h4>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="card-text">
+{% trans 'Решения других пользователей доступны для просмотра только по выполненным задачам' %}.</p>
+                                        <p>
+{% trans 'У тебя эта задача находится в статусе' %}: <span
+                                                class="text-info">{% if task.order_status %}
+                                                {{ task.order_status_display }}{% else %}
+                                                Не выполнялась{% endif %}</span></p>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="col-md-4">
+
+                        <!-- favourite -->
+                        {% if user.is_authenticated %}
+
+                        <form class="d-inline" id="favourite_update_form" method="post">
+                            {{ favourite_update_form }}
+                            {% csrf_token %}
+                            {% if is_favorite %}
+                            <button type="button" class="btn btn-info mb-2" value="{% trans 'Убрать решение из избранного' %}"
+                                name="btnAddFavourites" id="btnAddFavourites">
+                                <i class="material-icons mr-2">favorite_border</i><span id="textAddFavourites">
+                                    {% trans 'Убрать решение из избранного' %}</span>
+                            </button>
+                            {% else %}
+                            <button type="button" class="btn btn-outline-info mb-2" value="{% trans 'Добавить решение в избранное' %}"
+                                name="btnAddFavourites" id="btnAddFavourites">
+                                <i class="material-icons mr-2">favorite_border</i><span id="textAddFavourites">
+                                    {% trans 'Добавить решение в избранное' %}</span>
+                            </button>
+                            {% endif %}
+                        </form>
+                        <form class="d-inline" id="like_update_form" method="post">
+                            {{ like_update_form }}
+                            {% csrf_token %}
+                            {% if is_like %}
+                            <button type="button" class="btn btn-warning mb-2" value="{% trans 'Снять лайк' %}" name="btnLike"
+                                title="{% trans 'Снять лайк' %}" id="btnLike"><i class="material-icons">thumb_up</i>
+                            </button>
+                            {% else %}
+                            <button type="button" class="btn btn-outline-warning mb-2" value="{% trans 'Поставить лайк' %}"
+                                name="btnLike" title="{% trans 'Поставить лайк' %}" id="btnLike"><i
+                                    class="material-icons">thumb_up</i>
+                            </button>
+                            {% endif %}
+                        </form>
+
+                        {% endif %}
+                        <!-- //END favourite -->
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">{% trans 'Действие' %}</h4>
+                                <p class="card-subtitle">{% trans 'Состояние задачи у меня' %}:
+                                    <span class="text-info">
+                                        {% if task.is_my_task %}
+                                        {% trans 'Это моя задача' %}
+                                        {% elif task.order_status %}
+                                        {{ task.order_status_display }}
+                                        {% else %}
+                                        {% trans 'Не выполнялась' %}
+                                        {% endif %}
+                                    </span>
+                                </p>
+                            </div>
+
+                            <div class="card-body text-center">
+                                {% if answers_available %}
+                                <div class="media align-items-center mb-3">
+                                    <div class="media-left">
+                                        {% trans 'Оценка решения' %}:
+                                    </div>
+                                    <div class="media-body">
+                                        <span class="h2 text-success">{{ order.get_rate.rate_display }}</span>
+                                    </div>
+                                </div>
+                                {% if order_in_check.status == 'done' %}
+                                <a href="{% url 'apporders:order_in_check_update' order_in_check.id %}"
+                                    class="btn btn-warning btn-block mt-3">{% trans 'Изменить оценку' %}</a>
+                                {% elif order_in_check.status == 'incheck' %}
+                                <a href="{% url 'apporders:order_in_check_update' order_in_check.id %}"
+                                    class="btn btn-primary btn-block mt-3">{% trans 'Продолжить проверку' %}</a>
+                                {% elif user_request_order %}
+                                <a href="{{ user_request_order.get_absolute_url }}"
+                                    class="btn btn-success btn-block flex-column">{% trans 'Открыть мое решение' %}</a>
+                                {% else %}
+                                <form action="{% url 'apporders:order_in_check_create' order.id %}" method="post">
+                                    {{ order_in_check_creation_form }}
+                                    {% csrf_token %}
+                                    <input type="submit" class="btn btn-success btn-block mt-3" value="{% trans 'Взять в проверку' %}"
+                                        name="btnOrderGrabInCheck">
+                                </form>
+                                {% endif %}
+                                {% elif user_request_order %}
+                                <a href="{{ user_request_order.get_absolute_url }}"
+                                    class="btn btn-success btn-block flex-column">{% trans 'Открыть мое решение' %}</a>
+                                {% else %}
+                                <form action="{% url 'apporders:order_create' %}" method="post">
+                                    {{ order_create_form }}
+                                    {% csrf_token %}
+                                    <input type="submit" class="btn btn-success btn-block flex-column"
+                                        value="{% trans 'Взять в работу' %}" name="btnActionTask">
+                                </form>
+                                {% if form.task.errors %}
+                                <div class="alert alert-danger" role="alert" id="check_confirm_alert">
+                                    {% for error in form.task.errors %}
+                                    <strong>{{ error|escape }}</strong>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+
+                                {% endif %}
+
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            {% with order_user=order.user.profile %}
+                            <div class="card-header">
+                                <div class="media align-items-center">
+                                    <div class="media-left">
+                                        <img src="{{ order_user.get_avatar_url }}" alt="{{ order_user }}" width="50"
+                                            class="rounded-circle">
+                                    </div>
+                                    <div class="media-body">
+                                        <h4 class="card-title">{% trans 'Решил' %}: <a href="{{ order_user.get_absolute_url }}"
+                                                class="text-info">{{ order_user }}</a></h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <p>{{ order_user.get_description }}</p>
+                            </div>
+                            {% endwith %}
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="media align-items-center">
+                                    <div class="media-left">
+                                        <img src="{{ task.author.profile.get_avatar_url }}"
+                                            alt="{{ task.author.profile }}" width="50" class="rounded-circle">
+                                    </div>
+                                    <div class="media-body">
+                                        <h4 class="card-title">{% trans 'Автор задачи' %}: <a
+                                                href="{{ task.author.profile.get_absolute_url }}"
+                                                class="text-info">{{ task.author.profile }}</a></h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <p>{{ task.author.profile.get_description }}</p>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <ul class="list-group list-group-fit">
+                                <li class="list-group-item">
+                                    <div class="media align-items-center">
+                                        <div class="media-left">
+                                            <i class="material-icons text-muted-light">schedule</i>
+                                        </div>
+                                        <div class="media-body">
+                                            <small class="text-muted">{% trans 'Дата изменения' %}</small>
+                                            <p>{{ order.updated }}</p>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="media align-items-center">
+                                        <div class="media-left">
+                                            <i class="material-icons text-muted-light">code</i>
+                                        </div>
+                                        <div class="media-body"><a href="{{ task.skill.get_absolute_url }}"
+                                                class="text-decoration-0">{{ task.skill }}</a></div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- // END Header Layout Content -->
+
+</div>
+<!-- // END Header Layout -->
+
+
+{% endblock %}
+
+{% block js_body %}
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script src="{% static 'vendor/hljs/highlight.pack.js' %}"></script>
+<script>
+    var container = document.getElementById('task_description_editor')
+    var toolbarOptions = []
+    var options = {
+        theme: 'bubble',
+        readOnly: true
+    };
+    var editor = new Quill(container, options)
+
+    let task_description_HTML_JSON = '{{ task.description_HTML|escapejs }}'
+    try {
+        editor.setContents(JSON.parse(task_description_HTML_JSON))
+    } catch (error) {
+
+    }
+
+    var container = document.getElementById('editor')
+    var toolbarOptions = []
+    var options = {
+        theme: 'bubble',
+        readOnly: true
+    };
+    var editor = new Quill(container, options)
+
+    let description_HTML_JSON = '{{ order.comment_HTML|escapejs }}'
+    try {
+
+        editor.setContents(JSON.parse(description_HTML_JSON))
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('pre').forEach((block) => {
+                if (block.classList.contains('ql-syntax')) {
+                    hljs.highlightBlock(block)
+                    block.classList.remove('ql-syntax')
+                }
+            })
+        })
+
+    } catch (error) {
+
+    }
+
+    var btnAddFavourites = document.getElementById('btnAddFavourites')
+    if (btnAddFavourites != null) {
+        btnAddFavourites.onclick = function () {
+            var postUrl = "{% url 'apporders:favourite_update' %}"
+            var formData = new FormData(document.forms.favourite_update_form)
+            var xhr = new XMLHttpRequest()
+            xhr.open("POST", postUrl)
+            xhr.send(formData)
+            xhr.onloadend = function () {
+                var classList = btnAddFavourites.classList;
+                if (xhr.status == 200) {
+                    let response = JSON.parse(xhr.response)
+                    if (response.is_favourite) {
+
+                        Swal.fire({
+                            title: '{% trans 'Готово' %}!',
+                            text: '{% trans 'Решение добавлено в избранное' %}',
+                            icon: 'success',
+                            confirmButtonText: 'Ok',
+                            footer: "<a href={% url 'apporders:favourite_list' %}>{% trans 'Перейти в избранное' %}</a>"
+                        })
+
+                        classList.remove('btn-outline-info');
+                        classList.add('btn-info');
+                        textAddFavourites.innerHTML = "{% trans 'Убрать решение из избранного' %}"
+                    } else {
+
+                        Swal.fire({
+                            title: '{% trans 'Решение удалено из избранных' %}!',
+                            icon: 'warning',
+                            confirmButtonText: 'Ok'
+                        })
+
+                        classList.remove('btn-info');
+                        classList.add('btn-outline-info');
+                        textAddFavourites.innerHTML = "{% trans 'Добавить решение в избранное' %}"
+                    }
+                } else {
+
+                }
+
+            }
+        }
+    }
+
+    var btnLike = document.getElementById('btnLike')
+    if (btnLike != null) {
+
+        btnLike.onclick = function () {
+
+            var postUrl = "{% url 'apporders:like_update' %}"
+            var formData = new FormData(document.forms.like_update_form)
+            var xhr = new XMLHttpRequest()
+            xhr.open("POST", postUrl)
+            xhr.send(formData)
+            xhr.onloadend = function () {
+                var classList = btnLike.classList;
+                if (xhr.status == 200) {
+                    let response = JSON.parse(xhr.response)
+                    if (response.is_like) {
+                        classList.remove('btn-outline-warning');
+                        classList.add('btn-warning');
+                        btnLike.title = "{% trans 'Снять лайк' %}"
+
+                        Swal.fire({
+                            title: '{% trans 'Лайк поставлен' %} :)',
+                            icon: 'success',
+                            confirmButtonText: 'Ok'
+                        })
+
+                    } else {
+                        classList.remove('btn-warning');
+                        classList.add('btn-outline-warning');
+                        btnLike.title = "{% trans 'Поставить лайк' %}"
+
+                        Swal.fire({
+                            title: '{% trans 'Лайк снят' %} :(',
+                            icon: 'warning',
+                            confirmButtonText: 'Ok'
+                        })
+                    }
+                } else {
+
+                }
+
+            }
+        }
+    }
+</script>
+{% endblock %}

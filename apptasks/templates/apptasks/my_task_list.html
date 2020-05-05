@@ -1,0 +1,104 @@
+{% extends '__base.html' %}
+
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans 'Мои задачи' %}{% endblock %}
+
+{% block content %}
+
+    <!-- Header Layout -->
+    <div class="mdk-header-layout js-mdk-header-layout">
+
+        <!-- Header -->
+        {% include '_main_menu.html' %}
+        <!-- // END Header -->
+
+        <!-- Header Layout Content -->
+        <div class="mdk-header-layout__content d-flex flex-column">
+
+            {% include '_page_menu.html' %}
+
+            <div class="page ">
+
+                <div class="container page__container">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'appmain:index' %}">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'appmain:dashboard' %}">{% trans 'Панель управления' %}</a></li>
+                        <li class="breadcrumb-item active">{% trans 'Мои задачи' %}</li>
+                    </ol>
+                    {% include '_messages.html' %}
+                    <h2 class="h2">{% trans 'Мои задачи' %}</h2>
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">{% trans 'Всего задач' %} <span class="text-primary">{{ task_count }}</span></h5>
+                        </div>
+                        <div data-toggle="lists" data-lists-values='[
+        "js-lists-values-skill", 
+        "js-lists-values-task", 
+        "js-lists-values-created"
+      ]' data-lists-sort-by="js-lists-values-revenue" data-lists-sort-desc="true" class="table-responsive">
+                            <table class="table table-nowrap m-0">
+                                <thead class="thead-light">
+                                    <tr class="text-uppercase small">
+                                        <th>
+                                            <a href="javascript:void(0)" class="sort" data-sort="js-lists-values-skill">Skill</a>
+                                        </th>
+                                        <th>
+                                            <a href="javascript:void(0)" class="sort" data-sort="js-lists-values-task">{% trans 'Задача' %}</a>
+                                        </th>
+                                        <th>
+                                            <a href="javascript:void(0)" class="sort" data-sort="js-lists-values-created">{% trans 'Дата обновления' %}</a>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="list">
+
+                                    {% for task in tasks %}
+                                    <tr>
+                                        <td>
+                                            <div class="media align-items-center">
+                                                <a href="{{ task.get_absolute_url }}" class="avatar avatar-4by3 avatar-lg mr-3" title="{{ task_href_title_prefix }} {{ task.title_short }}">
+                                                    <img src="{{ task.skill.get_avatar_url }}" alt="{{ task.skill }}" class="avatar-img rounded">
+                                                    <span class="js-lists-values-skill text-muted small my-1" hidden>{{ task.skill }}</span>
+                                                </a>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="media align-items-center">
+                                                <div class="media-body my-2">
+                                                    <a class="text-body js-lists-values-task my-1" href="{{ task.get_absolute_url }}" title="{{ task_href_title_prefix }} {{ task.title_short }}">
+                                                        <strong>{{ task.title_short }}</strong>
+                                                    </a>
+                                                    <div class="text-muted small my-1">{{ task.skill }}</div>
+                                                    <p class="my-1">{{ task.description_short }}</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        
+                                        <td class="text-black-70">
+                                            <span class="js-lists-values-created">{{ task.updated }}</span>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    {% include '_pagination.html' %}
+                    
+                </div>
+
+            </div>
+        </div>
+        <!-- // END Header Layout Content -->
+
+    </div>
+    <!-- // END Header Layout -->
+
+{% endblock %}
+
+{% block js_body %}
+{% include '_list_js.html' %}
+{% endblock %}

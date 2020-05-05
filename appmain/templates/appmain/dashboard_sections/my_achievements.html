@@ -1,0 +1,88 @@
+{% extends 'appmain/dashboard.html' %}
+{% load static %}
+{% load filters %}
+{% load course_filters %}
+{% load i18n %}
+
+{% block section_content %}
+
+    <!-- section: Quiz results -->
+    {% if not quiz_list %}
+        <div class="page-section bg-white border-bottom-2">
+            <div class="container page__container">
+                <div class="row">
+                    <div class="col">
+                        <h4>{% trans 'Мои достижения' %}</h4>
+                        <p>{% trans 'Пройденных испытаний еще нет' %}</p>
+                        <a href="{% url 'appmain:exams' %}" class="btn btn-accent">
+                            {% trans 'Список всех испытаний' %}
+                        </a>
+                        <div style="min-height: 21.9vh;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="container page__container page-section">
+        {% for quiz in quiz_list %}
+            {% with quiz_result_url=quiz.get_results_url %}
+                <a href="{{ quiz.get_absolute_url }}" class="mb-heading d-flex align-items-center text-body"
+                   title="{% trans 'Перейти к тесту' %}">
+                <span class="mr-16pt">
+                    <img src="{{ quiz.result_description.cup_avatar }}"
+                         alt="{{ quiz.result_description.cup_description }}"
+                         class="avatar avatar-lg"
+                         title="{% trans 'Перейти к тесту' %}">
+                </span>
+                    <span class="d-flex flex-column flex">
+                    <span class="h4 d-block m-0">{{ quiz.title }}</span>
+                    <span class="text-70">
+                        {{ quiz.user_score|default_if_none:0 }} {% trans 'из' %} {{ quiz.total_score }}
+                    </span>
+                    <small class="text-muted">
+                        {% trans 'Пройден' %} {{ quiz.complete_date }}
+                    </small>
+                </span>
+                </a>
+                <div class="card stack mb-44pt">
+                    <div class="list-group list-group-flush">
+                        {% for question in quiz.active_questions %}
+                            {% if forloop.counter <= 3 %}
+                                <div class="list-group-item d-flex align-items-center px-16pt">
+                                    <div class="flex d-flex flex-column">
+                                        <a class="text-body" href="{{ quiz_result_url }}"
+                                           title="{% trans 'Смотреть результаты' %}">
+                                            {{ question.text|truncatechars:50|safe }}
+                                        </a>
+                                        {% if question.correct %}
+                                            <span class="text-success mr-auto">correct</span>
+                                        {% else %}
+                                            <span class="text-danger mr-auto">wrong</span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center">
+                                        {% if question.correct %}
+                                            <span class="lead lh-1">{{ question.score }}</span>
+                                            <small class="text-muted text-uppercase">
+                                                {% plural_form  question.score 'балл' 'балла' 'баллов' True %}
+                                            </small>
+                                        {% else %}
+                                            <span class="lead lh-1">0</span>
+                                            <small class="text-muted text-uppercase">Баллов</small>
+                                        {% endif %}
+                                    </div>
+                                    <a href="{{ quiz_result_url }}" class="text-muted ml-8pt">
+                                        <i class="material-icons">chevron_right</i>
+                                    </a>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endwith %}
+        {% endfor %}
+    </div>
+    {% endif %}
+    <!-- //END section: Quiz results -->
+
+{% endblock %}

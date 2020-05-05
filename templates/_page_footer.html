@@ -1,0 +1,25 @@
+{% if not hide_footer %}
+<footer class="py-4" style="background-color: #465a6e; position: absolute;width: 100%;">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-sm-3 my-2">
+                {% load i18n %}
+                {% get_current_language as LANGUAGE_CODE %}
+                {% get_available_languages as LANGUAGES %}
+                {% get_language_info_list for LANGUAGES as languages %}
+                <div class="form-group">
+                    <label class="text-white" for="custom-select">{% trans 'Язык' %}:</label>
+                    <select id="custom-select" class="form-control custom-select" onchange="window.location.href=this.options[this.selectedIndex].value">
+                        {% for language in languages %}
+                        <option value="/{{ language.code }}/" {% if language.code == LANGUAGE_CODE %} selected {% endif %}="">{{ language.name_local }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col-12 col-sm-9 my-2 text-right" style="color: hsla(0, 0%, 100%, .5);">
+                Copyright &copy; 2020 - PumpSkill
+            </div>
+        </div>
+    </div>
+</footer>
+{% endif %}

@@ -1,0 +1,370 @@
+{% extends '__base.html' %}
+
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Панель управления" %}{% endblock %}
+
+{% block css_head %}
+<style>
+    .text-body,
+    .media-body {
+        overflow: hidden;
+    }
+    .breadcrumb {
+        overflow: hidden;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+    <!-- Header Layout -->
+    <div class="mdk-header-layout js-mdk-header-layout">
+
+        <!-- Header -->
+        {% include '_main_menu.html' %}
+        <!-- // END Header -->
+
+        <!-- Header Layout Content -->
+        <div class="mdk-header-layout__content d-flex flex-column">
+
+            {% include '_page_menu.html' %}
+
+            <!-- page -->
+            <div class="page ">
+
+                <!-- page__container -->
+                <div class="container page__container">
+
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'appmain:index' %}">Home</a></li>
+                        <li class="breadcrumb-item active">{% trans 'Панель управления' %}</li>
+                    </ol>
+
+                    {% include '_messages.html' %}
+
+                    <h1 class="h2">{% trans 'Панель управления' %}</h1>
+
+                    <!-- row Создать задачу -->
+                    <div class="row">
+                        <div class="col">
+                            <div class="card border-left-3 border-left-primary card-2by1">
+                                <div class="card-body">
+                                    <div class="media flex-wrap align-items-center">
+                                        <div class="media-left">
+                                            <i class="material-icons text-muted-light">credit_card</i>
+                                        </div>
+                                        <div class="media-body" style="min-width: 180px">
+                                            {% trans "Ты можешь создать новую задачу" %}
+                                        </div>
+                                        <div class="media-right mt-2 mt-xs-plus-0">
+                                            <a class="btn btn-success" href="{% url 'apptasks:task_create' %}">{% trans 'Создать задачу' %}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- //END row Создать задачу -->
+
+                    <!-- row Новые задачи -->
+                    <div class="row">
+                        <!-- col 1 -->
+                        <div class="col">
+                            <!-- card -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h4 class="card-title">{% trans 'Новые задачи' %}</h4>
+                                            <p class="card-subtitle">{% trans 'Последние поступления в задачах' %}</p>
+                                        </div>
+                                        <div class="col text-sm-right">
+                                            <a class="btn btn-sm btn-primary"
+                                                href="{% url 'apptasks:task_list' %}">{% trans 'Смотреть все' %}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <ul class="list-group list-group-fit mb-0" style="z-index: initial;">
+                                    {% for task in new_tasks %}
+                                    <li class="list-group-item">
+                                        <div class="row">
+                                            <div class="col-sm-1">
+                                                <a href="{{ task.author.profile.get_absolute_url }}" class="avatar avatar-lg mr-3"
+                                                    title="{{ task.author.profile }}">
+                                                    <img src="{{ task.author.profile.get_avatar_url }}" alt="{{ task.author.profile}}"
+                                                        class="avatar-img rounded-circle">
+                                                </a>
+                                            </div>
+                                            <div class="col-sm-11">
+                                                <div class="d-sm-flex align-items-center justify-content-sm-between">
+                                                    <a href="{{ task.get_absolute_url }}" class="text-body mr-2"
+                                                        title="{{ task_href_title_prefix }} {{ task.title_short }}">
+                                                        <strong>{{ task.title_short }}</strong>
+                                                    </a>
+
+                                                    <small class="text-muted d-block">{{ task.created }}</small>
+                                                </div>
+                                                <p>{{ task.description_short }}</p>
+                                                <div>
+                                                    <span class="text-black-50 mr-2">
+                                                        <i class="material-icons mr-1"
+                                                            style="font-size: inherit;">favorite_border</i>
+                                                        {{ task.favourite_count|default_if_none:"--" }}
+                                                    </span>
+                                                    <span class="text-black-50 mr-2">
+                                                        <i class="material-icons mr-1"
+                                                            style="font-size: inherit;">thumb_up</i>
+                                                        {{ task.like_count|default_if_none:"--" }}
+                                                    </span>
+                                                    <a href="{{ task.skill.get_absolute_url }}" class="text-black-50"
+                                                        title="Смотреть все задачи по {{ task.skill }}">
+                                                        <span
+                                                            class="badge badge-pill badge-primary m-0">{{ task.skill }}</span>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <!-- //END card -->
+                        </div>
+                        <!-- //END col 1 -->
+                    </div>
+                    <!-- // END row Новые задачи -->
+
+                    <!-- row Мои задачи/Мои решения -->
+                    <div class="row">
+                        <!-- col Мои задачи -->
+                        <div class="col-12 col-lg-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h4 class="card-title">{% trans 'Мои задачи' %}</h4>
+                                            <p class="card-subtitle">{% trans 'Задачи созданные мной' %}</p>
+                                        </div>
+                                        <div class="col text-sm-right">
+                                            <a class="btn btn-sm btn-primary" href="{% url 'apptasks:my_task_list' %}">{% trans 'Показать все' %}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <ul class="list-group list-group-fit">
+                                    {% for task in my_tasks %}
+                                    <li class="list-group-item">
+                                        <div class="row">
+                                            <div class="col-sm-2">
+                                                <a href="{{ task.get_absolute_url }}" class="avatar avatar-4by3 avatar-md mr-3"
+                                                    title="{{ task_href_title_prefix }} {{ task.title_short }}">
+                                                    <img src="{{ task.skill.get_avatar_url }}" alt="{{ task.skill }}"
+                                                        class="avatar-img rounded">
+                                                </a>
+                                            </div>
+                                            <div class="col-sm-10">
+                                                <div class="d-sm-flex align-items-center justify-content-sm-between">
+                                                    <a href="{{ task.get_absolute_url }}" class="text-body"
+                                                        title="{{ task_href_title_prefix }} {{ task.title_short }}"><strong>{{ task.title_short }}</strong></a>
+                                                    <small class="text-muted d-block">{{ task.created }}</small>
+                                                </div>
+                                                <p>{{ task.description_short }}</p>
+                                                <div class="d-flex align-items-center">
+                                                    <span
+                                                        class="text-black-50 d-flex align-items-center text-decoration-0">
+                                                        <i class="material-icons mr-1"
+                                                            style="font-size: inherit;">favorite_border</i>
+                                                        {{ task.favourite_count|default_if_none:"--" }}
+                                                    </span>
+                                                    <span
+                                                        class="text-black-50 d-flex align-items-center text-decoration-0 ml-3">
+                                                        <i class="material-icons mr-1"
+                                                            style="font-size: inherit;">thumb_up</i>
+                                                        {{ task.like_count|default_if_none:"--" }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- //END col Мои задачи -->
+
+                        <!-- col Мои Решения -->
+                        <div class="col-12 col-lg-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h4 class="card-title">{% trans 'Мои решения' %}</h4>
+                                            <p class="card-subtitle">{% trans 'Задачи, которые я решаю' %}</p>
+                                        </div>
+                                        <div class="col text-sm-right">
+                                            <a class="btn btn-sm btn-primary" href="{% url 'appmain:my_order_list' %}">{% trans 'Показать все' %}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <ul class="list-group list-group-fit mb-0">
+                                    {% for order in user_orders %}
+                                    <li class="list-group-item">
+                                        <div class="row">
+                                            <div class="col-sm-2">
+                                                <a href="{{ order.get_absolute_url }}" class="avatar avatar-4by3 avatar-md mr-3"
+                                                    title="{{ order_href_title_prefix }} {{ order }}">
+                                                    <img src="{{ order.task.skill.get_avatar_url }}" alt="{{ order.task.skill }}"
+                                                        class="avatar-img rounded">
+                                                </a>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div>
+                                                    <a href="{{ order.get_absolute_url }}" class="text-body"
+                                                        title="{{ order_href_title_prefix }} {{ order }}">
+                                                        <strong>{{ order }}</strong></a>
+                                                </div>
+                                                <small class="text-muted">{{ order.updated }}</small>
+                                                <div>
+                                                    <a href="{{ order.task.skill.get_absolute_url }}"
+                                                        title="{{ skill_href_title_prefix }} {{ order.task.skill }}">#{{ order.task.skill }}</a>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4 d-sm-flex flex-sm-row align-items-sm-center">
+                                                <span class="text-black-50 mr-3">{{ order.get_status_display }}</span>
+                                                <h4 class="mb-0">{{ order.get_rate.rate_display }}</h4>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- //END col Мои Решения -->
+                    </div>
+                    <!-- //END row Мои задачи/Мои решения -->
+
+                    <!-- row Избранное -->
+                    <div class="row">
+                        <!-- col Избранные задачи -->
+                        <div class="col-12 col-lg-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h4 class="card-title">{% trans 'Избранное: задачи' %}</h4>
+                                            <p class="card-subtitle">{% trans 'Задачи добавленные в избранное' %}</p>
+                                        </div>
+                                        <div class="col text-sm-right">
+                                            <a class="btn btn-sm btn-primary"
+                                                href="{% url 'apptasks:favourite_task_list' %}" title="Показать все">
+                                                <i class="material-icons">keyboard_arrow_right</i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <ul class="list-group list-group-fit">
+                                    {% for favourite_item in task_favourites %}
+                                    <li class="list-group-item">
+                                        <div class="row">
+                                            <div class="col-sm-2">
+                                                <div class="forum-icon-wrapper" style="width: 80px;">
+                                                    <a href="{{ favourite_item.task.get_absolute_url }}" class="avatar avatar-lg mr-3"
+                                                        title="{{ task_href_title_prefix }} {{ favourite_item.task.title }}">
+                                                        <img src="{{ favourite_item.task.skill.get_avatar_url }}" alt="{{ favourite_item.task.skill }}"
+                                                            class="avatar-img rounded-circle">
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-10">
+                                                <div class="d-sm-flex align-items-center justify-content-sm-between">
+                                                    <a href="{{ favourite_item.task.get_absolute_url }}" class="text-body"
+                                                        title="{{ task_href_title_prefix }} {{ favourite_item.title_short }}"><strong>{{ favourite_item.title_short }}</strong></a>
+                                                    <small class="text-muted d-block">{{ favourite_item.task.created }}</small>
+                                                </div>
+                                                <small class="text-muted d-block">
+                                                    by
+                                                    <a href="{{ favourite_item.task.author.profile.get_absolute_url }}" 
+                                                        title="{{ favourite_item.task.author.profile }}">
+                                                        {{ favourite_item.task.author.profile }}
+                                                    </a>
+                                                </small>
+                                                <p>{{ favourite_item.task.description_short }}</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- //END col Избранные задачи -->
+
+                        <!-- col Избранные решения -->
+                        <div class="col-12 col-lg-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h4 class="card-title">{% trans 'Избранное: решения' %}</h4>
+                                            <p class="card-subtitle">{% trans 'Решения добавленные в избранное' %}</p>
+                                        </div>
+                                        <div class="col text-sm-right">
+                                            <a class="btn btn-sm btn-primary"
+                                                href="{% url 'apporders:favourite_list' %}" title="Показать все">
+                                                <i class="material-icons">keyboard_arrow_right</i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <ul class="list-group list-group-fit">
+                                    {% for favourite_item in order_favourites %}
+                                    <li class="list-group-item">
+                                        <div class="row">
+                                            <div class="col-sm-2">
+                                                <div class="forum-icon-wrapper" style="width: 80px;">
+                                                    <a href="{{ favourite_item.order.get_view_url }}" class="avatar avatar-lg mr-3"
+                                                        title="{{ order_href_title_prefix }} {{ favourite_item.title_short }}">
+                                                        <img src="{{ favourite_item.order.task.skill.get_avatar_url }}" alt="{{ favourite_item.order.task.skill }}"
+                                                            class="avatar-img rounded-circle">
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-10">
+                                                <div class="d-sm-flex align-items-center justify-content-sm-between">
+                                                    <a href="{{ favourite_item.order.get_view_url }}" class="text-body"
+                                                        title="{{ order_href_title_prefix }} {{ favourite_item.title_short }}"><strong>{{ favourite_item.title_short }}</strong></a>
+                                                    <small class="text-muted d-block">{{ favourite_item.order.created }}</small>
+                                                </div>
+                                                <small class="text-muted d-block">
+                                                    by
+                                                    <a href="{{ favourite_item.order.user.profile.get_absolute_url }}" 
+                                                        title="{{ favourite_item.order.user.profile }}">
+                                                        {{ favourite_item.order.user.profile }}
+                                                    </a>
+                                                </small>
+                                                <p>{{ favourite_item.order.task.description_short }}</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- //END col Избранные решения -->
+
+                    </div>
+                    <!-- //END row Избранное -->
+
+                </div>
+                <!-- //END page__container -->
+                
+            </div>
+            <!-- //END page -->
+
+        </div>
+        <!-- // END Header Layout Content -->
+
+    </div>
+    <!-- // END Header Layout -->
+
+{% endblock %}
